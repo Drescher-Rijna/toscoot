@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "441420196923",
+    "project_id": "to-scoot",
+    "storage_bucket": "to-scoot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441420196923:android:a99c5ed1bf45b45a6f001e",
+        "android_client_info": {
+          "package_name": "com.drescher.toscoot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "441420196923-g9i43mj37k2748cqmqu9u92sdo2n7llg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANlzgHDF0JL_MD5ZKgEFlV3QZZvT-SlI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "441420196923-g9i43mj37k2748cqmqu9u92sdo2n7llg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
