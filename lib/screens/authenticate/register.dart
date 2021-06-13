@@ -18,6 +18,7 @@ class _RegisterState extends State<Register> {
   bool loading = false;
 
   // text field state
+  String username = '';
   String email = '';
   String password = '';
   String error = '';
@@ -56,6 +57,25 @@ class _RegisterState extends State<Register> {
             key: _formKey,
             child: Column(
               children: <Widget>[
+                SizedBox(height: 20.0,),
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'username',
+                    fillColor: Colors.white,
+                    filled: true,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 2.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.orange[900], width: 2.0),
+                    ),
+                  ),
+                  validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                  obscureText: true,
+                  onChanged: (val) {
+                    setState(() => username = val);
+                  },
+                ),
                 SizedBox(height: 20.0,),
                 TextFormField(
                   decoration: InputDecoration(
@@ -106,18 +126,6 @@ class _RegisterState extends State<Register> {
                     padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 12.0, horizontal: 25.0)),
                   ),
                   onPressed: () async {
-                    if (_formKey.currentState.validate()){
-                      setState(() => loading = true);
-                      dynamic result = await _auth.SignInWithEmailAndPassword(email, password);
-                      if (result == null) {
-                        setState(() {
-                            error = 'Could not sign in. It may be because you wrote an invalid email or password';
-                            loading = false;
-                          }
-                        );
-                        
-                      }
-                    }
                     if (_formKey.currentState.validate()){
                       setState(() => loading = true);
                       dynamic result = await _auth.registerWithEmailAndPassword(email, password);
