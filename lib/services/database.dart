@@ -23,14 +23,17 @@ class DatabaseService {
     return await trickListCollection.add({
       'title': title,
       'tricks': tricks,
+      'created': FieldValue.serverTimestamp(),
     });
   }
 
   // trick list from snapshot
   List<TrickList> _trickListFromSnapshot(QuerySnapshot snapshot) {
     print(trickListCollection);
+    
     return snapshot.docs.map((doc) {
       return TrickList(
+        id: doc.id,
         title: doc['title'] ?? '',
         tricks: doc['tricks'] ?? '',
       );
@@ -43,7 +46,7 @@ class DatabaseService {
   }
 
   Stream<List<TrickList>> get tricklists {
-    return trickListCollection.snapshots()
+    return trickListCollection.orderBy("created", descending: false).snapshots()
       .map(_trickListFromSnapshot);
   }
 

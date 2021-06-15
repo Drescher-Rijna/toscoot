@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toscoot/models/tricklist.dart';
+import 'package:toscoot/screens/tricklists/tricklist_details.dart';
+import 'package:toscoot/services/database.dart';
 
 class TrickListTile extends StatelessWidget {
 
@@ -29,9 +31,21 @@ class TrickListTile extends StatelessWidget {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => TrickListDetails(tricklistTitle: tricklist.title, tricklistTricks: tricklist.tricks,)));
+                    },
                     icon: Icon(
-                      Icons.edit,
+                      Icons.remove_red_eye,
+                      color: Colors.grey[100],
+                    ),
+                    highlightColor: Colors.orange[900],
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      await DatabaseService().trickListCollection.doc(tricklist.id).delete();
+                    },
+                    icon: Icon(
+                      Icons.delete,
                       color: Colors.grey[100],
                     ),
                     highlightColor: Colors.orange[900],
