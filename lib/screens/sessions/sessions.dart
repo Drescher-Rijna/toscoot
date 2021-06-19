@@ -1,31 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:toscoot/models/tricklist.dart';
-import 'package:toscoot/screens/sessions/sessions.dart';
+import 'package:toscoot/models/session.dart';
+import 'package:toscoot/screens/sessions/sessions_list.dart';
 import 'package:toscoot/screens/tricklists/create_tricklist.dart';
-import 'package:toscoot/screens/tricklists/trick_list.dart';
 import 'package:toscoot/services/auth.dart';
 import 'package:toscoot/services/database.dart';
 
-class TrickLists extends StatefulWidget {
+class Sessions extends StatelessWidget {
 
-  @override
-  _TrickListsState createState() => _TrickListsState();
-}
-
-class _TrickListsState extends State<TrickLists> {
   final AuthService _auth = AuthService();
-
-  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<TrickList>>.value(
-      value: DatabaseService().tricklists,
+    return StreamProvider<List<Session>>.value(
+      value: DatabaseService().sessions,
       child: Scaffold(
         backgroundColor: Colors.grey[900],
         appBar: AppBar(
-          title: Text('Tricklists'),
+          title: Text('Sessions'),
           centerTitle: true,
           backgroundColor: Colors.orange[900],
           elevation: 0.0,
@@ -47,7 +39,7 @@ class _TrickListsState extends State<TrickLists> {
             ),
           ],
         ),
-        body: TrickListScreen(),
+        body: SessionList(),
         floatingActionButton: new FloatingActionButton(
           onPressed: () {
             Navigator.push(
@@ -62,17 +54,6 @@ class _TrickListsState extends State<TrickLists> {
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.orange[900],
           type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-            switch (_currentIndex) {
-              case 2:
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Sessions()));
-              break;
-            }
-          },
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
@@ -85,7 +66,6 @@ class _TrickListsState extends State<TrickLists> {
             BottomNavigationBarItem(
               icon: Icon(Icons.more_time_rounded),
               label: 'Sessions',
-              
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.linear_scale),
