@@ -59,6 +59,26 @@ class _SessionTileState extends State<SessionTile> {
                     ),
                     highlightColor: Colors.orange[900],
                   ),
+                  !session.isComplete ?
+                  IconButton(
+                    onPressed: () {
+                      
+                    },
+                    icon: Icon(
+                      Icons.play_arrow,
+                      color: Colors.grey[100],
+                    ),
+                    highlightColor: Colors.orange[900],
+                  ) : IconButton(
+                    onPressed: () {
+                      
+                    },
+                    icon: Icon(
+                      Icons.bar_chart,
+                      color: Colors.grey[100],
+                    ),
+                    highlightColor: Colors.orange[900],
+                  ),
                 ],
               ),
             ],

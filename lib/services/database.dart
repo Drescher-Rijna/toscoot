@@ -6,6 +6,7 @@ import 'package:toscoot/models/tricklist.dart';
 class DatabaseService {
 
   final String uid;
+  static String activeID = '6Wh7e2yJstnsouW5gUVI';
   DatabaseService({ this.uid });
 
   // collection reference
@@ -25,7 +26,7 @@ class DatabaseService {
       'title': title,
       'tricks': tricks,
       'created': FieldValue.serverTimestamp(),
-      'isActive': 'false',
+      'isActive': false,
     });
   }
 
@@ -41,7 +42,11 @@ class DatabaseService {
     }).toList();
   }
 
-  final CollectionReference sessionCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('tricklists').doc(ActiveTricklist().id).collection('sessions');
+  Future<void> getActiveID(String id) {
+    activeID = id;
+  }
+  
+  final CollectionReference sessionCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('tricklists').doc(activeID).collection('sessions');
   Future<void> updateSessionData(String title, List sets) async {
     return await sessionCollection.add({
       'title': title,
@@ -57,6 +62,7 @@ class DatabaseService {
         id: doc.id,
         title: doc['title'] ?? '',
         sets: doc['sets'] ?? '',
+        isComplete: doc['isComplete'] ?? '',
       );
     }).toList();
   }
