@@ -41,7 +41,7 @@ class DatabaseService {
     }).toList();
   }
 
-  final CollectionReference sessionCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('tricklists').doc(ActiveTricklist().id).collection('sessions');
+  final CollectionReference sessionCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('sessions');
   Future<void> updateSessionData(String title, List sets) async {
     return await sessionCollection.add({
       'title': title,
@@ -75,7 +75,7 @@ class DatabaseService {
 
   // get users sessions
   Stream<List<Session>> get sessions{
-    return sessionCollection.orderBy("created", descending: false).snapshots()
+    return sessionCollection.where('listID', isEqualTo: ActiveTricklist().id).orderBy("created", descending: false).snapshots()
       .map(_sessionFromSnapshot);
   }
 
