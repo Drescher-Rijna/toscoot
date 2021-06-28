@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:toscoot/models/session.dart';
+import 'package:toscoot/models/sets.dart';
 import 'package:toscoot/models/tricklist.dart';
 
 class DatabaseService {
@@ -43,15 +44,21 @@ class DatabaseService {
   }
 
   Future<void> getActiveID(String id) {
-    activeID = id;
+    if (id != null) {
+      activeID = id;
+    } else {
+      activeID = null;
+    }
   }
-  
+
   final CollectionReference sessionCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('tricklists').doc(activeID).collection('sessions');
   Future<void> updateSessionData(String title, List sets) async {
+
     return await sessionCollection.add({
       'title': title,
       'sets': sets,
       'created': FieldValue.serverTimestamp(),
+      'isComplete': false,
     });
   }
 

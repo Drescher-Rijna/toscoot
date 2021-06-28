@@ -13,13 +13,14 @@ class SessionTile extends StatefulWidget {
 }
 
 class _SessionTileState extends State<SessionTile> {
-  
+
   final session;
   _SessionTileState( this.session );
 
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
+      return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
         color: Colors.grey[800],
@@ -41,7 +42,7 @@ class _SessionTileState extends State<SessionTile> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(sessionTitle: session.title, sessionSets: [session.sets],)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(sessionTitle: session.title, sessionSets: session.sets,)));
                     },
                     icon: Icon(
                       Icons.remove_red_eye,
@@ -86,5 +87,6 @@ class _SessionTileState extends State<SessionTile> {
         ),
       ),
     );
+     
   }
 }

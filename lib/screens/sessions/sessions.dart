@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/session.dart';
+import 'package:toscoot/screens/sessions/create_session.dart';
 import 'package:toscoot/screens/sessions/sessions_list.dart';
-import 'package:toscoot/screens/tricklists/create_tricklist.dart';
 import 'package:toscoot/services/auth.dart';
 import 'package:toscoot/services/database.dart';
 
@@ -44,7 +44,7 @@ class Sessions extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Create_TrickList()),
+              MaterialPageRoute(builder: (context) => Create_Session()),
             );
           },
           elevation: 5,

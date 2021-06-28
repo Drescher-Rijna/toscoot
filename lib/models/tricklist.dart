@@ -11,7 +11,7 @@ class TrickList {
 
 
 class ActiveTricklist {
-  final String id;
+  final List tricks;
 
-  ActiveTricklist({ this.id });
+  ActiveTricklist({ this.tricks});
 }

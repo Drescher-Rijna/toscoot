@@ -6,14 +6,12 @@ class SessionDetails extends StatelessWidget {
   final Session session;
 
   final sessionTitle;
-  final List<dynamic> sessionSets;
+  final sessionSets;
   SessionDetails({this.sessionTitle, this.sessionSets, this.session});
 
-  Widget getSetsWidgets(List<dynamic> sets)
+  Widget getTrickWidgets(List<dynamic>sets)
     {
-      print(sets);
-      print(sessionSets);
-        return new Column(
+      return new Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: sets.map((set) => 
           Container(
@@ -28,25 +26,23 @@ class SessionDetails extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 new Text(
-                  set[1]['trick'],
+                  set['trick'],
                   style: TextStyle(
                     fontSize: 18.0,
                     color: Colors.grey[100],
                   ),
                 ),
                 new Text(
-                  set[1]['reps'] + ' reps',
+                  set['reps'].toString(),
                   style: TextStyle(
                     fontSize: 18.0,
                     color: Colors.grey[100],
                   ),
-                ),
+                )
               ],
             ),
-          ),).toList(),
+          )).toList()
       );
-      
-      
     }
 
   @override
@@ -61,10 +57,7 @@ class SessionDetails extends StatelessWidget {
         ),
         body: Column(
           children: [
-            Container(
-              child: getSetsWidgets(sessionSets),
-            ),
-            
+            getTrickWidgets(sessionSets),
           ],
         ),
     );
