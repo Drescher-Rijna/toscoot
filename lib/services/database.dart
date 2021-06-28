@@ -6,7 +6,8 @@ import 'package:toscoot/models/tricklist.dart';
 class DatabaseService {
 
   final String uid;
-  DatabaseService({ this.uid });
+  String activeID;
+  DatabaseService({ this.uid, this.activeID});
 
   // collection reference
   final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
@@ -39,6 +40,15 @@ class DatabaseService {
         isActive: doc['isActive'] ?? '',
       );
     }).toList();
+  }
+
+  // sessions collectionreference
+  Future<void> getActiveID(String id) {
+    if (id != null) {
+      activeID = id;
+    } else {
+      activeID = null;
+    }
   }
 
   final CollectionReference sessionCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('sessions');
@@ -75,7 +85,7 @@ class DatabaseService {
 
   // get users sessions
   Stream<List<Session>> get sessions{
-    return sessionCollection.where('listID', isEqualTo: ActiveTricklist().id).orderBy("created", descending: false).snapshots()
+    return sessionCollection.where('listID', isEqualTo: activeID).orderBy("created", descending: false).snapshots()
       .map(_sessionFromSnapshot);
   }
 
