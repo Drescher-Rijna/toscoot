@@ -1,24 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:toscoot/models/session.dart';
-import 'package:toscoot/models/tricklist.dart';
-import 'package:toscoot/screens/sessions/session_details.dart';
-import 'package:toscoot/screens/tricklists/tricklist_details.dart';
 import 'package:toscoot/services/database.dart';
 
-class SessionTile extends StatefulWidget {
+class CreatedSetTile extends StatefulWidget {
 
-  final Session session;
-  SessionTile({ this.session });
+  final Sets sets;
+  CreatedSetTile({ this.sets });
 
   @override
-  _SessionTileState createState() => _SessionTileState(session);
+  _CreatedSetTileState createState() => _CreatedSetTileState(sets);
 }
 
-class _SessionTileState extends State<SessionTile> {
+class _CreatedSetTileState extends State<CreatedSetTile> {
 
-  final session;
-  _SessionTileState( this.session );
+  final sets;
+  _CreatedSetTileState( this.sets );
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +32,13 @@ class _SessionTileState extends State<SessionTile> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                session.title,
+                sets.trick,
+                style: TextStyle(
+                  color: Colors.grey[100],
+                ),
+              ),
+              Text(
+                sets.reps.toString(),
                 style: TextStyle(
                   color: Colors.grey[100],
                 ),
@@ -44,18 +46,8 @@ class _SessionTileState extends State<SessionTile> {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(sessionTitle: session.title, sessionSets: [session.sets])));
-                    },
-                    icon: Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.grey[100],
-                    ),
-                    highlightColor: Colors.orange[900],
-                  ),
-                  IconButton(
                     onPressed: () async {
-                      await DatabaseService().sessionCollection.doc(session.id).delete();
+                      await DatabaseService().setsCollection.doc(sets.id).delete();
                     },
                     icon: Icon(
                       Icons.delete,

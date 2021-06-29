@@ -12,6 +12,7 @@ class SessionList extends StatefulWidget {
 class _SessionListState extends State<SessionList> {
   @override
   Widget build(BuildContext context) {
+
     final sessions = Provider.of<List<Session>>(context);
 
     return ListView.builder(

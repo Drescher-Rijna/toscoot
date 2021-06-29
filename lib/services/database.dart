@@ -6,12 +6,12 @@ import 'package:toscoot/models/tricklist.dart';
 class DatabaseService {
 
   final String uid;
-  String activeID;
-  DatabaseService({ this.uid, this.activeID});
+  static String activeID;
+  static String currentSeshID;
+  DatabaseService({ this.uid });
 
   // collection reference
   final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
-
   Future<void> updateUserData(String username, String email) async {
     return await userCollection.doc(uid).set({
       'username': username,
@@ -26,7 +26,7 @@ class DatabaseService {
       'title': title,
       'tricks': tricks,
       'created': FieldValue.serverTimestamp(),
-      'isActive': 'false',
+      'isActive': false,
     });
   }
 
@@ -43,21 +43,25 @@ class DatabaseService {
   }
 
   // sessions collectionreference
-  Future<void> getActiveID(String id) {
+  Future getActiveID(String id) {
     if (id != null) {
       activeID = id;
+      print(activeID);
     } else {
       activeID = null;
+      print(activeID);
     }
   }
 
   final CollectionReference sessionCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('sessions');
-  Future<void> updateSessionData(String title, List sets) async {
+  // creating a session with a title
+  Future<void> updateSessionData(String title) async {
     return await sessionCollection.add({
       'title': title,
-      'sets': sets,
       'created': FieldValue.serverTimestamp(),
-    });
+      'isComplete': false,
+      'listID': activeID,
+    }).then((doc) => currentSeshID = doc.id );
   }
 
   // session from snapshot
@@ -66,7 +70,28 @@ class DatabaseService {
       return Session(
         id: doc.id,
         title: doc['title'] ?? '',
-        sets: doc['sets'] ?? '',
+      );
+    }).toList();
+  }
+
+  // sets collectionreference
+  final CollectionReference setsCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('sessions').doc(currentSeshID).collection('sets');
+
+  // adding sets to the just creating session
+  Future<void> updateSetsData(String trick, int reps) async {
+    return await sessionCollection.doc(currentSeshID).collection('sets').add({
+      'trick': trick,
+      'reps': reps,
+    });
+  }
+
+  // sets from snapshot
+  List<Sets> _setsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Sets(
+        id: doc.id,
+        trick: doc['trick'],
+        reps: doc['reps'],
       );
     }).toList();
   }
@@ -90,6 +115,9 @@ class DatabaseService {
   }
 
   // get session result
-
+  Stream<List<Sets>> get sets{
+    return setsCollection.snapshots()
+      .map(_setsFromSnapshot);
+  }
 
 }

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:toscoot/models/tricklist.dart';
 import 'package:toscoot/screens/tricklists/tricklist_details.dart';
