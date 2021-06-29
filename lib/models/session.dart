@@ -1,10 +1,9 @@
 class Session {
 
   final String title;
-  final List sets;
   final String id;
 
-  Session({ this.title, this.sets, this.id });
+  Session({ this.title, this.id });
 
 }
 
@@ -16,4 +15,13 @@ class Sets {
 
   Sets({ this.id, this.trick, this.reps });
 
+}
+
+class CurrentSets {
+
+  final String id;
+  final String trick;
+  final int reps;
+
+  CurrentSets({ this.id, this.trick, this.reps });
 }

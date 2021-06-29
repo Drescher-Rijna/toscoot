@@ -6,9 +6,12 @@ import 'package:toscoot/models/tricklist.dart';
 class DatabaseService {
 
   final String uid;
+  final String activeTricklistID;
+
   static String activeID;
   static String currentSeshID;
-  DatabaseService({ this.uid });
+
+  DatabaseService({ this.uid, this.activeTricklistID });
 
   // collection reference
   final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
@@ -51,6 +54,25 @@ class DatabaseService {
       activeID = null;
       print(activeID);
     }
+  }
+
+  Future getSeshID(String id) {
+    if (id != null) {
+      currentSeshID = id;
+      print(currentSeshID);
+    } else {
+      currentSeshID = null;
+      print(currentSeshID);
+    }
+  }
+
+  // active tricklist from snapshot
+  ActiveTricklist _activeListFromSnapshot(DocumentSnapshot snapshot) {
+    return ActiveTricklist(
+      id: snapshot.id,
+      tricks: snapshot['tricks']
+      
+    );
   }
 
   final CollectionReference sessionCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('sessions');
@@ -96,6 +118,17 @@ class DatabaseService {
     }).toList();
   }
 
+  // current sesh sets from snapshot
+  List<CurrentSets> _currentSetsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return CurrentSets(
+        id: doc.id,
+        trick: doc['trick'],
+        reps: doc['reps'],
+      );
+    }).toList();
+  }
+  
 
   // get users stream
   Stream<QuerySnapshot> get users {
@@ -108,10 +141,22 @@ class DatabaseService {
       .map(_trickListFromSnapshot);
   }
 
+  // get user active list
+  Stream<ActiveTricklist> get activeTricklist {
+    return FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('tricklists').doc(activeID).snapshots()
+      .map(_activeListFromSnapshot);
+  }
+
   // get users sessions
   Stream<List<Session>> get sessions{
     return sessionCollection.where('listID', isEqualTo: activeID).orderBy("created", descending: false).snapshots()
       .map(_sessionFromSnapshot);
+  }
+
+  // get current sessions sets
+  Stream<List<CurrentSets>> get currentSets{
+    return sessionCollection.doc(currentSeshID).collection('sets').snapshots()
+      .map(_currentSetsFromSnapshot);
   }
 
   // get session result

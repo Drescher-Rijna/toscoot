@@ -74,6 +74,7 @@ class _TrickListTileState extends State<TrickListTile> {
                               });
 
                               DatabaseService().getActiveID(tricklist.id);
+                              DatabaseService(activeTricklistID: tricklist.id);
 
                               print(tricklist.isActive);
 

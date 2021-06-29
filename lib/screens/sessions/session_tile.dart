@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:toscoot/models/session.dart';
-import 'package:toscoot/models/tricklist.dart';
 import 'package:toscoot/screens/sessions/session_details.dart';
-import 'package:toscoot/screens/tricklists/tricklist_details.dart';
 import 'package:toscoot/services/database.dart';
 
 class SessionTile extends StatefulWidget {
@@ -44,8 +41,9 @@ class _SessionTileState extends State<SessionTile> {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(sessionTitle: session.title, sessionSets: [session.sets])));
+                    onPressed: () async {
+                      await DatabaseService().getSeshID(session.id);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(sessionTitle: session.title, session: session,)));
                     },
                     icon: Icon(
                       Icons.remove_red_eye,
