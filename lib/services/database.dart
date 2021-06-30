@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:toscoot/models/results.dart';
 import 'package:toscoot/models/session.dart';
 import 'package:toscoot/models/tricklist.dart';
 
@@ -10,10 +11,12 @@ class DatabaseService {
 
   static String activeID;
   static String currentSeshID;
+  static String currentResultsID;
+  static String currentSetResultsID;
 
   DatabaseService({ this.uid, this.activeTricklistID });
 
-  // collection reference
+  // users collection reference
   final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
   Future<void> updateUserData(String username, String email) async {
     return await userCollection.doc(uid).set({
@@ -45,7 +48,7 @@ class DatabaseService {
     }).toList();
   }
 
-  // sessions collectionreference
+  // get current ID's
   Future getActiveID(String id) {
     if (id != null) {
       activeID = id;
@@ -53,16 +56,6 @@ class DatabaseService {
     } else {
       activeID = null;
       print(activeID);
-    }
-  }
-
-  Future getSeshID(String id) {
-    if (id != null) {
-      currentSeshID = id;
-      print(currentSeshID);
-    } else {
-      currentSeshID = null;
-      print(currentSeshID);
     }
   }
 
@@ -75,6 +68,9 @@ class DatabaseService {
     );
   }
 
+   
+
+  // sessions collectionreference
   final CollectionReference sessionCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('sessions');
   // creating a session with a title
   Future<void> updateSessionData(String title) async {
@@ -84,6 +80,17 @@ class DatabaseService {
       'isComplete': false,
       'listID': activeID,
     }).then((doc) => currentSeshID = doc.id );
+  }
+
+  // get current sesh id
+  Future getSeshID(String id) {
+    if (id != null) {
+      currentSeshID = id;
+      print(currentSeshID);
+    } else {
+      currentSeshID = null;
+      print(currentSeshID);
+    }
   }
 
   // session from snapshot
@@ -97,8 +104,9 @@ class DatabaseService {
   }
 
   // sets collectionreference
-  final CollectionReference setsCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('sessions').doc(currentSeshID).collection('sets');
-
+  final CollectionReference setsCollection = FirebaseFirestore.instance.collection('users')
+  .doc(FirebaseAuth.instance.currentUser.uid).collection('sessions')
+  .doc(currentSeshID).collection('sets');
   // adding sets to the just creating session
   Future<void> updateSetsData(String trick, int reps) async {
     return await sessionCollection.doc(currentSeshID).collection('sets').add({
@@ -128,7 +136,102 @@ class DatabaseService {
       );
     }).toList();
   }
+
+
+
+  // results collection reference
+  final CollectionReference resultsCollection = FirebaseFirestore.instance.collection('users')
+  .doc(FirebaseAuth.instance.currentUser.uid).collection('results');
+
+  // set results collection reference
+  final CollectionReference setResultsCollection = FirebaseFirestore.instance.collection('users')
+  .doc(FirebaseAuth.instance.currentUser.uid).collection('results').doc(currentResultsID).collection('setResults');
+
+  // create intial document for result and get current results ID
+  Future<void> initResults() async {
+    return await resultsCollection.add({
+      'seshID': currentSeshID,
+      'seshDate': FieldValue.serverTimestamp(),
+      'overallTime': '00:00:00',
+    }).then((doc) => currentResultsID = doc.id );
+  }
+
+  // update current results document data
+  Future<void> updateResultsData(String time) async {
+    return await resultsCollection.doc(currentResultsID).update({
+      'overallTime': time,
+    });
+  }
+
+  // create intial document for result and get current results ID
+  Future<void> initSetResults(String trick, int reps) async {
+    return await setResultsCollection.add({
+      'trick': trick,
+      'goal': reps,
+      'lands': 0,
+      'fails': 0,
+      'setTime': '00:00:00',
+      'isDone': false,
+    });
+  }
+
+  // update current set results data
+  Future<void> updateSetResultsData(String setID, String trick, int lands, int fails, String time, int goal, bool isDone) async {
+    return await setResultsCollection.doc(setID).update({
+      'trick': trick,
+      'lands': lands,
+      'fails': fails,
+      'setTime': time,
+      'goal': goal,
+      'isDone': isDone,
+    });
+  }
+
+  // current sets results from snapshot
+  List<SetResults> _currentSetResultsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return SetResults(
+        id: doc.id,
+        trick: doc['trick'] ?? '',
+        lands: doc['lands'] ?? '',
+        fails: doc['fails'] ?? '',
+        goal: doc['goal'] ?? '',
+        setTime: doc['setTime'] ?? '',
+        isDone: doc['isDone'] ?? '',
+      );
+    }).toList();
+  }
+
+  // current sesh results from snapshot
+  List<Results> _currentSeshResultsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Results(
+        id: doc.id,
+        sessionID: doc['seshID'],
+        completeTime: doc['overallTime'],
+        completionDate: doc['seshDate'],
+      );
+    }).toList();
+  }
+
+  // current tricklist all results from snapshot
+  List<Results> _currentTricklistResultsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Results(
+        id: doc.id,
+        sessionID: doc['seshID'],
+        completeTime: doc['overallTime'],
+        completionDate: doc['seshDate'],
+      );
+    }).toList();
+  }
+
+  // current user all results ever from snapshot
+
+
   
+
+  // STREAMS STREAMS STREAMS STREAMS STREAMS
 
   // get users stream
   Stream<QuerySnapshot> get users {
@@ -163,6 +266,13 @@ class DatabaseService {
   Stream<List<Sets>> get sets{
     return setsCollection.snapshots()
       .map(_setsFromSnapshot);
+  }
+
+
+  // get the current set results in active sesh
+  Stream<List<SetResults>> get setResults{
+    return setResultsCollection.snapshots()
+      .map(_currentSetResultsFromSnapshot);
   }
 
 }

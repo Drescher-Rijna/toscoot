@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/session.dart';
+import 'package:toscoot/screens/sessions/session_active.dart';
 import 'package:toscoot/screens/sessions/session_details_list.dart';
 import 'package:toscoot/services/auth.dart';
 import 'package:toscoot/services/database.dart';
@@ -49,7 +52,10 @@ class SessionDetails extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
                 TextButton.icon(
-                  onPressed: () {}, 
+                  onPressed: () async {
+                    await DatabaseService().initResults();
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SessionActive()));
+                  }, 
                   icon: Icon(
                     Icons.play_arrow,
                     color: Colors.grey[100],
