@@ -71,7 +71,6 @@ class _RegisterState extends State<Register> {
                     ),
                   ),
                   validator: (val) => val.isEmpty ? 'Enter an email' : null,
-                  obscureText: true,
                   onChanged: (val) {
                     setState(() => username = val);
                   },
@@ -128,7 +127,7 @@ class _RegisterState extends State<Register> {
                   onPressed: () async {
                     if (_formKey.currentState.validate()){
                       setState(() => loading = true);
-                      dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                      dynamic result = await _auth.registerWithEmailAndPassword(username, email, password);
                       if (result == null) {
                         setState(() {
                             error = 'please supply a valid email';

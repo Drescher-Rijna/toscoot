@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:toscoot/models/results.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:toscoot/services/database.dart';
 
 class SessionActiveSetTile extends StatefulWidget {
 
@@ -20,94 +23,185 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
 
   @override
   Widget build(BuildContext context) {
-      int _currentLand = 0;
-      int _currentFail = 0;
-
-      void _incrementLand() {
-        setState(() {
-          _currentLand++;
-        });
-      }
-
-      void _incrementFail() {
-        setState(() {
-          _currentFail++;
-        });
-      }
-
+      int _currentLand = setResults.lands;
+      int _currentFail = setResults.fails;
+      
+      final StopWatchTimer _stopwatchTimer = StopWatchTimer();
+      final _isHours = true;
 
     void showSettingsPanel() {
       showModalBottomSheet(context: context, builder: (context) {
-        return Container(
-          color: Colors.grey[900],
-          padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              color: Colors.grey[900],
+              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                    setResults.trick,
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      color: Colors.grey[100]
-                    ),
-                  ),
-                  SizedBox(height: 25.0,),
-                  Text(
-                    '00:00:00',
-                    style: TextStyle(
-                      fontSize: 40.0,
-                      color: Colors.grey[100]
-                    ),
-                  ),
-                  SizedBox(height: 5.0,),
-                  Text(
-                    'start',
-                    style: TextStyle(
-                          fontSize: 25.0,
-                          color: Colors.grey[100]
-                        ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Text(
-                    _currentLand.toString() + '/10',
-                    style: TextStyle(
-                      fontSize: 40.0,
-                      color: Colors.grey[100]
-                    ),
-                  ),
-                  SizedBox(height: 5.0,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Column(
                     children: [
-                      TextButton(
-                        child: Text(
-                          'Land',
-                          style: TextStyle(
-                            fontSize: 25.0,
-                            color: Colors.grey[100]
-                          ),
-                        ),
-                        onPressed: () {_incrementLand();}
-                        ),
-                      SizedBox(width: 20.0,),
                       Text(
-                        'fail',
+                        setResults.trick,
                         style: TextStyle(
                           fontSize: 25.0,
                           color: Colors.grey[100]
                         ),
                       ),
+                      SizedBox(height: 25.0,),
+
+                      StreamBuilder<int>(
+                        stream: _stopwatchTimer.rawTime,
+                        initialData: _stopwatchTimer.rawTime.value,
+                        builder: (context, snapshot,) {
+
+                        final value = snapshot.data;
+                        final displayTime = StopWatchTimer.getDisplayTime(value, hours: _isHours);
+
+                        return Column(
+                          children: [
+                            Text(
+                              displayTime,
+                              style: TextStyle(
+                                fontSize: 40.0,
+                                color: Colors.grey[100]
+                              ),
+                            ),
+                            SizedBox(height: 5.0,),
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.play_arrow), 
+                                  onPressed: () {
+                                    _stopwatchTimer.onExecute.add(StopWatchExecute.start);
+                                    DatabaseService().updateSetResultsData(setResults.id, _currentLand, _currentFail, displayTime);
+                                  }
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.pause), 
+                                  onPressed: () {
+                                    _stopwatchTimer.onExecute.add(StopWatchExecute.stop);
+                                    DatabaseService().updateSetResultsData(setResults.id, _currentLand, _currentFail, displayTime,);
+                                  }
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.stop), 
+                                  onPressed: () async {
+                                    await DatabaseService().endSet(setResults.id, _currentLand, _currentFail, displayTime, setResults.isDone);
+                                    
+                                    _stopwatchTimer.onExecute.add(StopWatchExecute.reset);
+                                    
+                                    setState(() {
+                                      _currentLand = 0;
+                                      _currentFail = 0;
+                                    });
+
+                                    Navigator.pop(context);
+                                  }
+                                ),
+                              ],
+                            ),
+
+                            // COUNTERS
+                            Column(
+                              children: [
+                                Text(
+                                  _currentLand.toString() + '/10',
+                                  style: TextStyle(
+                                    fontSize: 40.0,
+                                    color: Colors.grey[100]
+                                  ),
+                                ),
+                                SizedBox(height: 10.0,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      color: Colors.greenAccent[700],
+                                      padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
+                                      child: TextButton(
+                                        style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.all(Colors.greenAccent[700]),
+                                        ),
+                                        child: Text(
+                                          'Land',
+                                          style: TextStyle(
+                                            fontSize: 25.0,
+                                            color: Colors.grey[100]
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          setState(() {
+                                            _currentLand++;
+                                          });
+
+                                          if (_currentLand == setResults.goal) {
+                                            await DatabaseService().endSet(setResults.id, _currentLand, _currentFail, displayTime, true);
+                                            
+                                            _stopwatchTimer.onExecute.add(StopWatchExecute.reset);
+
+                                            setState(() {
+                                              _currentLand = 0;
+                                              _currentFail = 0;
+                                            });
+
+                                            Navigator.pop(context);
+                                          } else {
+                                            await DatabaseService().updateSetResultsData(setResults.id, _currentLand, _currentFail, displayTime,);
+                                          }
+                                          
+
+                                        }
+                                      ),
+                                    ),
+                                    SizedBox(width: 20.0,),
+                                    Container(
+                                      color: Colors.redAccent[700],
+                                      padding: EdgeInsets.fromLTRB(0, 0, 12, 0),
+                                      
+                                      child: Row(
+                                        children: [
+                                          TextButton(
+                                            child: Text(
+                                              'Fail',
+                                              style: TextStyle(
+                                                fontSize: 25.0,
+                                                color: Colors.grey[100]
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                _currentFail++;
+                                              });
+
+                                              DatabaseService().updateSetResultsData(setResults.id, _currentLand, _currentFail, displayTime,);
+                                            }
+                                          ),
+                                          Text(
+                                            _currentFail.toString(),
+                                            style: TextStyle(
+                                              fontSize: 25.0,
+                                              color: Colors.grey[100]
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }),
                     ],
                   ),
                 ],
               ),
-            ],
-          ),
+            );
+          }
+          
         );
       });
     }
@@ -152,4 +246,39 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
     );
   }
 }
+
+
+Stream<int> stopWatchStream() {
+    StreamController<int> streamController;
+    Timer timer;
+    Duration timerInterval = Duration(seconds: 1);
+    int counter = 0;
+
+    void stopTimer() {
+      if (timer != null) {
+        timer.cancel();
+        timer = null;
+        counter = 0;
+        streamController.close();
+      }
+    }
+
+    void tick(_) {
+      counter++;
+      streamController.add(counter);
+    }
+
+    void startTimer() {
+      timer = Timer.periodic(timerInterval, tick);
+    }
+
+    streamController = StreamController<int>(
+      onListen: startTimer,
+      onCancel: stopTimer,
+      onResume: startTimer,
+      onPause: stopTimer,
+    );
+
+    return streamController.stream;
+  }
 

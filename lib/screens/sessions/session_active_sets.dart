@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/results.dart';
 import 'package:toscoot/screens/sessions/session_active_settile.dart';
+import 'package:toscoot/shared/loading.dart';
 
 class SessionActiveSets extends StatefulWidget {
 
@@ -19,7 +20,7 @@ class _SessionActiveSetsState extends State<SessionActiveSets> {
     return ListView.builder(
       itemCount: setResults.length,
       itemBuilder: (context, index) {
-        return SessionActiveSetTile(setResults[index]);
+        return setResults == null ? Loading() : SessionActiveSetTile(setResults[index]);
       },
     );
   }

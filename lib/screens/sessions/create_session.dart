@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:toscoot/models/tricklist.dart';
 import 'package:toscoot/screens/sessions/create_sets.dart';
 import 'package:toscoot/services/database.dart';
+import 'package:toscoot/shared/loading.dart';
 
 class Create_Session extends StatefulWidget {
 
@@ -13,11 +14,13 @@ class Create_Session extends StatefulWidget {
 class _Create_SessionState extends State<Create_Session> {
   final _formKey = GlobalKey<FormState>();
 
+  bool loading = false;
+
   String title = '';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
         backgroundColor: Colors.grey[900],
           appBar: AppBar(
             title: Text('Create A Session'),
@@ -66,6 +69,7 @@ class _Create_SessionState extends State<Create_Session> {
                       ),
                       onPressed: () async {
                         if(_formKey.currentState.validate()){
+                          setState(() => loading = true);
                           await DatabaseService().updateSessionData(title);
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Create_Sets()));
                         }

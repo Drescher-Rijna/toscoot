@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/session.dart';
@@ -14,6 +15,17 @@ class Create_Sets extends StatefulWidget {
 
 class _Create_SetsState extends State<Create_Sets> {
 
+  String id = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    id = ActiveID.getID() ?? '';
+    print('preference');
+    print(id);
+  }
+
   final _formKey = GlobalKey<FormState>();
 
   String _currentTrick;
@@ -21,6 +33,8 @@ class _Create_SetsState extends State<Create_Sets> {
 
   @override
   Widget build(BuildContext context) {
+    print('hej');
+    print(DatabaseService().activeTricklistID);
     return StreamProvider<List<Sets>>.value(
       value: DatabaseService().sets,
       child: Scaffold(
@@ -38,13 +52,12 @@ class _Create_SetsState extends State<Create_Sets> {
                   child: Column(
                     children: [
                       StreamBuilder<ActiveTricklist>(
-                        stream: DatabaseService().activeTricklist,
+                        stream: DatabaseService(activeTricklistID: id).activeTricklist,
                         builder: (context, snapshot) {
                           if(snapshot.hasData) {
-
-                            ActiveTricklist activeTricklist = snapshot.data;
-
-                            print(activeTricklist.tricks);
+                            print('succes');
+                            print(snapshot.data.tricks);
+                            ActiveTricklist activelist = snapshot.data;
 
                             return Form(
                                     key: _formKey,
@@ -66,20 +79,15 @@ class _Create_SetsState extends State<Create_Sets> {
                                                 children: [
                                                   SizedBox(height: 15.0,),                                    
                                                   DropdownButtonFormField(
-                                                    dropdownColor: Colors.grey[900],
-                                                    style: TextStyle(
-                                                      color: Colors.grey[200],
-                                                      fontSize: 18.0,
-                                                    ),
-                                                    value: _currentTrick ?? 'Select a trick',
-                                                    items: activeTricklist.tricks.map((trick) {
+                                                    value: _currentTrick,
+                                                    items: activelist.tricks.map((trick) {
                                                       return new DropdownMenuItem(
                                                         value: trick,
-                                                        child: new Text(trick),
+                                                        child: Text(trick),
                                                       );
                                                     }).toList(),
-                                                    onChanged: (val) => setState(() => _currentTrick = val),
-                                                  ), 
+                                                    onChanged: (val) => setState(() => _currentTrick = val ),
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -143,6 +151,7 @@ class _Create_SetsState extends State<Create_Sets> {
                                   );
 
                           } else {
+                            print('fejl');
                             print(snapshot.data);
                             return Text('fejl');
                           }
@@ -151,7 +160,6 @@ class _Create_SetsState extends State<Create_Sets> {
                       ),
                       SizedBox(height: 30.0,),
                       Expanded(
-                          
                           child: CreatedSetsList(),
                         ),
                     ],

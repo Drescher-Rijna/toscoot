@@ -16,6 +16,9 @@ class DatabaseService {
 
   DatabaseService({ this.uid, this.activeTricklistID });
 
+  
+
+
   // users collection reference
   final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
   Future<void> updateUserData(String username, String email) async {
@@ -50,13 +53,8 @@ class DatabaseService {
 
   // get current ID's
   Future getActiveID(String id) {
-    if (id != null) {
       activeID = id;
       print(activeID);
-    } else {
-      activeID = null;
-      print(activeID);
-    }
   }
 
   // active tricklist from snapshot
@@ -102,6 +100,8 @@ class DatabaseService {
       );
     }).toList();
   }
+
+
 
   // sets collectionreference
   final CollectionReference setsCollection = FirebaseFirestore.instance.collection('users')
@@ -176,13 +176,19 @@ class DatabaseService {
   }
 
   // update current set results data
-  Future<void> updateSetResultsData(String setID, String trick, int lands, int fails, String time, int goal, bool isDone) async {
+  Future<void> updateSetResultsData(String setID, int lands, int fails, String time) async {
     return await setResultsCollection.doc(setID).update({
-      'trick': trick,
       'lands': lands,
       'fails': fails,
       'setTime': time,
-      'goal': goal,
+    });
+  }
+
+  Future<void> endSet(String setID, int lands, int fails, String time, bool isDone) async {
+    return await setResultsCollection.doc(setID).update({
+      'lands': lands,
+      'fails': fails,
+      'setTime': time,
       'isDone': isDone,
     });
   }
@@ -203,15 +209,14 @@ class DatabaseService {
   }
 
   // current sesh results from snapshot
-  List<Results> _currentSeshResultsFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
+  Results _currentSeshResultsFromSnapshot(DocumentSnapshot snapshot) {
       return Results(
-        id: doc.id,
-        sessionID: doc['seshID'],
-        completeTime: doc['overallTime'],
-        completionDate: doc['seshDate'],
+        id: snapshot.id,
+        sessionID: snapshot['seshID'],
+        completeTime: snapshot['overallTime'],
+        completionDate: snapshot['seshDate'],
       );
-    }).toList();
+
   }
 
   // current tricklist all results from snapshot
@@ -231,6 +236,9 @@ class DatabaseService {
 
   
 
+
+
+
   // STREAMS STREAMS STREAMS STREAMS STREAMS
 
   // get users stream
@@ -246,7 +254,7 @@ class DatabaseService {
 
   // get user active list
   Stream<ActiveTricklist> get activeTricklist {
-    return FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('tricklists').doc(activeID).snapshots()
+    return trickListCollection.doc(activeTricklistID).snapshots()
       .map(_activeListFromSnapshot);
   }
 
@@ -262,17 +270,25 @@ class DatabaseService {
       .map(_currentSetsFromSnapshot);
   }
 
-  // get session result
+  // get session sets
   Stream<List<Sets>> get sets{
     return setsCollection.snapshots()
       .map(_setsFromSnapshot);
   }
 
 
+  // get the current session complete results
+  Stream<Results> get completeResults{
+    return resultsCollection.doc(currentResultsID).snapshots()
+      .map(_currentSeshResultsFromSnapshot);
+  }
+
   // get the current set results in active sesh
   Stream<List<SetResults>> get setResults{
     return setResultsCollection.snapshots()
       .map(_currentSetResultsFromSnapshot);
   }
+
+  
 
 }

@@ -75,18 +75,13 @@ class _TrickListTileState extends State<TrickListTile> {
 
                               DatabaseService().getActiveID(tricklist.id);
                               DatabaseService(activeTricklistID: tricklist.id);
-
-                              print(tricklist.isActive);
+                              await ActiveID.setID(tricklist.id);
 
                             } else {
 
                               await DatabaseService().trickListCollection.doc(tricklist.id).update({
                                 'isActive': false,
                               });
-
-                              DatabaseService().getActiveID(null);
-
-                              print(tricklist.isActive);
 
                             }
                             
