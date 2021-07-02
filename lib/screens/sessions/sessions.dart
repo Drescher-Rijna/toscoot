@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/session.dart';
+import 'package:toscoot/screens/sessions/create_session.dart';
 import 'package:toscoot/screens/sessions/sessions_list.dart';
-import 'package:toscoot/screens/tricklists/create_tricklist.dart';
 import 'package:toscoot/services/auth.dart';
 import 'package:toscoot/services/database.dart';
 
-class Sessions extends StatelessWidget {
+class Sessions extends StatefulWidget {
 
+  @override
+  _SessionsState createState() => _SessionsState();
+}
+
+class _SessionsState extends State<Sessions> {
   final AuthService _auth = AuthService();
+
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +51,7 @@ class Sessions extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Create_TrickList()),
+              MaterialPageRoute(builder: (context) => Create_Session()),
             );
           },
           elevation: 5,
@@ -54,6 +61,17 @@ class Sessions extends StatelessWidget {
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.orange[900],
           type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+            switch (_currentIndex) {
+              case 2:
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Sessions()));
+              break;
+            }
+          },
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
@@ -66,6 +84,7 @@ class Sessions extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Icon(Icons.more_time_rounded),
               label: 'Sessions',
+              
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.linear_scale),

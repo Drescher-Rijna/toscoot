@@ -13,12 +13,13 @@ class SessionTile extends StatefulWidget {
 }
 
 class _SessionTileState extends State<SessionTile> {
-  
+
   final session;
   _SessionTileState( this.session );
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
@@ -40,8 +41,16 @@ class _SessionTileState extends State<SessionTile> {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(sessionTitle: session.title, sessionSets: [session.sets],)));
+                    onPressed: () async {
+                      await DatabaseService().getSeshID(session.id);
+                      if (session.isComplete) {
+                        print('session is complete');
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(sessionTitle: session.title, session: session,)));
+                      } else {
+                        
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(sessionTitle: session.title, session: session,)));
+                      }
+                      
                     },
                     icon: Icon(
                       Icons.remove_red_eye,
@@ -68,3 +77,4 @@ class _SessionTileState extends State<SessionTile> {
     );
   }
 }
+
