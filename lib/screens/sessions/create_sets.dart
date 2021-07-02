@@ -6,6 +6,7 @@ import 'package:toscoot/models/session.dart';
 import 'package:toscoot/models/tricklist.dart';
 import 'package:toscoot/screens/sessions/created_sets_list.dart';
 import 'package:toscoot/services/database.dart';
+import 'package:toscoot/shared/loading.dart';
 
 class Create_Sets extends StatefulWidget {
 
@@ -33,140 +34,130 @@ class _Create_SetsState extends State<Create_Sets> {
 
   @override
   Widget build(BuildContext context) {
-    print('hej');
-    print(DatabaseService().activeTricklistID);
+
     return StreamProvider<List<Sets>>.value(
       value: DatabaseService().sets,
-      child: Scaffold(
-          backgroundColor: Colors.grey[900],
-            appBar: AppBar(
-              title: Text('Create A Session'),
-              centerTitle: true,
-              backgroundColor: Colors.orange[900],
-              elevation: 0.0,
-            ),
-            body:
-              Center(
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-                  child: Column(
-                    children: [
-                      StreamBuilder<ActiveTricklist>(
-                        stream: DatabaseService(activeTricklistID: id).activeTricklist,
-                        builder: (context, snapshot) {
-                          if(snapshot.hasData) {
-                            print('succes');
-                            print(snapshot.data.tricks);
-                            ActiveTricklist activelist = snapshot.data;
-
-                            return Form(
-                                    key: _formKey,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          'Add new sets',
-                                          style: TextStyle(
-                                            color: Colors.grey[200],
-                                            fontSize: 20.0
-                                          ),
-                                        ),
-                                        
-                                        Row(
+      child: StreamBuilder<ActiveTricklist>(
+        stream: DatabaseService(activeTricklistID: id).activeTricklist,
+        builder: (context, snapshot) {
+          if(snapshot.hasData) {
+            ActiveTricklist activelist = snapshot.data;
+            print(activelist.tricks);
+            return Scaffold(
+              backgroundColor: Colors.grey[900],
+                appBar: AppBar(
+                  title: Text('Create A Session'),
+                  centerTitle: true,
+                  backgroundColor: Colors.orange[900],
+                  elevation: 0.0,
+                ),
+                body:
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                      child: Column(
+                        children: [
+                                    Form(
+                                        key: _formKey,
+                                        child: Column(
                                           children: [
-                                            Expanded(
-                                              flex: 2,
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.0,),                                    
-                                                  DropdownButtonFormField(
-                                                    value: _currentTrick,
-                                                    items: activelist.tricks.map((trick) {
-                                                      return new DropdownMenuItem(
-                                                        value: trick,
-                                                        child: Text(trick),
-                                                      );
-                                                    }).toList(),
-                                                    onChanged: (val) => setState(() => _currentTrick = val ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(width: 20.0,),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.0,),
-                                                  TextFormField(
-                                                    decoration: InputDecoration(
-                                                      hintText: 'Reps',
-                                                      fillColor: Colors.white,
-                                                      filled: true,
-                                                      enabledBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(color: Colors.white, width: 2.0),
-                                                      ),
-                                                      focusedBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(color: Colors.orange[900], width: 2.0),
-                                                      ),
-                                                    ),
-                                                    keyboardType: TextInputType.number,
-                                                    validator: (val) => val.isEmpty ? 'Enter reps' : null,
-                                                    onChanged: (val) {
-                                                      setState(() => reps = val);
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 20.0,),
-                                        TextButton.icon(
-                                          icon: Icon(
-                                            Icons.add,
-                                            color: Colors.grey[100],
-                                          ),
-                                          style: TextButton.styleFrom(
-                                            backgroundColor: Colors.orange[900],
-                                            padding: EdgeInsets.all(12.0),
-                                          ),
-                                          onPressed: () async {
-                                            if(_formKey.currentState.validate()){
-                                              await DatabaseService().updateSetsData(_currentTrick, int.parse(reps));     
-                                            }
-                                          },
-                                          label: Text(
-                                              'Add new set',
+                                            Text(
+                                              'Add new sets',
                                               style: TextStyle(
-                                              color: Colors.grey[100],
-                                              fontSize: 16.0
+                                                color: Colors.grey[200],
+                                                fontSize: 20.0
                                               ),
                                             ),
-                                        ),
-                                        
-                                        
-                                      ],
-                                    ),
-                                    
-                                  );
-
-                          } else {
-                            print('fejl');
-                            print(snapshot.data);
-                            return Text('fejl');
-                          }
-
-                        } 
+                                            
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Column(
+                                                    children: [
+                                                      SizedBox(height: 15.0,),                                    
+                                                      DropdownButtonFormField(
+                                                        value: _currentTrick,
+                                                        items: activelist.tricks.map((trick) {
+                                                          return new DropdownMenuItem(
+                                                            value: trick,
+                                                            child: Text(trick),
+                                                          );
+                                                        }).toList(),
+                                                        onChanged: (val) => setState(() => _currentTrick = val ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(width: 20.0,),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Column(
+                                                    children: [
+                                                      SizedBox(height: 15.0,),
+                                                      TextFormField(
+                                                        decoration: InputDecoration(
+                                                          hintText: 'Reps',
+                                                          fillColor: Colors.white,
+                                                          filled: true,
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderSide: BorderSide(color: Colors.white, width: 2.0),
+                                                          ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderSide: BorderSide(color: Colors.orange[900], width: 2.0),
+                                                          ),
+                                                        ),
+                                                        keyboardType: TextInputType.number,
+                                                        validator: (val) => val.isEmpty ? 'Enter reps' : null,
+                                                        onChanged: (val) {
+                                                          setState(() => reps = val);
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                              SizedBox(height: 20.0,),
+                              TextButton.icon(
+                                icon: Icon(
+                                Icons.add,
+                                color: Colors.grey[100],
+                              ),
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.orange[900],
+                                padding: EdgeInsets.all(12.0),
+                              ),
+                              onPressed: () async {
+                                if(_formKey.currentState.validate()){
+                                  await DatabaseService().updateSetsData(_currentTrick, int.parse(reps));     
+                                }
+                              },
+                              label: Text(
+                                  'Add new set',
+                                  style: TextStyle(
+                                  color: Colors.grey[100],
+                                  fontSize: 16.0
+                                ),
+                              ),
+                            ),               
+                          ],
+                        ),                 
                       ),
                       SizedBox(height: 30.0,),
                       Expanded(
-                          child: CreatedSetsList(),
-                        ),
+                        child: CreatedSetsList(),
+                      ),
                     ],
                   ),
-            ),
+                ),
               ),
-      ),
-    );
+            );
+          } else {
+            return Loading();
+          }
+        }),
+        
+      );
   }
 }

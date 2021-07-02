@@ -20,6 +20,7 @@ class _SessionActiveState extends State<SessionActive> {
       providers: [
         StreamProvider<List<CurrentSets>>.value(value: DatabaseService().currentSets,),
         StreamProvider<List<SetResults>>.value(value: DatabaseService().setResults,),
+        StreamProvider<Results>.value(value: DatabaseService().completeResults,),
       ],
       child: Scaffold(
         backgroundColor: Colors.grey[900],
@@ -81,6 +82,7 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
   Widget build(BuildContext context) {
 
     final sets = Provider.of<List<CurrentSets>>(context);
+    final Results results = Provider.of<Results>(context);
 
     bool isStarted;
     bool isRunning;
@@ -137,7 +139,7 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                         } else {
                           _stopwatchTimer.onExecute.add(StopWatchExecute.stop);
 
-                          //DatabaseService().updateResultsData(displayTime);
+                          DatabaseService().updateResultsData(displayTime);
 
                           setState(() {
                             isRunning = false;
@@ -150,7 +152,8 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                     TextButton(
                       onPressed: () {
                         
-                        //DatabaseService().updateResultsData(displayTime);
+                        DatabaseService().updateResultsData(displayTime);
+                        DatabaseService().completeSession(true, DatabaseService.currentSeshID);
 
                         _stopwatchTimer.onExecute.add(StopWatchExecute.reset);
 

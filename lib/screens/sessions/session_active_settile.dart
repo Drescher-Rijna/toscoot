@@ -16,7 +16,7 @@ class SessionActiveSetTile extends StatefulWidget {
 
 class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
 
-  final setResults;
+  final SetResults setResults;
   _SessionActiveSetTileState( this.setResults );
 
   
@@ -33,7 +33,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
       showModalBottomSheet(context: context, builder: (context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return Container(
+            return !setResults.isDone ? Container(
               color: Colors.grey[900],
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
               child: Column(
@@ -106,7 +106,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                             Column(
                               children: [
                                 Text(
-                                  _currentLand.toString() + '/10',
+                                  _currentLand.toString() + '/' + setResults.goal.toString(),
                                   style: TextStyle(
                                     fontSize: 40.0,
                                     color: Colors.grey[100]
@@ -199,10 +199,66 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                   ),
                 ],
               ),
+            ) 
+            
+            :
+
+            Container(
+              color: Colors.grey[900],
+              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        setResults.trick,
+                        style: TextStyle(
+                          fontSize: 25.0,
+                          color: Colors.grey[100]
+                        ),
+                      ),
+                      SizedBox(height: 25.0,),
+                      Column(
+                          children: [
+                            Text(
+                              setResults.setTime,
+                              style: TextStyle(
+                                fontSize: 40.0,
+                                color: Colors.grey[100]
+                              ),
+                            ),
+
+                            // COUNTERS
+                            Column(
+                              children: [
+                                Text(
+                                  setResults.lands.toString()+ '/' + setResults.goal.toString(),
+                                  style: TextStyle(
+                                    fontSize: 40.0,
+                                    color: Colors.grey[100]
+                                  ),
+                                ),
+                                SizedBox(height: 10.0,),
+                                Text(
+                                  setResults.fails.toString(),
+                                  style: TextStyle(
+                                    fontSize: 40.0,
+                                    color: Colors.grey[100]
+                                  ),
+                                ),
+                              ],
+                            ),
+                                    
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             );
-          }
-          
-        );
+
+          });
       });
     }
 

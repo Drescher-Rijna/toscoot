@@ -2,8 +2,9 @@ class Session {
 
   final String title;
   final String id;
+  final bool isComplete;
 
-  Session({ this.title, this.id });
+  Session({ this.title, this.id, this.isComplete });
 
 }
 

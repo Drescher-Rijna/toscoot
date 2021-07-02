@@ -71,7 +71,8 @@ class _Create_SessionState extends State<Create_Session> {
                         if(_formKey.currentState.validate()){
                           setState(() => loading = true);
                           await DatabaseService().updateSessionData(title);
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Create_Sets()));
+                          await Navigator.push(context, MaterialPageRoute(builder: (context) => Create_Sets()));
+                          setState(() => loading = false);
                         }
                       },
                       child: Text(

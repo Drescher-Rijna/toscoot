@@ -76,7 +76,7 @@ class DatabaseService {
       'title': title,
       'created': FieldValue.serverTimestamp(),
       'isComplete': false,
-      'listID': activeID,
+      'listID': ActiveID.getID(),
     }).then((doc) => currentSeshID = doc.id );
   }
 
@@ -91,12 +91,20 @@ class DatabaseService {
     }
   }
 
+  // complete current session
+  Future<void> completeSession(bool isComplete, String seshID) async {
+    return await sessionCollection.doc(seshID).update({
+      'isComplete': isComplete,
+    });
+  }
+
   // session from snapshot
   List<Session> _sessionFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Session(
         id: doc.id,
         title: doc['title'] ?? '',
+        isComplete: doc['isComplete'] ?? '',
       );
     }).toList();
   }
@@ -254,13 +262,13 @@ class DatabaseService {
 
   // get user active list
   Stream<ActiveTricklist> get activeTricklist {
-    return trickListCollection.doc(activeTricklistID).snapshots()
+    return trickListCollection.doc(ActiveID.getID()).snapshots()
       .map(_activeListFromSnapshot);
   }
 
   // get users sessions
   Stream<List<Session>> get sessions{
-    return sessionCollection.where('listID', isEqualTo: activeID).orderBy("created", descending: false).snapshots()
+    return sessionCollection.where('listID', isEqualTo: ActiveID.getID()).orderBy("created", descending: false).snapshots()
       .map(_sessionFromSnapshot);
   }
 
