@@ -13,9 +13,9 @@ void main() async {
   await Firebase.initializeApp();
 
   await ActiveID.init();
-  print('active id is' + ActiveID.getID());
+  print(ActiveID.getID());
   await SessionState.initSession();
-  print('active id is' + ActiveID.getID());
+  print(ActiveID.getID());
   
 
   runApp(MyApp());

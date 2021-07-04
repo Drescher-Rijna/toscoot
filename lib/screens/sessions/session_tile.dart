@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toscoot/models/session.dart';
 import 'package:toscoot/screens/sessions/session_details.dart';
 import 'package:toscoot/services/database.dart';
+import 'package:toscoot/stats/sesh/seshStats.dart';
 
 class SessionTile extends StatefulWidget {
 
@@ -14,8 +15,19 @@ class SessionTile extends StatefulWidget {
 
 class _SessionTileState extends State<SessionTile> {
 
-  final session;
+  Session session;
   _SessionTileState( this.session );
+
+  @override
+  void didUpdateWidget(SessionTile oldWidget) {
+      if(session != widget.session) {
+          setState((){
+              session = widget.session;
+          });
+      }
+      super.didUpdateWidget(oldWidget);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +57,7 @@ class _SessionTileState extends State<SessionTile> {
                       await DatabaseService().getSeshID(session.id);
                       if (session.isComplete) {
                         print('session is complete');
-                        //Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(sessionTitle: session.title, session: session,)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SeshStats(session.resultsID)));
                       } else {
                         
                         Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(sessionTitle: session.title, session: session,)));
@@ -53,7 +65,7 @@ class _SessionTileState extends State<SessionTile> {
                       
                     },
                     icon: Icon(
-                      Icons.remove_red_eye,
+                      session.isComplete ? Icons.bar_chart : Icons.remove_red_eye,
                       color: Colors.grey[100],
                     ),
                     highlightColor: Colors.orange[900],

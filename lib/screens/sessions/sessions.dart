@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/session.dart';
+import 'package:toscoot/screens/home/home.dart';
 import 'package:toscoot/screens/sessions/create_session.dart';
 import 'package:toscoot/screens/sessions/sessions_list.dart';
+import 'package:toscoot/screens/tricklists/tricklists.dart';
 import 'package:toscoot/services/auth.dart';
 import 'package:toscoot/services/database.dart';
 
@@ -60,6 +62,7 @@ class _SessionsState extends State<Sessions> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.orange[900],
+          
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,
           onTap: (index) {
@@ -67,8 +70,14 @@ class _SessionsState extends State<Sessions> {
               _currentIndex = index;
             });
             switch (_currentIndex) {
+              case 0:
+                Navigator.pop(context, MaterialPageRoute(builder: (context) => Home()));
+              break;
+              case 1:
+                Navigator.pop(context, MaterialPageRoute(builder: (context) => TrickLists()));
+              break;
               case 2:
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Sessions()));
+                Navigator.pop(context, MaterialPageRoute(builder: (context) => Sessions()));
               break;
             }
           },
@@ -85,10 +94,6 @@ class _SessionsState extends State<Sessions> {
               icon: Icon(Icons.more_time_rounded),
               label: 'Sessions',
               
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.linear_scale),
-              label: 'Lines',
             ),
           ],
           selectedItemColor: Colors.grey[100],

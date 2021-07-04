@@ -6,6 +6,7 @@ import 'package:toscoot/models/results.dart';
 import 'package:toscoot/models/session.dart';
 import 'package:toscoot/screens/sessions/session_active_sets.dart';
 import 'package:toscoot/services/database.dart';
+import 'package:toscoot/stats/sesh/seshStats.dart';
 
 class SessionActive extends StatefulWidget {
 
@@ -34,6 +35,7 @@ class _SessionActiveState extends State<SessionActive> {
         body: Column(
           children: [
             TotalSessionTimer(),
+            SizedBox(height: 15,),
             Expanded(child: SessionActiveSets()),
           ],
         ),
@@ -110,46 +112,63 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                   ),
                 ),
 
-
+                SizedBox(height: 15,),
                 // buttons
                 SessionState.getStartedState() == true ?
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    IconButton(
-                      icon: Icon(Icons.play_arrow), 
-                      onPressed: () async {
-                        if (isRunning == true) {
-                          return null;
-                        } else {
-                          _stopwatchTimer.onExecute.add(StopWatchExecute.start);
-                          setState(() {
-                            isRunning = true;
-                          });
+                    Container(
+                      color: Colors.greenAccent[400],
+                      child: IconButton(
+                        color: Colors.grey[100],
+                        icon: Icon(Icons.play_arrow), 
+                        onPressed: () async {
+                          if (isRunning == true) {
+                            return null;
+                          } else {
+                            _stopwatchTimer.onExecute.add(StopWatchExecute.start);
+                            setState(() {
+                              isRunning = true;
+                            });
 
-                          SessionState.setRunningState(isRunning);
+                            SessionState.setRunningState(isRunning);
 
+                          }
                         }
-                      }
+                      ),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.pause), 
-                      onPressed: () {
-                        if (isRunning == false) {
-                          return null;
-                        } else {
-                          _stopwatchTimer.onExecute.add(StopWatchExecute.stop);
+                    SizedBox(width: 25,),
+                    Container(
+                      color: Colors.blueAccent[400],
+                      child: IconButton(
+                        color: Colors.grey[100],
+                        icon: Icon(Icons.pause), 
+                        onPressed: () {
+                          if (isRunning == false) {
+                            return null;
+                          } else {
+                            _stopwatchTimer.onExecute.add(StopWatchExecute.stop);
 
-                          DatabaseService().updateResultsData(displayTime);
+                            DatabaseService().updateResultsData(displayTime);
 
-                          setState(() {
-                            isRunning = false;
-                          });
-                          SessionState.setRunningState(isRunning);
+                            setState(() {
+                              isRunning = false;
+                            });
+                            SessionState.setRunningState(isRunning);
 
+                          }
                         }
-                      }
+                      ),
                     ),
+                    SizedBox(width: 25,),
                     TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.orange[900],
+                        padding: EdgeInsets.all(13.0),
+                        
+                      ),
+                      
                       onPressed: () {
                         
                         DatabaseService().updateResultsData(displayTime);
@@ -162,9 +181,12 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                         });
 
                         SessionState.setStartedState(isStarted);
+
+                        Navigator.pop(context, MaterialPageRoute(builder: (context) => SeshStats(results.sessionID)));
                       }, 
                       child: Text(
                         'End Session',
+                        style: TextStyle(color: Colors.grey[100], fontSize: 18),
                       ),
                     ),
                   ],

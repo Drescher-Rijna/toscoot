@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/tricklist.dart';
+import 'package:toscoot/screens/home/home.dart';
 import 'package:toscoot/screens/sessions/sessions.dart';
 import 'package:toscoot/screens/tricklists/create_tricklist.dart';
 import 'package:toscoot/screens/tricklists/trick_list.dart';
@@ -68,6 +69,12 @@ class _TrickListsState extends State<TrickLists> {
               _currentIndex = index;
             });
             switch (_currentIndex) {
+              case 0:
+                Navigator.pop(context, MaterialPageRoute(builder: (context) => Home()));
+              break;
+              case 1:
+                Navigator.pop(context, MaterialPageRoute(builder: (context) => TrickLists()));
+              break;
               case 2:
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Sessions()));
               break;
@@ -86,10 +93,6 @@ class _TrickListsState extends State<TrickLists> {
               icon: Icon(Icons.more_time_rounded),
               label: 'Sessions',
               
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.linear_scale),
-              label: 'Lines',
             ),
           ],
           selectedItemColor: Colors.grey[100],

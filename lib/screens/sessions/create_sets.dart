@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/session.dart';
@@ -16,21 +14,11 @@ class Create_Sets extends StatefulWidget {
 
 class _Create_SetsState extends State<Create_Sets> {
 
-  String id = '';
-
-  @override
-  void initState() {
-    super.initState();
-
-    id = ActiveID.getID() ?? '';
-    print('preference');
-    print(id);
-  }
-
   final _formKey = GlobalKey<FormState>();
 
-  String _currentTrick;
+  String _currentTrick = '';
   String reps = '';
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +26,12 @@ class _Create_SetsState extends State<Create_Sets> {
     return StreamProvider<List<Sets>>.value(
       value: DatabaseService().sets,
       child: StreamBuilder<ActiveTricklist>(
-        stream: DatabaseService(activeTricklistID: id).activeTricklist,
-        builder: (context, snapshot) {
+        stream: DatabaseService(activeTricklistID: ActiveID.getID()).activeTricklist,
+        builder: (context, AsyncSnapshot<ActiveTricklist> snapshot) {
           if(snapshot.hasData) {
             ActiveTricklist activelist = snapshot.data;
             print(activelist.tricks);
+            print(snapshot.hasData);
             return Scaffold(
               backgroundColor: Colors.grey[900],
                 appBar: AppBar(
@@ -76,15 +65,23 @@ class _Create_SetsState extends State<Create_Sets> {
                                                   child: Column(
                                                     children: [
                                                       SizedBox(height: 15.0,),                                    
-                                                      DropdownButtonFormField(
-                                                        value: _currentTrick,
-                                                        items: activelist.tricks.map((trick) {
-                                                          return new DropdownMenuItem(
-                                                            value: trick,
-                                                            child: Text(trick),
-                                                          );
-                                                        }).toList(),
-                                                        onChanged: (val) => setState(() => _currentTrick = val ),
+                                                      TextFormField(
+                                                        decoration: InputDecoration(
+                                                          hintText: 'Trick',
+                                                          fillColor: Colors.white,
+                                                          filled: true,
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderSide: BorderSide(color: Colors.white, width: 2.0),
+                                                          ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderSide: BorderSide(color: Colors.orange[900], width: 2.0),
+                                                          ),
+                                                        ),
+                                                        keyboardType: TextInputType.number,
+                                                        validator: (val) => val.isEmpty ? 'Enter reps' : null,
+                                                        onChanged: (val) {
+                                                          setState(() => _currentTrick = val);
+                                                        },
                                                       ),
                                                     ],
                                                   ),

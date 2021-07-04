@@ -10,6 +10,7 @@ class SessionList extends StatefulWidget {
 }
 
 class _SessionListState extends State<SessionList> {
+
   @override
   Widget build(BuildContext context) {
 
