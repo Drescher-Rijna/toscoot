@@ -17,6 +17,7 @@ class ActiveTricklist {
   final List tricks;
 
   ActiveTricklist({ this.id, this.tricks });
+
 }
 
 class ActiveID {

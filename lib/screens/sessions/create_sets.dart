@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:toscoot/models/session.dart';
 import 'package:toscoot/models/tricklist.dart';
 import 'package:toscoot/screens/sessions/created_sets_list.dart';
+import 'package:toscoot/screens/sessions/sessions.dart';
 import 'package:toscoot/services/database.dart';
 import 'package:toscoot/shared/loading.dart';
 
@@ -16,21 +17,12 @@ class Create_Sets extends StatefulWidget {
 
 class _Create_SetsState extends State<Create_Sets> {
 
-  String id = '';
-
-  @override
-  void initState() {
-    super.initState();
-
-    id = ActiveID.getID() ?? '';
-    print('preference');
-    print(id);
-  }
-
   final _formKey = GlobalKey<FormState>();
 
   String _currentTrick;
   String reps = '';
+
+  List tricks = ['bri', 'whip'];
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +30,10 @@ class _Create_SetsState extends State<Create_Sets> {
     return StreamProvider<List<Sets>>.value(
       value: DatabaseService().sets,
       child: StreamBuilder<ActiveTricklist>(
-        stream: DatabaseService(activeTricklistID: id).activeTricklist,
+        stream: DatabaseService(activeTricklistID: ActiveID.getID()).activeTricklist,
         builder: (context, snapshot) {
           if(snapshot.hasData) {
-            ActiveTricklist activelist = snapshot.data;
-            print(activelist.tricks);
+            ActiveTricklist activeTricklist = snapshot.data;
             return Scaffold(
               backgroundColor: Colors.grey[900],
                 appBar: AppBar(
@@ -50,6 +41,23 @@ class _Create_SetsState extends State<Create_Sets> {
                   centerTitle: true,
                   backgroundColor: Colors.orange[900],
                   elevation: 0.0,
+                  actions: <Widget>[
+                    TextButton.icon(
+                      icon: Icon(
+                        Icons.save,
+                        color: Colors.grey[100],
+                      ),
+                      label: Text(
+                        'Save',
+                        style: TextStyle(
+                          color: Colors.grey[100],
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context, MaterialPageRoute(builder: (context) => Sessions()));
+                      },
+                    ),
+                  ],
                 ),
                 body:
                   Center(
@@ -77,11 +85,24 @@ class _Create_SetsState extends State<Create_Sets> {
                                                     children: [
                                                       SizedBox(height: 15.0,),                                    
                                                       DropdownButtonFormField(
-                                                        value: _currentTrick,
-                                                        items: activelist.tricks.map((trick) {
+                                                        dropdownColor: Colors.grey[900],
+                                                        hint: Text('Select a trick', style: TextStyle(color: Colors.grey[100], fontSize: 18.0),),
+                                                        decoration: InputDecoration(
+                                                          contentPadding: const EdgeInsets.all(0.0),
+                                                          enabledBorder: UnderlineInputBorder(
+                                                            borderSide: BorderSide(color: Colors.orange[900]),
+                                                          ),
+                                                        ),
+                                                        
+                                                        items: activeTricklist.tricks.map((trick) {
                                                           return new DropdownMenuItem(
                                                             value: trick,
-                                                            child: Text(trick),
+                                                            child: Text(
+                                                              trick, 
+                                                              style: TextStyle(
+                                                                color: Colors.grey[100], 
+                                                                fontSize: 18.0),
+                                                              ),
                                                           );
                                                         }).toList(),
                                                         onChanged: (val) => setState(() => _currentTrick = val ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toscoot/screens/tricklists/tricklists.dart';
 import 'package:toscoot/services/database.dart';
 
 class Create_TrickList extends StatelessWidget {
@@ -65,6 +66,7 @@ class _TrickListFormState extends State<TrickListForm> {
                 if(_formKey.currentState.validate()){
                     //_formKey.currentState.save();
                     await DatabaseService().updateTrickListData(Listtitle, tricksList);
+                    Navigator.pop(context, MaterialPageRoute(builder: (context) => TrickLists()));
                 }
               },
             ),

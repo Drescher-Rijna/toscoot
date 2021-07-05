@@ -16,10 +16,18 @@ class SessionActiveSetTile extends StatefulWidget {
 
 class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
 
-  final SetResults setResults;
+   SetResults setResults;
   _SessionActiveSetTileState( this.setResults );
 
-  
+  @override
+  void didUpdateWidget(SessionActiveSetTile oldWidget) {
+      if(setResults != widget.setResults) {
+          setState((){
+              setResults = widget.setResults;
+          });
+      }
+      super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +65,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
 
                         final value = snapshot.data;
                         final displayTime = StopWatchTimer.getDisplayTime(value, hours: _isHours);
+                      
 
                         return Column(
                           children: [
@@ -67,41 +76,56 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                                 color: Colors.grey[100]
                               ),
                             ),
-                            SizedBox(height: 5.0,),
+                            SizedBox(height: 10.0,),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                IconButton(
-                                  icon: Icon(Icons.play_arrow), 
-                                  onPressed: () {
-                                    _stopwatchTimer.onExecute.add(StopWatchExecute.start);
-                                    DatabaseService().updateSetResultsData(setResults.id, _currentLand, _currentFail, displayTime);
-                                  }
+                                Container(
+                                  color: Colors.greenAccent[400],
+                                  child: IconButton(
+                                    color: Colors.grey[100],
+                                    icon: Icon(Icons.play_arrow), 
+                                    onPressed: () {
+                                      _stopwatchTimer.onExecute.add(StopWatchExecute.start);
+                                      DatabaseService().updateSetResultsData(setResults.id, _currentLand, _currentFail, displayTime);
+                                    }
+                                  ),
                                 ),
-                                IconButton(
-                                  icon: Icon(Icons.pause), 
-                                  onPressed: () {
-                                    _stopwatchTimer.onExecute.add(StopWatchExecute.stop);
-                                    DatabaseService().updateSetResultsData(setResults.id, _currentLand, _currentFail, displayTime,);
-                                  }
+                                SizedBox(width: 25.0,),
+                                Container(
+                                  color: Colors.blueAccent[400],
+                                  child: IconButton(
+                                    color: Colors.grey[100],
+                                    icon: Icon(Icons.pause), 
+                                    onPressed: () {
+                                      _stopwatchTimer.onExecute.add(StopWatchExecute.stop);
+                                      DatabaseService().updateSetResultsData(setResults.id, _currentLand, _currentFail, displayTime,);
+                                    }
+                                  ),
                                 ),
-                                IconButton(
-                                  icon: Icon(Icons.stop), 
-                                  onPressed: () async {
-                                    await DatabaseService().endSet(setResults.id, _currentLand, _currentFail, displayTime, setResults.isDone);
-                                    
-                                    _stopwatchTimer.onExecute.add(StopWatchExecute.reset);
-                                    
-                                    setState(() {
-                                      _currentLand = 0;
-                                      _currentFail = 0;
-                                    });
+                                SizedBox(width: 25.0,),
+                                Container(
+                                  color: Colors.orange[900],
+                                  child: IconButton(
+                                    color: Colors.grey[100],
+                                    icon: Icon(Icons.stop), 
+                                    onPressed: () async {
+                                      await DatabaseService().endSet(setResults.id, _currentLand, _currentFail, displayTime, setResults.isDone);
+                                      
+                                      _stopwatchTimer.onExecute.add(StopWatchExecute.reset);
+                                      
+                                      setState(() {
+                                        _currentLand = 0;
+                                        _currentFail = 0;
+                                      });
 
-                                    Navigator.pop(context);
-                                  }
+                                      Navigator.pop(context);
+                                    }
+                                  ),
                                 ),
                               ],
                             ),
-
+                            SizedBox(height: 30,),
                             // COUNTERS
                             Column(
                               children: [
@@ -214,36 +238,36 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                       Text(
                         setResults.trick,
                         style: TextStyle(
-                          fontSize: 25.0,
+                          fontSize: 40.0,
                           color: Colors.grey[100]
                         ),
                       ),
-                      SizedBox(height: 25.0,),
+                      SizedBox(height: 30.0,),
                       Column(
                           children: [
                             Text(
-                              setResults.setTime,
+                              'Time: ' + setResults.setTime,
                               style: TextStyle(
-                                fontSize: 40.0,
+                                fontSize: 35.0,
                                 color: Colors.grey[100]
                               ),
                             ),
-
+                            SizedBox(height: 30,),
                             // COUNTERS
                             Column(
                               children: [
                                 Text(
-                                  setResults.lands.toString()+ '/' + setResults.goal.toString(),
+                                  'Lands: ' + setResults.lands.toString()+ '/' + setResults.goal.toString(),
                                   style: TextStyle(
-                                    fontSize: 40.0,
+                                    fontSize: 35.0,
                                     color: Colors.grey[100]
                                   ),
                                 ),
-                                SizedBox(height: 10.0,),
+                                SizedBox(height: 30.0,),
                                 Text(
-                                  setResults.fails.toString(),
+                                  'Fails: ' + setResults.fails.toString(),
                                   style: TextStyle(
-                                    fontSize: 40.0,
+                                    fontSize: 35.0,
                                     color: Colors.grey[100]
                                   ),
                                 ),

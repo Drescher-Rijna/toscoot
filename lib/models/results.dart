@@ -5,7 +5,7 @@ class Results {
   String id;
   String sessionID;
   String completeTime;
-  DateTime completionDate;
+  dynamic completionDate;
 
   Results({ this.id, this.sessionID, this.completeTime, this.completionDate });
 

@@ -1,32 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:toscoot/models/tricklist.dart';
+import 'package:toscoot/models/results.dart';
 import 'package:toscoot/screens/home/home.dart';
 import 'package:toscoot/screens/sessions/sessions.dart';
-import 'package:toscoot/screens/tricklists/create_tricklist.dart';
-import 'package:toscoot/screens/tricklists/trick_list.dart';
+import 'package:toscoot/screens/tricklists/tricklists.dart';
 import 'package:toscoot/services/auth.dart';
 import 'package:toscoot/services/database.dart';
+import 'package:toscoot/stats/sesh/seshStatsOverall.dart';
+import 'package:toscoot/stats/sesh/seshStatsRatioList.dart';
+import 'package:toscoot/stats/sesh/seshStatsSetTimeList.dart';
 
-class TrickLists extends StatefulWidget {
+class SeshStats extends StatefulWidget {
+
+  final String resultsID;
+  SeshStats(this.resultsID);
 
   @override
-  _TrickListsState createState() => _TrickListsState();
+  _SeshStatsState createState() => _SeshStatsState(resultsID);
 }
 
-class _TrickListsState extends State<TrickLists> {
+class _SeshStatsState extends State<SeshStats> {
+
+  final String resultsID;
+  _SeshStatsState(this.resultsID); 
+  
+
   final AuthService _auth = AuthService();
 
   int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<TrickList>>.value(
-      value: DatabaseService().tricklists,
+    print('resultID');
+    print(resultsID);
+    return MultiProvider(
+      providers: [
+        StreamProvider<Results>.value(value: DatabaseService(statsResultsID: resultsID).statsResults),
+        StreamProvider<List<SetResults>>.value(value: DatabaseService(statsResultsID: resultsID).statsSetResults),
+      ],
       child: Scaffold(
         backgroundColor: Colors.grey[900],
         appBar: AppBar(
-          title: Text('Tricklists'),
+          title: Text('Stats'),
           centerTitle: true,
           backgroundColor: Colors.orange[900],
           elevation: 0.0,
@@ -48,18 +63,22 @@ class _TrickListsState extends State<TrickLists> {
             ),
           ],
         ),
-        body: TrickListScreen(),
-        floatingActionButton: new FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Create_TrickList()),
-            );
-          },
-          elevation: 5,
-          backgroundColor: Colors.orange[900],
-          child: new Icon(Icons.add),
+
+        body: Column(
+          children: [
+            SeshStatsOverall(),
+            SizedBox(height: 25,),
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(child: SeshStatsRatioList()),
+                  Expanded(child: SeshStatsSetTimeList()),
+                ],
+              ),
+            ),
+          ],
         ),
+
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.orange[900],
           type: BottomNavigationBarType.fixed,
@@ -76,7 +95,7 @@ class _TrickListsState extends State<TrickLists> {
                 Navigator.pop(context, MaterialPageRoute(builder: (context) => TrickLists()));
               break;
               case 2:
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Sessions()));
+                Navigator.pop(context, MaterialPageRoute(builder: (context) => Sessions()));
               break;
             }
           },

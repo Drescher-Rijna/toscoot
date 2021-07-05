@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:toscoot/screens/sessions/sessions.dart';
+import 'package:toscoot/screens/tricklists/tricklists.dart';
 import 'package:toscoot/services/auth.dart';
+import 'package:toscoot/stats/tricklist/tricklistStats.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
 
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
+
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +43,26 @@ class Home extends StatelessWidget {
             ),
           ],
         ),
+        body: AllTimeStats(),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.orange[900],
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+            switch (_currentIndex) {
+              case 0:
+                
+              break;
+              case 1:
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TrickLists()));
+              break;
+              case 2:
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Sessions()));
+              break;
+            }
+          },
           type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
@@ -48,10 +76,6 @@ class Home extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Icon(Icons.more_time_rounded),
               label: 'Sessions',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.linear_scale),
-              label: 'Lines',
             ),
           ],
           selectedItemColor: Colors.grey[100],
