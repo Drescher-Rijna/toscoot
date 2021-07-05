@@ -14,13 +14,12 @@ class _SessionActiveSetsState extends State<SessionActiveSets> {
   @override
   Widget build(BuildContext context) {
 
-    final setResults = Provider.of<List<SetResults>>(context);
-    print(setResults.length);
+    final setResults = Provider.of<List<SetResults>>(context) ?? [];
 
     return ListView.builder(
       itemCount: setResults.length,
       itemBuilder: (context, index) {
-        return setResults == null ? Loading() : SessionActiveSetTile(setResults[index]);
+        return SessionActiveSetTile(setResults[index]);
       },
     );
   }

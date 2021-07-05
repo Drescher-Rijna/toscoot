@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/user.dart';
 import 'package:toscoot/screens/authenticate/authenticate.dart';
-import 'package:toscoot/screens/home/home.dart';
-import 'package:toscoot/screens/sessions/sessions.dart';
-import 'package:toscoot/screens/tricklists/tricklists.dart';
+import 'package:toscoot/screens/navigator.dart';
+
 
 class Wrapper extends StatelessWidget {
   @override
@@ -17,7 +16,7 @@ class Wrapper extends StatelessWidget {
     if (user == null){
       return Authenticate();
     } else {
-      return Home();
+      return BottomNavigator();
     }
     
   }

@@ -12,9 +12,9 @@ class CreatedSetsList extends StatefulWidget {
 class _CreatedSetsListState extends State<CreatedSetsList> {
   @override
   Widget build(BuildContext context) {
-    final sets = Provider.of<List<Sets>>(context);
+    final sets = Provider.of<List<Sets>>(context) ?? [];
 
-    return sets.isEmpty ? Text('no sets have been created', style: TextStyle(color: Colors.grey[100], fontSize: 22.0),) : ListView.builder(
+    return ListView.builder(
       itemCount: sets.length,
       itemBuilder: (context, index) {
         return CreatedSetTile(sets: sets[index],);

@@ -17,8 +17,6 @@ class TrickLists extends StatefulWidget {
 class _TrickListsState extends State<TrickLists> {
   final AuthService _auth = AuthService();
 
-  int _currentIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<TrickList>>.value(
@@ -60,43 +58,7 @@ class _TrickListsState extends State<TrickLists> {
           backgroundColor: Colors.orange[900],
           child: new Icon(Icons.add),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.orange[900],
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-            switch (_currentIndex) {
-              case 0:
-                Navigator.pop(context, MaterialPageRoute(builder: (context) => Home()));
-              break;
-              case 1:
-                Navigator.pop(context, MaterialPageRoute(builder: (context) => TrickLists()));
-              break;
-              case 2:
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Sessions()));
-              break;
-            }
-          },
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt),
-              label: 'Tricklists',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.more_time_rounded),
-              label: 'Sessions',
-              
-            ),
-          ],
-          selectedItemColor: Colors.grey[100],
-        ),
+
       ),
     );
   }

@@ -32,7 +32,7 @@ class _Create_SetsState extends State<Create_Sets> {
       child: StreamBuilder<ActiveTricklist>(
         stream: DatabaseService(activeTricklistID: ActiveID.getID()).activeTricklist,
         builder: (context, snapshot) {
-          if(snapshot.hasData) {
+          if(snapshot.hasData && snapshot != null) {
             ActiveTricklist activeTricklist = snapshot.data;
             return Scaffold(
               backgroundColor: Colors.grey[900],
