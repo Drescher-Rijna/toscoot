@@ -14,7 +14,7 @@ class _TrickListScreenState extends State<TrickListScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final tricklists = Provider.of<List<TrickList>>(context);
+    final tricklists = Provider.of<List<TrickList>>(context) ?? [];
 
     return ListView.builder(
       itemCount: tricklists.length,

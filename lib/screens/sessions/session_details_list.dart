@@ -13,12 +13,12 @@ class SessionDetails_List extends StatefulWidget {
 class _SessionDetails_ListState extends State<SessionDetails_List> {
   @override
   Widget build(BuildContext context) {
-    final currentSets = Provider.of<List<CurrentSets>>(context);
+    final currentSets = Provider.of<List<CurrentSets>>(context) ?? [];
 
     return ListView.builder(
       itemCount: currentSets.length,
       itemBuilder: (context, index) {
-        return currentSets == null ? Loading() : DetailsTile(currentSets: currentSets[index],);
+        return DetailsTile(currentSets: currentSets[index],);
       },
     );
   }

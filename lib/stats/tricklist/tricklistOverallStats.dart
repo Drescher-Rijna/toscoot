@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:toscoot/models/results.dart';
 import 'package:toscoot/models/tricklist.dart';
 import 'package:toscoot/services/database.dart';
+import 'package:toscoot/shared/loading.dart';
 
 class TricklistOverallStats extends StatefulWidget {
 
@@ -53,7 +54,7 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
     }
 
    
-    return Container(
+    return setResults == null ? Center(child: Text('Loading...', style: TextStyle(color: Colors.grey[100], fontSize: 25),)) : Container(
       child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

@@ -54,7 +54,7 @@ class SessionDetails extends StatelessWidget {
                 TextButton.icon(
                   onPressed: () async {
                     await DatabaseService().initResults();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SessionActive()));
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SessionActive()));
                   }, 
                   icon: Icon(
                     Icons.play_arrow,
