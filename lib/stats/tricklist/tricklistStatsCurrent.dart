@@ -23,6 +23,7 @@ class _TricklistStatsCurrentState extends State<TricklistStatsCurrent> {
         StreamProvider<List<Results>>.value(value: DatabaseService().statsTricklistResults,),
         StreamProvider<List<SetResults>>.value(value: DatabaseService().statsTricklistSetResults,),
         StreamProvider<ActiveTricklist>.value(value: DatabaseService().activeTricklist,),
+        StreamProvider<List<Totals>>.value(value: DatabaseService().totals,),
       ],
       child: Column(
         children: [
@@ -37,11 +38,8 @@ class _TricklistStatsCurrentState extends State<TricklistStatsCurrent> {
           ),
           SizedBox(height: 20,),
           TricklistOverallStats(),
-          Row(
-            children: [
-              TricklistRatioStatList(),
-            ],
-          ),
+          SizedBox(height: 20,),
+          Expanded(child: TricklistRatioStatList()),
         ],
       ),
     );

@@ -72,7 +72,7 @@ class _SessionTileState extends State<SessionTile> {
                   ),
                   IconButton(
                     onPressed: () async {
-                      await DatabaseService().sessionCollection.doc(session.id).delete();
+                      await DatabaseService().deleteFromSession(session.id);
                     },
                     icon: Icon(
                       Icons.delete,

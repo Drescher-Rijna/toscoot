@@ -47,7 +47,7 @@ class _CreatedSetTileState extends State<CreatedSetTile> {
                 children: [
                   IconButton(
                     onPressed: () async {
-                      await DatabaseService().setsCollection.doc(sets.id).delete();
+                      await DatabaseService().sessionCollection.doc(sets.seshID).collection('sets').doc(sets.id).delete();
                     },
                     icon: Icon(
                       Icons.delete,

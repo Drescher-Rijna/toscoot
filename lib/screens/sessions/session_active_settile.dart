@@ -111,6 +111,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                                     icon: Icon(Icons.stop), 
                                     onPressed: () async {
                                       await DatabaseService().endSet(setResults.id, _currentLand, _currentFail, displayTime, setResults.isDone);
+                                      await DatabaseService().updateTotalsData(_currentLand, _currentFail, setResults.trick);
                                       
                                       _stopwatchTimer.onExecute.add(StopWatchExecute.reset);
                                       
@@ -161,6 +162,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
 
                                           if (_currentLand == setResults.goal) {
                                             await DatabaseService().endSet(setResults.id, _currentLand, _currentFail, displayTime, true);
+                                            await DatabaseService().updateTotalsData(_currentLand, _currentFail, setResults.trick);
                                             
                                             _stopwatchTimer.onExecute.add(StopWatchExecute.reset);
 

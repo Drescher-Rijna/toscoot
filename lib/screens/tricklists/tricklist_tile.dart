@@ -54,7 +54,10 @@ class _TrickListTileState extends State<TrickListTile> {
                   ),
                   IconButton(
                     onPressed: () async {
-                      await DatabaseService().trickListCollection.doc(tricklist.id).delete();
+                      if (tricklist.id == ActiveID.getID()) {
+                        ActiveID.setID('noIDisChoosen');
+                      }
+                      await DatabaseService().deleteFromTricklist(tricklist.id);
                     },
                     icon: Icon(
                       Icons.delete,

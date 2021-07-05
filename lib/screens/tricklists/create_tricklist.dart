@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toscoot/screens/tricklists/tricklists.dart';
 import 'package:toscoot/services/database.dart';
+import 'package:toscoot/shared/loading.dart';
 
 class Create_TrickList extends StatelessWidget {
   @override
@@ -29,21 +30,25 @@ class _TrickListFormState extends State<TrickListForm> {
   //field states
   String Listtitle = '';
 
+  bool loading = false;
+
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
+    _formKey.currentState?.reset();
   }
 
   @override
   void dispose() {
     _nameController.dispose();
+    _formKey.currentState?.reset();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.grey[900],
         appBar: AppBar(
           title: Text('Create A Tricklist'),
@@ -64,7 +69,9 @@ class _TrickListFormState extends State<TrickListForm> {
               ),
               onPressed: () async {
                 if(_formKey.currentState.validate()){
-                    //_formKey.currentState.save();
+                    setState(() {
+                      loading = true;                      
+                    });
                     await DatabaseService().updateTrickListData(Listtitle, tricksList);
                     Navigator.pop(context, MaterialPageRoute(builder: (context) => TrickLists()));
                 }
@@ -184,29 +191,13 @@ class TrickTextFields extends StatefulWidget {
 }
 
 class _TrickTextFieldsState extends State<TrickTextFields> {
-  TextEditingController _nameController;
   
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _nameController.text = _TrickListFormState.tricksList[widget.index] ?? '';
-    });
 
     return TextFormField(
-      controller: _nameController,
       onChanged: (val) => _TrickListFormState.tricksList[widget.index] = val,
       style: TextStyle(color: Colors.grey[100], fontSize: 16.0),
       decoration: InputDecoration(

@@ -14,9 +14,9 @@ class _SeshStatsSetTimeListState extends State<SeshStatsSetTimeList> {
   @override
   Widget build(BuildContext context) {
 
-    final List<SetResults> setResults = Provider.of<List<SetResults>>(context);
+    final List<SetResults> setResults = Provider.of<List<SetResults>>(context) ?? [];
 
-    return ListView.builder(
+    return setResults.isEmpty || setResults == [] ? Text('Loading...', style: TextStyle(color: Colors.grey[100], fontSize: 25)) : ListView.builder(
       itemCount: setResults.length,
       itemBuilder: (context, index) {
         return SeshStatsSetTimeTile(setResults[index]);

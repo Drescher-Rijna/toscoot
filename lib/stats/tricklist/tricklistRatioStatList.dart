@@ -17,9 +17,13 @@ class _TricklistRatioStatListState extends State<TricklistRatioStatList> {
   @override
   Widget build(BuildContext context) {
 
-    final activelist = Provider.of<ActiveTricklist>(context);
+    final totals = Provider.of<List<Totals>>(context) ?? [];
 
-
-    return Container();
+    return ListView.builder(
+      itemCount: totals.length,
+      itemBuilder: (context, index) {
+        return TricklistRatioTile(totals[index]);
+      },
+    );
   }
 }

@@ -169,10 +169,10 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                         
                       ),
                       
-                      onPressed: () {
+                      onPressed: () async {
                         
-                        DatabaseService().updateResultsData(displayTime);
-                        DatabaseService().completeSession(true, DatabaseService.currentSeshID);
+                        await DatabaseService().updateResultsData(displayTime);
+                        await DatabaseService().completeSession(true, DatabaseService.currentSeshID);
 
                         _stopwatchTimer.onExecute.add(StopWatchExecute.reset);
 

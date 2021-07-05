@@ -25,6 +25,15 @@ class SetResults {
 
 }
 
+class Totals {
+  int fails;
+  int lands;
+  String listID;
+  String trick;
+
+  Totals({ this.fails, this.trick, this.lands, this.listID});
+}
+
 class SessionState {
   static SharedPreferences _preferences;
 

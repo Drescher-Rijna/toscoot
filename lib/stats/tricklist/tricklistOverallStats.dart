@@ -17,8 +17,10 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
   @override
   Widget build(BuildContext context) {
 
-    final List<Results> overallResults = Provider.of<List<Results>>(context);
-    final List<SetResults> setResults = Provider.of<List<SetResults>>(context);
+    final List<Results> overallResults = Provider.of<List<Results>>(context) ?? [];
+    final List<SetResults> setResults = Provider.of<List<SetResults>>(context) ?? [];
+      print('setresults');
+    print(setResults);
 
     landingRatio() {
       var sumLands = 0;
@@ -54,7 +56,7 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
     }
 
    
-    return setResults == null ? Center(child: Text('Loading...', style: TextStyle(color: Colors.grey[100], fontSize: 25),)) : Container(
+    return setResults.isEmpty || setResults == [] ? Center(child: Text('No activity has been detected', style: TextStyle(color: Colors.grey[100], fontSize: 25),)) : Container(
       child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

@@ -6,6 +6,7 @@ import 'package:toscoot/models/tricklist.dart';
 
 class DatabaseService {
 
+// VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES
   final String uid;
   final String activeTricklistID;
   final String statsSeshID;
@@ -21,11 +22,17 @@ class DatabaseService {
 
   DatabaseService({ this.uid, this.activeTricklistID , this.statsTricklistID, this.statsSeshID, this.statsResultsID });
 
-  
 
 
-  // users collection reference
+
+
+
+
+// USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS
+  // collection reference
   final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
+
+  // creating the user document
   Future<void> updateUserData(String username, String email) async {
     return await userCollection.doc(uid).set({
       'username': username,
@@ -33,16 +40,38 @@ class DatabaseService {
     });
   }
 
+  // get users stream
+  Stream<QuerySnapshot> get users {
+    return userCollection.snapshots();
+  }
+
+
+
+
+
+
+
+// TRICKLISTS TRICKLISTS TRICKLISTS TRICKLISTS TRICKLISTS TRICKLISTS TRICKLISTS TRICKLISTS TRICKLISTS TRICKLISTS TRICKLISTS
   // tricklist collection reference for current user
   final CollectionReference trickListCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('tricklists');
-  Future<void> updateTrickListData(String title, List tricks) async {
+  Future<void> updateTrickListData(String title, List<String> tricks) async {
     return await trickListCollection.add({
       'title': title,
       'tricks': tricks,
       'created': FieldValue.serverTimestamp(),
       'isActive': false,
+    }).then((doc) {
+      tricks.forEach((trick) {
+        totalsCollection.doc(trick).set({
+          'lands':  0,
+          'fails': 0,
+          'trick': trick,
+          'listID': doc.id,
+        });
+      });
     });
   }
+
 
   // trick list from snapshot
   List<TrickList> _trickListFromSnapshot(QuerySnapshot snapshot) {
@@ -65,8 +94,25 @@ class DatabaseService {
     );
   }
 
-   
+  // get users tricklists
+  Stream<List<TrickList>> get tricklists {
+    return trickListCollection.orderBy("created", descending: false).snapshots()
+      .map(_trickListFromSnapshot);
+  }
 
+  // get user active list
+  Stream<ActiveTricklist> get activeTricklist {
+    return trickListCollection.doc(ActiveID.getID()).snapshots()
+      .map(_activeListFromSnapshot);
+  }
+
+
+
+
+
+
+
+// SESSIONS SESSIONS SESSIONS SESSIONS SESSIONS SESSIONS SESSIONS SESSIONS SESSIONS SESSIONS SESSIONS SESSIONS SESSIONS
   // sessions collectionreference
   final CollectionReference sessionCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('sessions');
   // creating a session with a title
@@ -110,51 +156,74 @@ class DatabaseService {
     }).toList();
   }
 
-
-
-  // sets collectionreference
-  final CollectionReference setsCollection = FirebaseFirestore.instance.collection('users')
-  .doc(FirebaseAuth.instance.currentUser.uid).collection('sessions')
-  .doc(currentSeshID).collection('sets');
-  // adding sets to the just creating session
-  Future<void> updateSetsData(String trick, int reps) async {
-    return await sessionCollection.doc(currentSeshID).collection('sets').add({
-      'trick': trick,
-      'reps': reps,
-    });
+  // get users sessions
+  Stream<List<Session>> get sessions{
+    return sessionCollection.where('listID', isEqualTo: ActiveID.getID()).orderBy("created", descending: false).snapshots()
+      .map(_sessionFromSnapshot);
   }
 
-  // sets from snapshot
-  List<Sets> _setsFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return Sets(
-        id: doc.id,
-        trick: doc['trick'],
-        reps: doc['reps'],
-      );
-    }).toList();
-  }
-
-  // current sesh sets from snapshot
-  List<CurrentSets> _currentSetsFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return CurrentSets(
-        id: doc.id,
-        trick: doc['trick'],
-        reps: doc['reps'],
-      );
-    }).toList();
+  // get current sessions sets
+  Stream<List<CurrentSets>> get currentSets{
+    return sessionCollection.doc(currentSeshID).collection('sets').snapshots()
+      .map(_currentSetsFromSnapshot);
   }
 
 
 
+  // SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS SETS
+    // sets collectionreference
+    final CollectionReference setsCollection = FirebaseFirestore.instance.collection('users')
+    .doc(FirebaseAuth.instance.currentUser.uid).collection('sessions')
+    .doc(currentSeshID).collection('sets');
+    // adding sets to the just creating session
+    Future<void> updateSetsData(String trick, int reps) async {
+      return await sessionCollection.doc(currentSeshID).collection('sets').add({
+        'trick': trick,
+        'reps': reps,
+        'listID': ActiveID.getID(),
+        'seshID': currentSeshID,
+      });
+    }
+
+    // sets from snapshot
+    List<Sets> _setsFromSnapshot(QuerySnapshot snapshot) {
+      return snapshot.docs.map((doc) {
+        return Sets(
+          id: doc.id,
+          trick: doc['trick'],
+          reps: doc['reps'],
+          seshID: doc['seshID']
+        );
+      }).toList();
+    }
+
+    // current sesh sets from snapshot
+    List<CurrentSets> _currentSetsFromSnapshot(QuerySnapshot snapshot) {
+      return snapshot.docs.map((doc) {
+        return CurrentSets(
+          id: doc.id,
+          trick: doc['trick'],
+          reps: doc['reps'],
+        );
+      }).toList();
+    }
+
+    // get session sets
+    Stream<List<Sets>> get sets{
+      return setsCollection.snapshots()
+        .map(_setsFromSnapshot);
+    }
+
+
+
+
+
+
+
+// RESULTS RESULTS RESULTS RESULTS RESULTS RESULTS RESULTS RESULTS RESULTS RESULTS RESULTS RESULTS RESULTS RESULTS
   // results collection reference
   final CollectionReference resultsCollection = FirebaseFirestore.instance.collection('users')
   .doc(FirebaseAuth.instance.currentUser.uid).collection('results');
-
-  // set results collection reference
-  final CollectionReference setResultsCollection = FirebaseFirestore.instance.collection('users')
-  .doc(FirebaseAuth.instance.currentUser.uid).collection('setResults');
 
   // create intial document for result and get current results ID
   Future<void> initResults() async {
@@ -172,6 +241,46 @@ class DatabaseService {
       'overallTime': time,
     });
   }
+
+  // current sesh results from snapshot
+  Results _currentSeshResultsFromSnapshot(DocumentSnapshot snapshot) {
+      return Results(
+        id: snapshot.id,
+        sessionID: snapshot['seshID'],
+        completeTime: snapshot['overallTime'],
+        completionDate: snapshot['seshDate'],
+      );
+
+  }
+
+  // current tricklist all results from snapshot
+  List<Results> _currentTricklistResultsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+        return Results(
+          id: doc.id,
+          sessionID: doc['seshID'],
+          completeTime: doc['overallTime'],
+          completionDate: doc['seshDate'],
+        );
+      }).toList();
+  }
+
+  // get the current session complete results
+  Stream<Results> get completeResults{
+    return resultsCollection.doc(currentResultsID).snapshots()
+      .map(_currentSeshResultsFromSnapshot);
+  }
+
+
+
+
+
+
+
+// SET RESULTS SET RESULTS SET RESULTS SET RESULTS SET RESULTS SET RESULTS SET RESULTS SET RESULTS SET RESULTS
+  // set results collection reference
+  final CollectionReference setResultsCollection = FirebaseFirestore.instance.collection('users')
+  .doc(FirebaseAuth.instance.currentUser.uid).collection('setResults');
 
   // create intial document for result and get current results ID
   Future<void> initSetResults(String trick, int reps) async {
@@ -221,81 +330,6 @@ class DatabaseService {
     }).toList();
   }
 
-  // current sesh results from snapshot
-  Results _currentSeshResultsFromSnapshot(DocumentSnapshot snapshot) {
-      return Results(
-        id: snapshot.id,
-        sessionID: snapshot['seshID'],
-        completeTime: snapshot['overallTime'],
-        completionDate: snapshot['seshDate'],
-      );
-
-  }
-
-  // current tricklist all results from snapshot
-  List<Results> _currentTricklistResultsFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return Results(
-        id: doc.id,
-        sessionID: doc['seshID'],
-        completeTime: doc['overallTime'],
-        completionDate: doc['seshDate'],
-      );
-    }).toList();
-  }
-
-  // current user all results ever from snapshot
-
-
-  
-
-
-
-
-  // STREAMS STREAMS STREAMS STREAMS STREAMS
-
-  // get users stream
-  Stream<QuerySnapshot> get users {
-    return userCollection.snapshots();
-  }
-
-  // get users tricklists
-  Stream<List<TrickList>> get tricklists {
-    return trickListCollection.orderBy("created", descending: false).snapshots()
-      .map(_trickListFromSnapshot);
-  }
-
-  // get user active list
-  Stream<ActiveTricklist> get activeTricklist {
-    return trickListCollection.doc(ActiveID.getID()).snapshots()
-      .map(_activeListFromSnapshot);
-  }
-
-  // get users sessions
-  Stream<List<Session>> get sessions{
-    return sessionCollection.where('listID', isEqualTo: ActiveID.getID()).orderBy("created", descending: false).snapshots()
-      .map(_sessionFromSnapshot);
-  }
-
-  // get current sessions sets
-  Stream<List<CurrentSets>> get currentSets{
-    return sessionCollection.doc(currentSeshID).collection('sets').snapshots()
-      .map(_currentSetsFromSnapshot);
-  }
-
-  // get session sets
-  Stream<List<Sets>> get sets{
-    return setsCollection.snapshots()
-      .map(_setsFromSnapshot);
-  }
-
-
-  // get the current session complete results
-  Stream<Results> get completeResults{
-    return resultsCollection.doc(currentResultsID).snapshots()
-      .map(_currentSeshResultsFromSnapshot);
-  }
-
   // get the current set results in active sesh
   Stream<List<SetResults>> get setResults{
     return setResultsCollection.where('seshID', isEqualTo: currentSeshID).snapshots()
@@ -304,7 +338,48 @@ class DatabaseService {
 
 
 
-  // STATS STATS STATS STATS STATS
+
+
+
+
+// TOTALS TOTALS TOTALS TOTALS TOTALS TOTALS TOTALS TOTALS TOTALS TOTALS TOTALS TOTALS TOTALS TOTALS TOTALS TOTALS
+  // collection reference
+  final CollectionReference totalsCollection = FirebaseFirestore.instance.collection('users')
+    .doc(FirebaseAuth.instance.currentUser.uid).collection('totals');
+
+  // update totals
+  Future<void> updateTotalsData(int lands, int fails, String trick) async {
+    return await totalsCollection.doc(trick).update({
+      'lands': FieldValue.increment(lands),
+      'fails': FieldValue.increment(fails)
+    });
+  }
+
+  // current stricklist totals
+  List<Totals> _totalsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Totals(
+        trick: doc['trick'] ?? '',
+        lands: doc['lands'] ?? '',
+        fails: doc['fails'] ?? '',
+        listID: doc['listID'] ?? '',
+      );
+    }).toList();
+  }
+
+  // current tricklist totals stream
+  Stream<List<Totals>> get totals{
+    return totalsCollection.where('listID', isEqualTo: ActiveID.getID()).snapshots()
+      .map(_totalsFromSnapshot);
+  }
+
+
+
+
+
+
+
+// STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS
   // results collection reference for stats
   final CollectionReference statsResultsCollection = FirebaseFirestore.instance.collection('users')
   .doc(FirebaseAuth.instance.currentUser.uid).collection('results');
@@ -361,8 +436,6 @@ class DatabaseService {
       }).toList();
   }
 
-
-
   // Get the Date from 7 days ago from today
   Future<DateTime> getDate() {
     dateAWeekAgo = new DateTime.now().subtract(const Duration(days: 7));
@@ -390,7 +463,7 @@ class DatabaseService {
 
   // get sets results for stats for tricklist from a week ago
   Stream<List<SetResults>> get statsTricklistWeekAgoSetResults{
-    return FirebaseFirestore.instance.collectionGroup('results')
+    return setResultsCollection
     .where('listID', isEqualTo: ActiveID.getID())
     .where('seshDate', isLessThanOrEqualTo: dateAWeekAgo)
     .snapshots()
@@ -401,35 +474,61 @@ class DatabaseService {
 
 
 
+
+// GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL
   // Deletion of all things connected with tricklist ID
-  Future deleteFromTricklist(id) {
-    trickListCollection.doc(id).delete();
+  Future<void> deleteFromTricklist(id) {
+      trickListCollection.doc(id).delete().then((doc) {
+      sessionCollection.where('listID', isEqualTo: id).get().then((snapshot) {
+        for(DocumentSnapshot ds in snapshot.docs){
+            ds.reference.delete();
+        }
+      }).then((snapshot) {
+        resultsCollection.where('listID', isEqualTo: id).get().then((snapshot) {
+        for(DocumentSnapshot ds in snapshot.docs)
+          {
+            ds.reference.delete();
+          }
+        }).then((snapshot) {
+          setResultsCollection.where('listID', isEqualTo: id).get().then((snapshot) {
+            for(DocumentSnapshot ds in snapshot.docs)
+            {
+              ds.reference.delete();
+            }
+          });
+        });
+      });
+    });
   }
 
   // Deletion of all things connected with sesh ID
-  Future deleteFromSession(id) {
-
+  Future<void> deleteFromSession(id) {
+      sessionCollection.doc(id).delete()
+      .then((snapshot) {
+        sessionCollection.doc(id).collection('sets').where('seshID', isEqualTo: id).get().then((snapshot) {
+          for(DocumentSnapshot ds in snapshot.docs)
+          {
+            ds.reference.delete();
+          }
+        });
+      })
+      .then((snapshot) {
+        resultsCollection.where('seshID', isEqualTo: id).get().then((snapshot) {
+        for(DocumentSnapshot ds in snapshot.docs)
+          {
+            ds.reference.delete();
+          }
+        }).then((snapshot) {
+          setResultsCollection.where('seshID', isEqualTo: id).get().then((snapshot) {
+            for(DocumentSnapshot ds in snapshot.docs)
+            {
+              ds.reference.delete();
+            }
+          });
+        });
+      });
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   
+
 
 }
