@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:toscoot/models/tricklist.dart';
 import 'package:toscoot/screens/tricklists/tricklist_details.dart';
@@ -61,9 +63,10 @@ class _TrickListTileState extends State<TrickListTile> {
                     highlightColor: Colors.orange[900],
                   ),
                   FutureBuilder(
-                      future: DatabaseService().trickListCollection.doc(tricklist.id).get(),
-                      builder: (context, AsyncSnapshot snapshot) {
-                        return IconButton(
+                      future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('tricklists').doc(tricklist.id).get(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return IconButton(
                           icon: Icon(Icons.check_circle_outline_sharp),
                           color: snapshot.data['isActive'] ? Colors.greenAccent[400] : Colors.grey[900],
                           onPressed: () async {
@@ -86,6 +89,11 @@ class _TrickListTileState extends State<TrickListTile> {
                             
                           },
                         );
+                        } else {
+                          print(snapshot.data);
+                          return Text('error');
+                          
+                        }
                       }
                   ),
                   

@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
             });
             switch (_currentIndex) {
               case 0:
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                
               break;
               case 1:
                 Navigator.push(context, MaterialPageRoute(builder: (context) => TrickLists()));

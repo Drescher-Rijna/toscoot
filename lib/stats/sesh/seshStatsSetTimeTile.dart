@@ -34,6 +34,7 @@ class _SeshStatsSetTimeTileState extends State<SeshStatsSetTimeTile> {
               children: [
                 Text(
                   setResults.trick,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

@@ -20,7 +20,7 @@ class _SeshStatsRatioTileState extends State<SeshStatsRatioTile> {
       var fails = setResults.fails;
       double ratio;
 
-      ratio = 1 - (fails/lands);
+      ratio = lands/(lands+fails);
       
       return ratio.toStringAsFixed(2);
   }
@@ -42,6 +42,7 @@ class _SeshStatsRatioTileState extends State<SeshStatsRatioTile> {
               children: [
                 Text(
                   setResults.trick,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

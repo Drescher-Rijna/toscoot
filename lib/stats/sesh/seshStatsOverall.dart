@@ -27,7 +27,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
         sumFails += given_list[i].fails;
       }
 
-      ratio = 1 - ((sumFails/given_list.length)/(sumLands/given_list.length));
+      ratio = ((sumLands/given_list.length)/((sumLands/given_list.length)+(sumFails/given_list.length)));
       
       return ratio.toStringAsFixed(2);
     }

@@ -18,7 +18,6 @@ class DatabaseService {
   static String currentSetResultsID;
 
   static DateTime dateAWeekAgo;
-  static String tricklistStatID;
 
   DatabaseService({ this.uid, this.activeTricklistID , this.statsTricklistID, this.statsSeshID, this.statsResultsID });
 
@@ -155,7 +154,7 @@ class DatabaseService {
 
   // set results collection reference
   final CollectionReference setResultsCollection = FirebaseFirestore.instance.collection('users')
-  .doc(FirebaseAuth.instance.currentUser.uid).collection('results').doc(currentResultsID).collection('setResults');
+  .doc(FirebaseAuth.instance.currentUser.uid).collection('setResults');
 
   // create intial document for result and get current results ID
   Future<void> initResults() async {
@@ -184,6 +183,8 @@ class DatabaseService {
       'setTime': '00:00:00',
       'isDone': false,
       'listID': ActiveID.getID(),
+      'seshID': currentSeshID,
+      'resultsID': currentResultsID,
     });
   }
 
@@ -266,7 +267,7 @@ class DatabaseService {
 
   // get user active list
   Stream<ActiveTricklist> get activeTricklist {
-    return trickListCollection.doc(activeTricklistID).snapshots()
+    return trickListCollection.doc(ActiveID.getID()).snapshots()
       .map(_activeListFromSnapshot);
   }
 
@@ -297,7 +298,7 @@ class DatabaseService {
 
   // get the current set results in active sesh
   Stream<List<SetResults>> get setResults{
-    return setResultsCollection.snapshots()
+    return setResultsCollection.where('seshID', isEqualTo: currentSeshID).snapshots()
       .map(_currentSetResultsFromSnapshot);
   }
 
@@ -342,7 +343,7 @@ class DatabaseService {
 
   // get sets results for stats
   Stream<List<SetResults>> get statsSetResults{
-    return statsResultsCollection.doc(statsResultsID).collection('setResults').snapshots()
+    return setResultsCollection.where('seshID', isEqualTo: currentSeshID).snapshots()
       .map(_statsSetResultsFromSnapshot);
   }
 
@@ -350,7 +351,7 @@ class DatabaseService {
 
   // get all results for tricklist all-time
   List<Results> _statsTricklistResultsFromSnapshot(QuerySnapshot snapshot) {
-      snapshot.docs.map((doc) {
+      return snapshot.docs.map((doc) {
         return Results(
           id: doc.id,
           sessionID: doc['seshID'] ?? '',
@@ -382,23 +383,32 @@ class DatabaseService {
       .map(_statsTricklistResultsFromSnapshot);
   }
 
-  // get sets results for stats
-  Future<String> getListIDForStats(id) {
-    tricklistStatID = id;
-  }
-
   Stream<List<SetResults>> get statsTricklistSetResults{
-    return statsResultsCollection.doc(tricklistStatID).collection('setResults').where('listID', isEqualTo: ActiveID.getID()).snapshots()
+    return setResultsCollection.where('listID', isEqualTo: ActiveID.getID()).snapshots()
       .map(_statsSetResultsFromSnapshot);
   }
 
   // get sets results for stats for tricklist from a week ago
   Stream<List<SetResults>> get statsTricklistWeekAgoSetResults{
-    return statsResultsCollection.doc(tricklistStatID).collection('setResults')
+    return FirebaseFirestore.instance.collectionGroup('results')
     .where('listID', isEqualTo: ActiveID.getID())
     .where('seshDate', isLessThanOrEqualTo: dateAWeekAgo)
     .snapshots()
       .map(_statsSetResultsFromSnapshot);
+  }
+
+
+
+
+
+  // Deletion of all things connected with tricklist ID
+  Future deleteFromTricklist(id) {
+    trickListCollection.doc(id).delete();
+  }
+
+  // Deletion of all things connected with sesh ID
+  Future deleteFromSession(id) {
+
   }
 
 
