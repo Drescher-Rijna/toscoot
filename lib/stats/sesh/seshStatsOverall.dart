@@ -13,8 +13,8 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
   @override
   Widget build(BuildContext context) {
 
-    final Results overallResults = Provider.of<Results>(context);
-    final List<SetResults> setResults = Provider.of<List<SetResults>>(context);
+    final Results overallResults = Provider.of<Results>(context) ?? [];
+    final List<SetResults> setResults = Provider.of<List<SetResults>>(context) ?? [];
 
     landingRatio() {
       var sumLands = 0;
@@ -49,7 +49,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
 
     }
     
-    return Container(
+    return setResults.isEmpty || setResults == [] ? Center(child: Text('Loading...', style: TextStyle(color: Colors.grey[100], fontSize: 25),)) : Container(
       padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
       child: Column(
         children: [

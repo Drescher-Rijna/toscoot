@@ -14,8 +14,9 @@ class Sets {
   String id;
   String trick;
   int reps;
+  String seshID;
 
-  Sets({ this.id, this.trick, this.reps });
+  Sets({ this.id, this.trick, this.reps, this.seshID });
 
 }
 

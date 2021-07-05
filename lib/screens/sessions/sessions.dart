@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/session.dart';
-import 'package:toscoot/screens/home/home.dart';
 import 'package:toscoot/screens/sessions/create_session.dart';
 import 'package:toscoot/screens/sessions/sessions_list.dart';
-import 'package:toscoot/screens/tricklists/tricklists.dart';
 import 'package:toscoot/services/auth.dart';
 import 'package:toscoot/services/database.dart';
 

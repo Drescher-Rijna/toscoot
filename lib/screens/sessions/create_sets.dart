@@ -22,8 +22,6 @@ class _Create_SetsState extends State<Create_Sets> {
   String _currentTrick;
   String reps = '';
 
-  List tricks = ['bri', 'whip'];
-
   @override
   Widget build(BuildContext context) {
 
@@ -93,7 +91,7 @@ class _Create_SetsState extends State<Create_Sets> {
                                                             borderSide: BorderSide(color: Colors.orange[900]),
                                                           ),
                                                         ),
-                                                        
+                                                        value: _currentTrick,
                                                         items: activeTricklist.tricks.map((trick) {
                                                           return new DropdownMenuItem(
                                                             value: trick,
