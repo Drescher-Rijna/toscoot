@@ -20,7 +20,7 @@ class _DetailsTileState extends State<DetailsTile> {
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
-        color: Colors.grey[800],
+        color: Colors.grey[900],
         shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5)),
         elevation: 1,
@@ -33,12 +33,14 @@ class _DetailsTileState extends State<DetailsTile> {
                 currentSets.trick,
                 style: TextStyle(
                   color: Colors.grey[100],
+                  fontSize: 16.0,
                 ),
               ),
               Text(
                 currentSets.reps.toString(),
                 style: TextStyle(
                   color: Colors.grey[100],
+                  fontSize: 16.0,
                 ),
               ),
             ],

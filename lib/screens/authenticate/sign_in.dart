@@ -25,9 +25,9 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Color(0xff121212),
       appBar: AppBar(
-        backgroundColor: Colors.orange[900],
+        backgroundColor: Color(0xffbd0f15),
         elevation: 0.0,
         title: Text('Sign in'),
         centerTitle: true,
@@ -66,7 +66,7 @@ class _SignInState extends State<SignIn> {
                       borderSide: BorderSide(color: Colors.white, width: 2.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.orange[900], width: 2.0),
+                      borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
                     ),
                   ),
                   validator: (val) => val.isEmpty ? 'Enter an email' : null,
@@ -84,7 +84,7 @@ class _SignInState extends State<SignIn> {
                       borderSide: BorderSide(color: Colors.white, width: 2.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.orange[900], width: 2.0),
+                      borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
                     ),
                   ),
                   validator: (val) => val.length < 6 ? 'Enter a password +6 characters long' : null,
@@ -99,10 +99,11 @@ class _SignInState extends State<SignIn> {
                     "Sign in",
                     style: TextStyle(
                       color: Colors.grey[100],
+                      fontSize: 16,
                     ),
                   ),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.orange[900]),
+                    backgroundColor: MaterialStateProperty.all(Color(0xffbd0f15)),
                     padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 12.0, horizontal: 25.0)),
                   ),
                   onPressed: () async {

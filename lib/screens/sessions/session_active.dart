@@ -24,11 +24,11 @@ class _SessionActiveState extends State<SessionActive> {
         StreamProvider<Results>.value(value: DatabaseService().completeResults,),
       ],
       child: Scaffold(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Color(0xff121212),
         appBar: AppBar(
           title: Text('Session'),
           centerTitle: true,
-          backgroundColor: Colors.orange[900],
+          backgroundColor: Color(0xffbd0f15),
           elevation: 0.0,
         ),
 
@@ -40,30 +40,6 @@ class _SessionActiveState extends State<SessionActive> {
           ],
         ),
         
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.orange[900],
-          type: BottomNavigationBarType.fixed,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt),
-              label: 'Tricklists',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.more_time_rounded),
-              label: 'Sessions',
-              
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.linear_scale),
-              label: 'Lines',
-            ),
-          ],
-          selectedItemColor: Colors.grey[100],
-        ),
       ),
     );
   }
@@ -108,7 +84,7 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                   displayTime,
                   style: TextStyle(
                     color: Colors.grey[100],
-                    fontSize: 50.0,
+                    fontSize: 48.0,
                   ),
                 ),
 
@@ -119,7 +95,7 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      color: Colors.greenAccent[400],
+                      color: Color(0xff00e000),
                       child: IconButton(
                         color: Colors.grey[100],
                         icon: Icon(Icons.play_arrow), 
@@ -140,7 +116,7 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                     ),
                     SizedBox(width: 25,),
                     Container(
-                      color: Colors.blueAccent[400],
+                      color: Colors.blueAccent[700],
                       child: IconButton(
                         color: Colors.grey[100],
                         icon: Icon(Icons.pause), 
@@ -164,7 +140,7 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                     SizedBox(width: 25,),
                     TextButton(
                       style: TextButton.styleFrom(
-                        backgroundColor: Colors.orange[900],
+                        backgroundColor: Color(0xffe00000),
                         padding: EdgeInsets.all(13.0),
                         
                       ),
@@ -182,7 +158,7 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
 
                         SessionState.setStartedState(isStarted);
 
-                        Navigator.pop(context, MaterialPageRoute(builder: (context) => SeshStats(results.sessionID)));
+                        Navigator.pop(context);
                       }, 
                       child: Text(
                         'End Session',
@@ -218,11 +194,11 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                       'Start session',
                       style: TextStyle(
                         color: Colors.grey[100],
-                        fontSize: 20.0,
+                        fontSize: 24.0,
                       ),
                     ),
                     style: TextButton.styleFrom(
-                      backgroundColor: Colors.orange[900],
+                      backgroundColor:Color(0xffbd0f15),
                       padding: EdgeInsets.all(13.0),
                     ),       
                   ),

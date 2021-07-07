@@ -8,19 +8,13 @@ class DatabaseService {
 
 // VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES VALUES
   final String uid;
-  final String activeTricklistID;
-  final String statsSeshID;
-  final String statsTricklistID;
+  final String tricklistID;
   final String statsResultsID;
 
-  static String listID = ActiveID.getID();
   static String currentSeshID;
   static String currentResultsID;
-  static String currentSetResultsID;
 
-  static DateTime dateAWeekAgo;
-
-  DatabaseService({ this.uid, this.activeTricklistID , this.statsTricklistID, this.statsSeshID, this.statsResultsID });
+  DatabaseService({ this.uid, this.tricklistID , this.statsResultsID });
 
 
 
@@ -62,12 +56,29 @@ class DatabaseService {
       'isActive': false,
     }).then((doc) {
       tricks.forEach((trick) {
-        totalsCollection.doc(trick).set({
+        trickListCollection.doc(doc.id).collection('totals').doc(trick).set({
           'lands':  0,
           'fails': 0,
           'trick': trick,
           'listID': doc.id,
-        });
+        },
+        );
+      });
+    }).then((doc) {
+      tricks.forEach((trick) {
+        totalsCollection.doc(trick).get().then((doc) {
+          if (doc.exists) {
+            print('document already exists');
+          } else {
+            totalsCollection.doc(trick).set({
+              'lands':  0,
+              'fails': 0,
+              'trick': trick,
+              },
+            );
+          }
+        }); 
+        
       });
     });
   }
@@ -253,18 +264,6 @@ class DatabaseService {
 
   }
 
-  // current tricklist all results from snapshot
-  List<Results> _currentTricklistResultsFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-        return Results(
-          id: doc.id,
-          sessionID: doc['seshID'],
-          completeTime: doc['overallTime'],
-          completionDate: doc['seshDate'],
-        );
-      }).toList();
-  }
-
   // get the current session complete results
   Stream<Results> get completeResults{
     return resultsCollection.doc(currentResultsID).snapshots()
@@ -312,6 +311,7 @@ class DatabaseService {
       'fails': fails,
       'setTime': time,
       'isDone': isDone,
+      'setDate': FieldValue.serverTimestamp(),
     });
   }
 
@@ -355,7 +355,15 @@ class DatabaseService {
     });
   }
 
-  // current stricklist totals
+  // update tricklist totals
+  Future<void> updateTricklistTotalsData(int lands, int fails, String trick) async {
+    return await trickListCollection.doc(ActiveID.getID()).collection('totals').doc(trick).update({
+      'lands': FieldValue.increment(lands),
+      'fails': FieldValue.increment(fails)
+    });
+  }
+
+  // tricklist totals
   List<Totals> _totalsFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Totals(
@@ -367,10 +375,27 @@ class DatabaseService {
     }).toList();
   }
 
-  // current tricklist totals stream
+  // tricklist totals stream
   Stream<List<Totals>> get totals{
-    return totalsCollection.where('listID', isEqualTo: ActiveID.getID()).snapshots()
+    return trickListCollection.doc(tricklistID).collection('totals').snapshots()
       .map(_totalsFromSnapshot);
+  }
+
+  // All Time totals from snapshot
+  List<AllTimeTotals> _allTimeTotalsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return AllTimeTotals(
+        trick: doc['trick'] ?? '',
+        lands: doc['lands'] ?? '',
+        fails: doc['fails'] ?? '',
+      );
+    }).toList();
+  }
+
+  // All Time Totals
+  Stream<List<AllTimeTotals>> get allTimeTotals{
+    return totalsCollection.snapshots()
+      .map(_allTimeTotalsFromSnapshot);
   }
 
 
@@ -384,8 +409,23 @@ class DatabaseService {
   final CollectionReference statsResultsCollection = FirebaseFirestore.instance.collection('users')
   .doc(FirebaseAuth.instance.currentUser.uid).collection('results');
 
-  // current sets results from snapshot for stats
+  // current sets results from snapshot for sesh stats
   List<SetResults> _statsSetResultsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return SetResults(
+        id: doc.id,
+        trick: doc['trick'] ?? '',
+        lands: doc['lands'] ?? '',
+        fails: doc['fails'] ?? '',
+        goal: doc['goal'] ?? '',
+        setTime: doc['setTime'] ?? '',
+        isDone: doc['isDone'] ?? '',
+      );
+    }).toList();
+  }
+
+  // current sets results from snapshot for tricklist stats
+  List<SetResults> _tricklistSetResultsFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return SetResults(
         id: doc.id,
@@ -410,64 +450,77 @@ class DatabaseService {
 
   }
 
-  // get overall results for stats
+
+  // get overall results for ALL TIME stats
   Stream<Results> get statsResults{
     return statsResultsCollection.doc(statsResultsID).snapshots()
       .map(_statsResultsFromSnapshot);
   }
 
-  // get sets results for stats
+  // get sets results for SESH stats
   Stream<List<SetResults>> get statsSetResults{
     return setResultsCollection.where('seshID', isEqualTo: currentSeshID).snapshots()
       .map(_statsSetResultsFromSnapshot);
   }
 
-
-
-  // get all results for tricklist all-time
-  List<Results> _statsTricklistResultsFromSnapshot(QuerySnapshot snapshot) {
-      return snapshot.docs.map((doc) {
-        return Results(
-          id: doc.id,
-          sessionID: doc['seshID'] ?? '',
-          completeTime: doc['overallTime'] ?? '',
-          completionDate: doc['seshDate'] ?? '',
-        );
-      }).toList();
+  // get sets results for TRICKLIST stats
+  Stream<List<SetResults>> get tricklistSetResults{
+    return setResultsCollection.where('listID', isEqualTo: tricklistID).snapshots()
+      .map(_tricklistSetResultsFromSnapshot);
   }
 
-  // Get the Date from 7 days ago from today
-  Future<DateTime> getDate() {
-    dateAWeekAgo = new DateTime.now().subtract(const Duration(days: 7));
-    print(dateAWeekAgo);
-  }
-
-  // get overall results for stats
-  Stream<List<Results>> get statsTricklistResults{
-    return statsResultsCollection.where('listID', isEqualTo: ActiveID.getID())
-    .snapshots()
-      .map(_statsTricklistResultsFromSnapshot);
-  }
-
-  // get overall results for stats from a week ago
-  Stream<List<Results>> get statsTricklistWeekAgoResults{
-    return statsResultsCollection.where('listID', isEqualTo: ActiveID.getID())
-    .where('seshDate', isLessThanOrEqualTo: dateAWeekAgo).snapshots()
-      .map(_statsTricklistResultsFromSnapshot);
-  }
-
-  Stream<List<SetResults>> get statsTricklistSetResults{
-    return setResultsCollection.where('listID', isEqualTo: ActiveID.getID()).snapshots()
+  // all time set results
+  Stream<List<SetResults>> get allTimeSetResults{
+    return setResultsCollection.snapshots()
       .map(_statsSetResultsFromSnapshot);
   }
 
-  // get sets results for stats for tricklist from a week ago
-  Stream<List<SetResults>> get statsTricklistWeekAgoSetResults{
+
+  // week old sets results from snapshot for ALL TIME STATS
+  List<SetResultsOld> _statsSetResultsOldFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return SetResultsOld(
+        id: doc.id,
+        trick: doc['trick'] ?? '',
+        lands: doc['lands'] ?? '',
+        fails: doc['fails'] ?? '',
+        goal: doc['goal'] ?? '',
+        setTime: doc['setTime'] ?? '',
+        isDone: doc['isDone'] ?? '',
+      );
+    }).toList();
+  }
+
+  // get sets results for stats ALL TIME STATS from a week ago
+  Stream<List<SetResultsOld>> get allTimeWeekAgoSetResults{
     return setResultsCollection
-    .where('listID', isEqualTo: ActiveID.getID())
-    .where('seshDate', isLessThanOrEqualTo: dateAWeekAgo)
+    .where('setDate', isLessThanOrEqualTo: DateTime.now().subtract(Duration(days: 7)))
     .snapshots()
-      .map(_statsSetResultsFromSnapshot);
+      .map(_statsSetResultsOldFromSnapshot);
+  }
+
+  // old sets results from snapshot for TRICKLIST STATS
+  List<SetResultsOld> _tricklistSetResultsOldFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return SetResultsOld(
+        id: doc.id,
+        trick: doc['trick'] ?? '',
+        lands: doc['lands'] ?? '',
+        fails: doc['fails'] ?? '',
+        goal: doc['goal'] ?? '',
+        setTime: doc['setTime'] ?? '',
+        isDone: doc['isDone'] ?? '',
+      );
+    }).toList();
+  }
+
+  // get sets set results for stats TRICKLIST STATS from a week ago
+  Stream<List<SetResultsOld>> get tricklistWeekAgoSetResults{
+    return setResultsCollection
+    .where('listID', isEqualTo: tricklistID)
+    .where('setDate', isLessThanOrEqualTo: DateTime.now().subtract(Duration(days: 7)))
+    .snapshots()
+      .map(_tricklistSetResultsOldFromSnapshot);
   }
 
 
@@ -478,12 +531,22 @@ class DatabaseService {
 // GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL
   // Deletion of all things connected with tricklist ID
   Future<void> deleteFromTricklist(id) {
-      trickListCollection.doc(id).delete().then((doc) {
-      sessionCollection.where('listID', isEqualTo: id).get().then((snapshot) {
-        for(DocumentSnapshot ds in snapshot.docs){
-            ds.reference.delete();
-        }
-      }).then((snapshot) {
+      trickListCollection.doc(id).delete()
+      .then((doc) => {
+        trickListCollection.doc(id).collection('totals').where('listID', isEqualTo: id).get()
+        .then((snapshot) {
+          for(DocumentSnapshot ds in snapshot.docs){
+              ds.reference.delete();
+          }
+        })
+      })
+      .then((doc) {
+        sessionCollection.where('listID', isEqualTo: id).get().then((snapshot) {
+          for(DocumentSnapshot ds in snapshot.docs){
+              ds.reference.delete();
+          }
+      })
+      .then((snapshot) {
         resultsCollection.where('listID', isEqualTo: id).get().then((snapshot) {
         for(DocumentSnapshot ds in snapshot.docs)
           {

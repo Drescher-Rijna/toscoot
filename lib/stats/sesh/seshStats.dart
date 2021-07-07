@@ -37,11 +37,11 @@ class _SeshStatsState extends State<SeshStats> {
         StreamProvider<List<SetResults>>.value(value: DatabaseService(statsResultsID: resultsID).statsSetResults),
       ],
       child: Scaffold(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Color(0xff121212),
         appBar: AppBar(
           title: Text('Stats'),
           centerTitle: true,
-          backgroundColor: Colors.orange[900],
+          backgroundColor: Color(0xffbd0f15),
           elevation: 0.0,
           actions: <Widget>[
             TextButton.icon(
@@ -69,8 +69,13 @@ class _SeshStatsState extends State<SeshStats> {
             Expanded(
               child: Row(
                 children: [
-                  Expanded(child: SeshStatsRatioList()),
-                  Expanded(child: SeshStatsSetTimeList()),
+                  Expanded(flex: 1,
+                    child: SeshStatsRatioList(),
+                  ),
+                  SizedBox(width: 10,),
+                  Expanded(flex: 1,
+                    child: SeshStatsSetTimeList(),
+                  ),
                 ],
               ),
             ),

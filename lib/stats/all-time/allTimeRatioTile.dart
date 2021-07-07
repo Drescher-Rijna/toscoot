@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:toscoot/models/results.dart';
 
-class TricklistRatioTile extends StatefulWidget {
+class AllTimeRatioTile extends StatefulWidget {
 
-  final totals;
-  TricklistRatioTile(this.totals);
+  final AllTimeTotals totals;
+  AllTimeRatioTile(this.totals);
 
   @override
-  _TricklistRatioTileState createState() => _TricklistRatioTileState(totals);
+  _AllTimeRatioTileState createState() => _AllTimeRatioTileState(totals);
 }
 
-class _TricklistRatioTileState extends State<TricklistRatioTile> {
+class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
+  final AllTimeTotals totals;
+    _AllTimeRatioTileState (this.totals);
 
-  final Totals totals;
-  _TricklistRatioTileState(this.totals);
-
+  @override
+  Widget build(BuildContext context) {
+    
   landingRatio() {
       var lands = totals.lands;
       var fails = totals.fails;
@@ -30,8 +32,6 @@ class _TricklistRatioTileState extends State<TricklistRatioTile> {
 
   }
 
-  @override
-  Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(5, 8, 5, 0),
       child: Container(

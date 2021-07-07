@@ -2,21 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/results.dart';
 
-
-class TricklistOverallStats extends StatefulWidget {
+class AllTimeOverallStats extends StatefulWidget {
 
   @override
-  _TricklistOverallStatsState createState() => _TricklistOverallStatsState();
+  _AllTimeOverallStatsState createState() => _AllTimeOverallStatsState();
 }
 
-class _TricklistOverallStatsState extends State<TricklistOverallStats> {
+class _AllTimeOverallStatsState extends State<AllTimeOverallStats> {
 
   @override
   Widget build(BuildContext context) {
 
-    final List<Totals> totals= Provider.of<List<Totals>>(context) ?? [];
+
+    final List<AllTimeTotals> totals = Provider.of<List<AllTimeTotals>>(context) ?? [];
     final List<SetResults> setResults = Provider.of<List<SetResults>>(context) ?? [];
     final List<SetResultsOld> setResultsOld = Provider.of<List<SetResultsOld>>(context) ?? [];
+
 
     compareRatios() {
       var sumLands = 0;
@@ -66,12 +67,7 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
 
       ratio = ((sumLands/given_list.length)/((sumLands/given_list.length)+(sumFails/given_list.length)));
       
-      if (ratio.isNaN) {
-        ratio = 0;
-        return ratio;
-      } else {
-        return ratio;
-      }
+      return ratio;
     }
 
     completionRate() {
@@ -99,11 +95,11 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
       }
 
       if (compareRatios().isNegative) {
-        color = Colors.redAccent[400];
+        color = Color(0xffe00000);
       } 
 
       if (compareRatios() > 0) {
-        color = Colors.greenAccent[400];
+        color = Color(0xff00e000);
       }
 
       return color;
@@ -126,7 +122,9 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
       return icon;
     }
 
-   
+
+
+
     return setResults.isEmpty || setResults == [] ? Center(child: Text('No activity has been detected', style: TextStyle(color: Colors.grey[100], fontSize: 25),)) : Container(
       child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

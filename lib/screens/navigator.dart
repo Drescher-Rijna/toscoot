@@ -3,7 +3,6 @@ import 'package:toscoot/screens/home/home.dart';
 import 'package:toscoot/screens/sessions/sessions.dart';
 import 'package:toscoot/screens/tricklists/tricklists.dart';
 import 'package:toscoot/services/auth.dart';
-import 'package:toscoot/stats/tricklist/tricklistStats.dart';
 
 class BottomNavigator extends StatefulWidget {
 
@@ -36,7 +35,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         body: _children[_currentIndex],
 
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.orange[900],
+          backgroundColor: Color(0xffbd0f15),
           currentIndex: _currentIndex,
           onTap: (index) {
             onTapBar(index);

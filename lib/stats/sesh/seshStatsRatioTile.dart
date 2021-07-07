@@ -31,30 +31,35 @@ class _SeshStatsRatioTileState extends State<SeshStatsRatioTile> {
       padding: EdgeInsets.fromLTRB(5, 8, 5, 0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(width: 1, color: Colors.orange[900]))
+          border: Border(bottom: BorderSide(width: 1, color: Colors.grey[900]))
         ),
         child: Card(
-          color: Colors.grey[900],
+          color: Color(0xff121212),
           margin: EdgeInsets.fromLTRB(0, 0.0, 0, 0.0),
           child: ListTile(
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  setResults.trick,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[100]
+                Flexible(
+                  child: RichText(
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                      text: setResults.trick,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[100]
+                      ),
+                    ),
                   ),
                 ),
+                SizedBox(width: 10,),
                 Text(
                   landingRatio(),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.yellowAccent[400],
+                    color: Color(0xffed2190),
                   ),
                 ),
               ],
