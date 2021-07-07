@@ -15,17 +15,17 @@ class TrickListDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: tricks.map((trick) => 
           Container(
-            padding: EdgeInsets.fromLTRB(0.0, 25.0, 0, 3.0),
-            margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+            padding: EdgeInsets.fromLTRB(0.0, 20.0, 0, 3.0),
+            margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(width: 2.0, color: Colors.orange[900]),
+                bottom: BorderSide(width: 2.0, color: Color(0xffbd0f15)),
               ),
             ),
             child: new Text(
               trick,
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 color: Colors.grey[100],
               ),
             ),
@@ -40,20 +40,20 @@ class TrickListDetails extends StatelessWidget {
     
 
     return Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Color(0xff121212),
         appBar: AppBar(
           title: Text(tricklistTitle),
           centerTitle: true,
-          backgroundColor: Colors.orange[900],
+          backgroundColor: Color(0xffbd0f15),
           elevation: 0.0,
         ),
-        body: Column(
-          children: [
-            Container(
-              child: getTrickWidgets(tricklistTricks),
-            ),
-            
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+                getTrickWidgets(tricklistTricks),
+              
+            ],
+          ),
         ),
     );
   }

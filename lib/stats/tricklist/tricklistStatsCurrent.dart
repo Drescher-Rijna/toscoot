@@ -8,39 +8,54 @@ import 'package:toscoot/stats/tricklist/tricklistRatioStatList.dart';
 
 class TricklistStatsCurrent extends StatefulWidget {
 
-  final Function toggleView;
-  TricklistStatsCurrent({ this.toggleView });
+  final String tricklistID;
+  TricklistStatsCurrent(this.tricklistID);
 
   @override
-  _TricklistStatsCurrentState createState() => _TricklistStatsCurrentState();
+  _TricklistStatsCurrentState createState() => _TricklistStatsCurrentState(tricklistID);
 }
 
 class _TricklistStatsCurrentState extends State<TricklistStatsCurrent> {
+
+  final String tricklistID;
+  _TricklistStatsCurrentState(this.tricklistID);
+
   @override
   Widget build(BuildContext context) {
+    print('tricklist id er: ' );
+    print(tricklistID);
     return MultiProvider(
       providers: [
-        StreamProvider<List<Results>>.value(value: DatabaseService().statsTricklistResults,),
-        StreamProvider<List<SetResults>>.value(value: DatabaseService().statsTricklistSetResults,),
-        StreamProvider<ActiveTricklist>.value(value: DatabaseService().activeTricklist,),
-        StreamProvider<List<Totals>>.value(value: DatabaseService().totals,),
+        StreamProvider<List<Totals>>.value(value: DatabaseService(tricklistID: tricklistID).totals,),
+        StreamProvider<List<SetResults>>.value(value: DatabaseService(tricklistID: tricklistID).tricklistSetResults),
+        StreamProvider<List<SetResultsOld>>.value(value: DatabaseService(tricklistID: tricklistID).tricklistWeekAgoSetResults)
       ],
-      child: Column(
-        children: [
-          SizedBox(height: 20,),
-          Text(
-            'All-Time Stats',
-            style: TextStyle(
-              color: Colors.grey[100],
-              fontSize: 35,
-              fontWeight: FontWeight.bold,
+      child: Scaffold(
+        backgroundColor: Color(0xff121212),
+        appBar: new AppBar(
+          title: Text('ToScoot'),
+          centerTitle: true,
+          backgroundColor: Color(0xffbd0f15),
+          elevation: 0.0,
+
+        ),
+        body: Column(
+          children: [
+            SizedBox(height: 20,),
+            Text(
+              'Tricklist Stats',
+              style: TextStyle(
+                color: Colors.grey[100],
+                fontSize: 34,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          SizedBox(height: 20,),
-          TricklistOverallStats(),
-          SizedBox(height: 20,),
-          Expanded(child: TricklistRatioStatList()),
-        ],
+            SizedBox(height: 20,),
+            TricklistOverallStats(),
+            SizedBox(height: 20,),
+            Expanded(child: TricklistRatioStatList()),
+          ],
+        ),
       ),
     );
   }

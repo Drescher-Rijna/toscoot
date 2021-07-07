@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:toscoot/screens/tricklists/tricklists.dart';
 import 'package:toscoot/services/database.dart';
 import 'package:toscoot/shared/loading.dart';
@@ -28,7 +29,7 @@ class _TrickListFormState extends State<TrickListForm> {
   static List<String> tricksList = [null];
 
   //field states
-  String Listtitle = '';
+  String listtitle = '';
 
   bool loading = false;
 
@@ -49,11 +50,11 @@ class _TrickListFormState extends State<TrickListForm> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Color(0xff121212),
         appBar: AppBar(
           title: Text('Create A Tricklist'),
           centerTitle: true,
-          backgroundColor: Colors.orange[900],
+          backgroundColor: Color(0xffbd0f15),
           elevation: 0.0,
           actions: <Widget>[
             TextButton.icon(
@@ -72,7 +73,7 @@ class _TrickListFormState extends State<TrickListForm> {
                     setState(() {
                       loading = true;                      
                     });
-                    await DatabaseService().updateTrickListData(Listtitle, tricksList);
+                    await DatabaseService().updateTrickListData(listtitle, tricksList);
                     Navigator.pop(context, MaterialPageRoute(builder: (context) => TrickLists()));
                 }
               },
@@ -80,49 +81,53 @@ class _TrickListFormState extends State<TrickListForm> {
           ],
         ),
       body: Container(
+        
         child: Form(
           key: _formKey,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // title textfield
-                Padding(
-                  padding: const EdgeInsets.only(right: 32.0),
-                  child: TextFormField(
-                    style: TextStyle(color: Colors.grey[100], fontSize: 20.0),
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      hintText: 'Title',
-                      hintStyle: TextStyle(fontSize: 20.0, color: Colors.grey[500]),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey[700], width: 2.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                
+                children: [
+                  // title textfield
+                  Padding(
+                    padding: const EdgeInsets.only(right: 32.0),
+                    child: TextFormField(
+                      style: TextStyle(color: Colors.grey[100], fontSize: 20.0),
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        hintText: 'Title',
+                        hintStyle: TextStyle(fontSize: 20.0, color: Colors.grey[500]),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey[700], width: 2.0),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
+                        ),
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.orange[900], width: 2.0),
-                      ),
+                      onChanged: (val) {
+                      setState(() => listtitle = val);
+                      },
+                      validator: (v){
+                        if(v.trim().isEmpty) return 'Please enter something';
+                        return null;
+                      },
                     ),
-                    onChanged: (val) {
-                    setState(() => Listtitle = val);
-                    },
-                    validator: (v){
-                      if(v.trim().isEmpty) return 'Please enter something';
-                      return null;
-                    },
                   ),
-                ),
-                SizedBox(height: 40,),
-                Text(
-                  'Add Tricks', 
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700, 
-                    fontSize: 18, 
-                    color: Colors.grey[100]
+                  SizedBox(height: 40,),
+                  Text(
+                    'Add Tricks', 
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700, 
+                      fontSize: 20, 
+                      color: Colors.grey[100]
+                    ),
                   ),
-                ),
-                ..._getTricks(),
-              ],
+                  ..._getTricks(),
+                ],
+              ),
             ),
           ),
         ),
@@ -167,7 +172,7 @@ class _TrickListFormState extends State<TrickListForm> {
         width: 30,
         height: 30,
         decoration: BoxDecoration(
-          color: (add) ? Colors.greenAccent[400] : Colors.redAccent[400],
+          color: (add) ? Color(0xff00e000) : Color(0xffe00000),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Icon((add) ? Icons.add : Icons.remove, color: Colors.white,),
@@ -176,6 +181,16 @@ class _TrickListFormState extends State<TrickListForm> {
   }
 
 
+}
+
+class LowerCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text?.toLowerCase(),
+      selection: newValue.selection,
+    );
+  }
 }
 
 
@@ -191,7 +206,6 @@ class TrickTextFields extends StatefulWidget {
 }
 
 class _TrickTextFieldsState extends State<TrickTextFields> {
-  
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +214,9 @@ class _TrickTextFieldsState extends State<TrickTextFields> {
     return TextFormField(
       onChanged: (val) => _TrickListFormState.tricksList[widget.index] = val,
       style: TextStyle(color: Colors.grey[100], fontSize: 16.0),
+      inputFormatters: [
+        LowerCaseTextFormatter(),
+      ],
       decoration: InputDecoration(
         hintText: 'Trick name',
         hintStyle: TextStyle( 
@@ -210,7 +227,7 @@ class _TrickTextFieldsState extends State<TrickTextFields> {
           borderSide: BorderSide(color: Colors.grey[700], width: 2.0),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.orange[900], width: 2.0),
+          borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
         ),
       ),
       validator: (val){

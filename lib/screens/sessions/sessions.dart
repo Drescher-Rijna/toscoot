@@ -21,11 +21,11 @@ class _SessionsState extends State<Sessions> {
     return StreamProvider<List<Session>>.value(
       value: DatabaseService().sessions,
       child: Scaffold(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Color(0xff121212),
         appBar: AppBar(
           title: Text('Sessions'),
           centerTitle: true,
-          backgroundColor: Colors.orange[900],
+          backgroundColor: Color(0xffbd0f15),
           elevation: 0.0,
           actions: <Widget>[
             TextButton.icon(
@@ -54,7 +54,7 @@ class _SessionsState extends State<Sessions> {
             );
           },
           elevation: 5,
-          backgroundColor: Colors.orange[900],
+          backgroundColor: Color(0xffbd0f15),
           child: new Icon(Icons.add),
         ),
       ),

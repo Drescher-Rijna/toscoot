@@ -20,11 +20,11 @@ class SessionDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Color(0xff121212),
         appBar: AppBar(
           title: Text(sessionTitle),
           centerTitle: true,
-          backgroundColor: Colors.orange[900],
+          backgroundColor: Color(0xffbd0f15),
           elevation: 0.0,
           actions: <Widget>[
             TextButton.icon(
@@ -51,6 +51,7 @@ class SessionDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SizedBox(height: 10,),
                 TextButton.icon(
                   onPressed: () async {
                     await DatabaseService().initResults();
@@ -65,15 +66,16 @@ class SessionDetails extends StatelessWidget {
                     'Start session',
                     style: TextStyle(
                       color: Colors.grey[100],
-                      fontSize: 20.0,
+                      fontSize: 24.0,
                     ),
                   ),
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.orange[900],
+                    backgroundColor: Color(0xffbd0f15),
                     padding: EdgeInsets.all(13.0),
                   ),
                   
                 ),
+                SizedBox(height: 10,),
               Expanded(
                 child: StreamProvider<List<CurrentSets>>.value(
                   value: DatabaseService().currentSets,
@@ -82,31 +84,6 @@ class SessionDetails extends StatelessWidget {
               ),
             ],
           ),
-        ),
-
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.orange[900],
-          type: BottomNavigationBarType.fixed,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt),
-              label: 'Tricklists',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.more_time_rounded),
-              label: 'Sessions',
-              
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.linear_scale),
-              label: 'Lines',
-            ),
-          ],
-          selectedItemColor: Colors.grey[100],
         ),
       );
   }

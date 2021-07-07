@@ -35,12 +35,14 @@ class _CreatedSetTileState extends State<CreatedSetTile> {
                 sets.trick,
                 style: TextStyle(
                   color: Colors.grey[100],
+                  fontSize: 16.0,
                 ),
               ),
               Text(
                 sets.reps.toString(),
                 style: TextStyle(
                   color: Colors.grey[100],
+                  fontSize: 16.0,
                 ),
               ),
               Row(

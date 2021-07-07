@@ -56,9 +56,9 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
           Column(
             children: [
               Text(
-                'Session completion',
+                'Sesh completion',
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: 34,
                   fontWeight: FontWeight.bold,
                   color: Colors.grey[100],
                 ),
@@ -72,7 +72,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
                       height: 40,
                       child: LinearProgressIndicator(
                         value: completionRate(),
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.greenAccent[700]),
+                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xff00e000)),
                         
                       ),
                     ),
@@ -81,7 +81,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
                     child: Text(
                       completionRate().round().toString() + '%',
                       style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 34,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey[100],
                       ),
@@ -110,9 +110,9 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
                   Text(
                     landingRatio(),
                     style: TextStyle(
-                        fontSize: 25,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.yellowAccent[400],
+                        color: Color(0xffed2190),
                     ),
                   ),
                 ],
@@ -131,7 +131,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
                   Text(
                     overallResults.completeTime.substring(0,8),
                     style: TextStyle(
-                        fontSize: 25,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.blueAccent[400],
                     ),

@@ -28,16 +28,16 @@ class _Create_SetsState extends State<Create_Sets> {
     return StreamProvider<List<Sets>>.value(
       value: DatabaseService().sets,
       child: StreamBuilder<ActiveTricklist>(
-        stream: DatabaseService(activeTricklistID: ActiveID.getID()).activeTricklist,
+        stream: DatabaseService(tricklistID: ActiveID.getID()).activeTricklist,
         builder: (context, snapshot) {
           if(snapshot.hasData && snapshot != null) {
             ActiveTricklist activeTricklist = snapshot.data;
             return Scaffold(
-              backgroundColor: Colors.grey[900],
+              backgroundColor: Color(0xff121212),
                 appBar: AppBar(
                   title: Text('Create A Session'),
                   centerTitle: true,
-                  backgroundColor: Colors.orange[900],
+                  backgroundColor: Color(0xffbd0f15),
                   elevation: 0.0,
                   actions: <Widget>[
                     TextButton.icon(
@@ -67,14 +67,16 @@ class _Create_SetsState extends State<Create_Sets> {
                                         key: _formKey,
                                         child: Column(
                                           children: [
+                                            SizedBox(height: 10,),
                                             Text(
                                               'Add new sets',
                                               style: TextStyle(
                                                 color: Colors.grey[200],
-                                                fontSize: 20.0
+                                                fontSize: 24.0,
+                                                fontWeight: FontWeight.bold
                                               ),
                                             ),
-                                            
+                                            SizedBox(height: 10,),
                                             Row(
                                               children: [
                                                 Expanded(
@@ -82,28 +84,30 @@ class _Create_SetsState extends State<Create_Sets> {
                                                   child: Column(
                                                     children: [
                                                       SizedBox(height: 15.0,),                                    
-                                                      DropdownButtonFormField(
-                                                        dropdownColor: Colors.grey[900],
-                                                        hint: Text('Select a trick', style: TextStyle(color: Colors.grey[100], fontSize: 18.0),),
-                                                        decoration: InputDecoration(
-                                                          contentPadding: const EdgeInsets.all(0.0),
-                                                          enabledBorder: UnderlineInputBorder(
-                                                            borderSide: BorderSide(color: Colors.orange[900]),
-                                                          ),
-                                                        ),
-                                                        value: _currentTrick,
-                                                        items: activeTricklist.tricks.map((trick) {
-                                                          return new DropdownMenuItem(
-                                                            value: trick,
-                                                            child: Text(
-                                                              trick, 
-                                                              style: TextStyle(
-                                                                color: Colors.grey[100], 
-                                                                fontSize: 18.0),
+                                                      Container(
+                                                        height: 60,
+                                                        child: DropdownButton(
+                                                          iconEnabledColor: Color(0xffbd0f15),
+                                                          iconSize: 30,
+                                                          dropdownColor: Colors.grey[900],
+                                                          icon: Icon(Icons.arrow_drop_down),
+                                                          hint: Text('Select a trick', style: TextStyle(color: Colors.grey[100], fontSize: 16.0),),
+                                                         isExpanded: true,
+                                                          value: _currentTrick,
+                                                          items: activeTricklist.tricks.map((trick) {
+                                                            return new DropdownMenuItem(
+                                                              
+                                                              value: trick,
+
+                                                              child: Text( trick, 
+                                                                  style: TextStyle(
+                                                                    color: Colors.grey[100], 
+                                                                    fontSize: 16.0),
                                                               ),
-                                                          );
-                                                        }).toList(),
-                                                        onChanged: (val) => setState(() => _currentTrick = val ),
+                                                            );
+                                                          }).toList(),
+                                                          onChanged: (val) => setState(() => _currentTrick = val ),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -116,16 +120,18 @@ class _Create_SetsState extends State<Create_Sets> {
                                                       SizedBox(height: 15.0,),
                                                       TextFormField(
                                                         decoration: InputDecoration(
-                                                          hintText: 'Reps',
+                                                          hintText: 'Reps', 
+                                                          hintStyle: TextStyle(fontSize: 16.0),
                                                           fillColor: Colors.white,
                                                           filled: true,
                                                           enabledBorder: OutlineInputBorder(
                                                             borderSide: BorderSide(color: Colors.white, width: 2.0),
                                                           ),
                                                           focusedBorder: OutlineInputBorder(
-                                                            borderSide: BorderSide(color: Colors.orange[900], width: 2.0),
+                                                            borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
                                                           ),
                                                         ),
+                                                        style: TextStyle(fontSize: 16),
                                                         keyboardType: TextInputType.number,
                                                         validator: (val) => val.isEmpty ? 'Enter reps' : null,
                                                         onChanged: (val) {
@@ -144,7 +150,7 @@ class _Create_SetsState extends State<Create_Sets> {
                                 color: Colors.grey[100],
                               ),
                               style: TextButton.styleFrom(
-                                backgroundColor: Colors.orange[900],
+                                backgroundColor: Color(0xffbd0f15),
                                 padding: EdgeInsets.all(12.0),
                               ),
                               onPressed: () async {

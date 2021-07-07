@@ -21,11 +21,11 @@ class _Create_SessionState extends State<Create_Session> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Color(0xff121212),
           appBar: AppBar(
             title: Text('Create A Session'),
             centerTitle: true,
-            backgroundColor: Colors.orange[900],
+            backgroundColor: Color(0xffbd0f15),
             elevation: 0.0,
           ),
           body: Center(
@@ -39,7 +39,7 @@ class _Create_SessionState extends State<Create_Session> {
                     Text(
                       'First give your session a title:',
                       style: TextStyle(
-                        fontSize: 22.0,
+                        fontSize: 20.0,
                         color: Colors.grey[100]
                       ),
                     ),
@@ -53,9 +53,10 @@ class _Create_SessionState extends State<Create_Session> {
                           borderSide: BorderSide(color: Colors.white, width: 2.0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.orange[900], width: 2.0),
+                          borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
                         ),
                       ),
+                      style: TextStyle(fontSize: 16),
                       validator: (val) => val.isEmpty ? 'Enter a title' : null,
                       onChanged: (val) {
                         setState(() => title = val);
@@ -64,7 +65,7 @@ class _Create_SessionState extends State<Create_Session> {
                     SizedBox(height: 20.0,),
                     TextButton(
                       style: TextButton.styleFrom(
-                        backgroundColor: Colors.orange[900],
+                        backgroundColor: Color(0xffbd0f15),
                         padding: EdgeInsets.fromLTRB(13, 13, 13, 13)
                       ),
                       onPressed: () async {
@@ -79,7 +80,7 @@ class _Create_SessionState extends State<Create_Session> {
                         'Create session',
                         style: TextStyle(
                           color: Colors.grey[100],
-                          fontSize: 18.0
+                          fontSize: 16.0
                         ),
                         ),
                     ), 
