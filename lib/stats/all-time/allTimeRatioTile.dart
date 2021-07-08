@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:toscoot/models/results.dart';
 
@@ -45,15 +47,32 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  totals.trick,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[100]
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      totals.trick,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[100]
+                      ),
+                    ),
+                    SizedBox(width: 10,),
+                    IconButton(
+                      onPressed: () async {
+                        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('totals').doc(totals.trick).delete();
+                      },
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.grey[100],
+                      ),
+                      highlightColor: Colors.orange[900],
+                    ),
+                  ],
                 ),
+                
                 Text(
                   landingRatio(),
                   style: TextStyle(

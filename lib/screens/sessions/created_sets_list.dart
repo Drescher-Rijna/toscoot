@@ -12,7 +12,7 @@ class CreatedSetsList extends StatefulWidget {
 class _CreatedSetsListState extends State<CreatedSetsList> {
   @override
   Widget build(BuildContext context) {
-    final sets = Provider.of<List<Sets>>(context) ?? [];
+    final sets = Provider.of<List<CurrentSets>>(context) ?? [];
 
     return ListView.builder(
       itemCount: sets.length,

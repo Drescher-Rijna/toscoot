@@ -109,12 +109,10 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                                 ),
                                 SizedBox(width: 25.0,),
                                 Container(
-                                  width: 45,
-                                  height: 45,
+                                  padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
                                   color: Color(0xffe00000),
-                                  child: IconButton(
-                                    color: Colors.grey[100],
-                                    icon: Icon(Icons.stop), 
+                                  child: TextButton(
+                                    child: Text('End set', style: TextStyle(color: Colors.grey[100], fontSize: 16.0,),),
                                     onPressed: () async {
                                       await DatabaseService().endSet(setResults.id, _currentLand, _currentFail, displayTime, setResults.isDone);
                                       await DatabaseService().updateTotalsData(_currentLand, _currentFail, setResults.trick);
@@ -160,9 +158,13 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                                           ),
                                         ),
                                         onPressed: () async {
-                                          setState(() {
-                                            _currentLand++;
-                                          });
+                                          if (_currentLand < setResults.goal) {
+                                            setState(() {
+                                              _currentLand++;
+                                            });
+
+                                            await DatabaseService().updateSetResultsData(setResults.id, _currentLand, _currentFail, displayTime,);
+                                          }
 
                                           if (_currentLand == setResults.goal) {
                                             await DatabaseService().endSet(setResults.id, _currentLand, _currentFail, displayTime, true);
@@ -177,11 +179,8 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                                             });
 
                                             Navigator.pop(context);
-                                          } else {
-                                            await DatabaseService().updateSetResultsData(setResults.id, _currentLand, _currentFail, displayTime,);
                                           }
                                           
-
                                         }
                                       ),
                                     ),
@@ -316,7 +315,8 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                   IconButton(
                     onPressed: () => showSettingsPanel(),
                     icon: Icon(
-                      Icons.play_arrow,
+                      Icons.arrow_drop_down,
+                      size: 30,
                       color: Colors.grey[100],
                     ),
                     highlightColor: Colors.orange[900],

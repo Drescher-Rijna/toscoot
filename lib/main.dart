@@ -13,7 +13,6 @@ void main() async {
   await Firebase.initializeApp();
 
   await ActiveID.init();
-  await ActiveID.setID('noIDisChoosen');
   print(ActiveID.getID());
   
   await SessionState.initSession();

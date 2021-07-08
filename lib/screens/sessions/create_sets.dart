@@ -25,8 +25,8 @@ class _Create_SetsState extends State<Create_Sets> {
   @override
   Widget build(BuildContext context) {
 
-    return StreamProvider<List<Sets>>.value(
-      value: DatabaseService().sets,
+    return StreamProvider<List<CurrentSets>>.value(
+      value: DatabaseService().currentSets,
       child: StreamBuilder<ActiveTricklist>(
         stream: DatabaseService(tricklistID: ActiveID.getID()).activeTricklist,
         builder: (context, snapshot) {

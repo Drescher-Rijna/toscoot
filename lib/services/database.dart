@@ -385,6 +385,7 @@ class DatabaseService {
   List<AllTimeTotals> _allTimeTotalsFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return AllTimeTotals(
+        id: doc.id ?? '',
         trick: doc['trick'] ?? '',
         lands: doc['lands'] ?? '',
         fails: doc['fails'] ?? '',

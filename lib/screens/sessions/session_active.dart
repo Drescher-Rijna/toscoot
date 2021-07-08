@@ -138,31 +138,30 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                       ),
                     ),
                     SizedBox(width: 25,),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: Color(0xffe00000),
-                        padding: EdgeInsets.all(13.0),
+                    Container(
+                      color: Color(0xffe00000),
+                      padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
+                      child: TextButton(
                         
-                      ),
-                      
-                      onPressed: () async {
-                        
-                        await DatabaseService().updateResultsData(displayTime);
-                        await DatabaseService().completeSession(true, DatabaseService.currentSeshID);
+                        onPressed: () async {
+                          
+                          await DatabaseService().updateResultsData(displayTime);
+                          await DatabaseService().completeSession(true, DatabaseService.currentSeshID);
 
-                        _stopwatchTimer.onExecute.add(StopWatchExecute.reset);
+                          _stopwatchTimer.onExecute.add(StopWatchExecute.reset);
 
-                        setState(() {
-                          isStarted = false;
-                        });
+                          setState(() {
+                            isStarted = false;
+                          });
 
-                        SessionState.setStartedState(isStarted);
+                          SessionState.setStartedState(isStarted);
 
-                        Navigator.pop(context);
-                      }, 
-                      child: Text(
-                        'End Session',
-                        style: TextStyle(color: Colors.grey[100], fontSize: 18),
+                          Navigator.pop(context);
+                        }, 
+                        child: Text(
+                          'End Session',
+                          style: TextStyle(color: Colors.grey[100], fontSize: 18),
+                        ),
                       ),
                     ),
                   ],

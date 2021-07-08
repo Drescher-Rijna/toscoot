@@ -4,7 +4,7 @@ import 'package:toscoot/services/database.dart';
 
 class CreatedSetTile extends StatefulWidget {
 
-  final Sets sets;
+  final CurrentSets sets;
   CreatedSetTile({ this.sets });
 
   @override

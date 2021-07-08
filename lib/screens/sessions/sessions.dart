@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/session.dart';
+import 'package:toscoot/models/tricklist.dart';
 import 'package:toscoot/screens/sessions/create_session.dart';
 import 'package:toscoot/screens/sessions/sessions_list.dart';
 import 'package:toscoot/services/auth.dart';
@@ -47,14 +48,15 @@ class _SessionsState extends State<Sessions> {
         ),
         body: SessionList(),
         floatingActionButton: new FloatingActionButton(
-          onPressed: () {
+          
+          onPressed: ActiveID.getID() == 'noIDisChoosen' ? null : () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Create_Session()),
             );
           },
           elevation: 5,
-          backgroundColor: Color(0xffbd0f15),
+          backgroundColor: ActiveID.getID() == 'noIDisChoosen' ? Colors.grey[700] : Color(0xffbd0f15),
           child: new Icon(Icons.add),
         ),
       ),

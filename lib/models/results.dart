@@ -47,11 +47,12 @@ class Totals {
 }
 
 class AllTimeTotals {
+  String id;
   int fails;
   int lands;
   String trick;
 
-  AllTimeTotals({ this.fails, this.trick, this.lands});
+  AllTimeTotals({this.id, this.fails, this.trick, this.lands});
 }
 
 class SessionState {
