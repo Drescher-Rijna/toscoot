@@ -55,6 +55,14 @@ class AllTimeTotals {
   AllTimeTotals({this.id, this.fails, this.trick, this.lands});
 }
 
+class AllTimeRatio {
+  String id;
+  double ratio;
+  String trick;
+
+  AllTimeRatio({this.id, this.trick, this.ratio });
+}
+
 class SessionState {
   static SharedPreferences _preferences;
 

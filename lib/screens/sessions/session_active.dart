@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -144,9 +146,9 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                       child: TextButton(
                         
                         onPressed: () async {
-                          
                           await DatabaseService().updateResultsData(displayTime);
                           await DatabaseService().completeSession(true, DatabaseService.currentSeshID);
+                          await DatabaseService().setRatios();
 
                           _stopwatchTimer.onExecute.add(StopWatchExecute.reset);
 

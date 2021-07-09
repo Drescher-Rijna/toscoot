@@ -7,6 +7,7 @@ import 'package:toscoot/screens/tricklists/create_tricklist.dart';
 import 'package:toscoot/screens/tricklists/trick_list.dart';
 import 'package:toscoot/services/auth.dart';
 import 'package:toscoot/services/database.dart';
+import 'package:toscoot/shared/alertSettings.dart';
 
 class TrickLists extends StatefulWidget {
 
@@ -44,6 +45,12 @@ class _TrickListsState extends State<TrickLists> {
                 await _auth.signOut();
               },
             ),
+            IconButton(
+            icon: Icon(Icons.settings), 
+            onPressed: () {
+              alertSettings(context);
+            }
+          ),
           ],
         ),
         body: TrickListScreen(),
@@ -51,7 +58,7 @@ class _TrickListsState extends State<TrickLists> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Create_TrickList()),
+              MaterialPageRoute(builder: (context) => TrickListForm()),
             );
           },
           elevation: 5,

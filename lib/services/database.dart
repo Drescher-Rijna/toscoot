@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:toscoot/models/results.dart';
 import 'package:toscoot/models/session.dart';
 import 'package:toscoot/models/tricklist.dart';
+import 'package:toscoot/models/user.dart';
 
 class DatabaseService {
 
@@ -11,6 +13,7 @@ class DatabaseService {
   final String tricklistID;
   final String statsResultsID;
 
+  static String ActiveID;
   static String currentSeshID;
   static String currentResultsID;
 
@@ -31,12 +34,38 @@ class DatabaseService {
     return await userCollection.doc(uid).set({
       'username': username,
       'email': email,
+      'ActiveID': 'noIDisChoosen',
+      'showAlerts': true,
     });
   }
 
+  // creating user ActiveID
+  Future<void> updateUserActiveID(String id) async {
+    return await userCollection.doc(FirebaseAuth.instance.currentUser.uid).update({
+      'ActiveID': id,
+    });
+  }
+
+  // change user showAlerts
+  Future<void> updateUserAlerts(bool showAlerts) async {
+    return await userCollection.doc(FirebaseAuth.instance.currentUser.uid).update({
+      'showAlerts': showAlerts,
+    });
+  }
+
+  // trick list from snapshot
+  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
+    return UserData(
+      uid: snapshot.id,
+      activeID: snapshot['ActiveID'],
+      showAlerts: snapshot['showAlerts']
+    );
+  }
+
   // get users stream
-  Stream<QuerySnapshot> get users {
-    return userCollection.snapshots();
+  Stream<UserData> get users {
+    return userCollection.doc(FirebaseAuth.instance.currentUser.uid).snapshots().
+    map(_userDataFromSnapshot);
   }
 
 
@@ -113,7 +142,13 @@ class DatabaseService {
 
   // get user active list
   Stream<ActiveTricklist> get activeTricklist {
-    return trickListCollection.doc(ActiveID.getID()).snapshots()
+    return trickListCollection.doc(ActiveID).snapshots()
+      .map(_activeListFromSnapshot);
+  }
+
+  // get user clicked tricklist
+  Stream<ActiveTricklist> get clickedTricklist {
+    return trickListCollection.doc(tricklistID).snapshots()
       .map(_activeListFromSnapshot);
   }
 
@@ -132,7 +167,7 @@ class DatabaseService {
       'title': title,
       'created': FieldValue.serverTimestamp(),
       'isComplete': false,
-      'listID': ActiveID.getID(),
+      'listID': ActiveID,
       'resultsID': 'nothing yet',
     }).then((doc) => currentSeshID = doc.id );
   }
@@ -169,7 +204,7 @@ class DatabaseService {
 
   // get users sessions
   Stream<List<Session>> get sessions{
-    return sessionCollection.where('listID', isEqualTo: ActiveID.getID()).orderBy("created", descending: false).snapshots()
+    return sessionCollection.where('listID', isEqualTo: ActiveID).orderBy("created", descending: false).snapshots()
       .map(_sessionFromSnapshot);
   }
 
@@ -191,7 +226,7 @@ class DatabaseService {
       return await sessionCollection.doc(currentSeshID).collection('sets').add({
         'trick': trick,
         'reps': reps,
-        'listID': ActiveID.getID(),
+        'listID': ActiveID,
         'seshID': currentSeshID,
       });
     }
@@ -242,7 +277,7 @@ class DatabaseService {
       'seshID': currentSeshID,
       'seshDate': FieldValue.serverTimestamp(),
       'overallTime': '00:00:00',
-      'listID': ActiveID.getID(),
+      'listID': ActiveID,
     }).then((doc) => currentResultsID = doc.id).then((doc) => sessionCollection.doc(currentSeshID).update({'resultsID': currentResultsID}));
   }
 
@@ -290,7 +325,7 @@ class DatabaseService {
       'fails': 0,
       'setTime': '00:00:00',
       'isDone': false,
-      'listID': ActiveID.getID(),
+      'listID': ActiveID,
       'seshID': currentSeshID,
       'resultsID': currentResultsID,
     });
@@ -357,7 +392,7 @@ class DatabaseService {
 
   // update tricklist totals
   Future<void> updateTricklistTotalsData(int lands, int fails, String trick) async {
-    return await trickListCollection.doc(ActiveID.getID()).collection('totals').doc(trick).update({
+    return await trickListCollection.doc(ActiveID).collection('totals').doc(trick).update({
       'lands': FieldValue.increment(lands),
       'fails': FieldValue.increment(fails)
     });
@@ -528,6 +563,46 @@ class DatabaseService {
 
 
 
+// RATIOS RATIOS RATIOS RATIOS RATIOS RATIOS RATIOS RATIOS RATIOS RATIOS
+final CollectionReference ratiosCollection = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('ratios');
+
+Future<void> setRatios() async {
+    totalsCollection.snapshots().map((snapshot) {
+      print(snapshot);
+      return snapshot.docs.forEach((doc) {
+        print(doc['trick']);
+        return FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('ratios').doc(doc.id).set({
+          'trick': doc['trick'] ?? '',
+          'ratio': doc['lands']/(doc['lands'] + doc['fails']) ?? 0,
+        });
+      });
+    }).toList();
+  
+}
+
+// old sets results from snapshot for TRICKLIST STATS
+  List<AllTimeRatio> _allTimeRatiosFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return AllTimeRatio(
+        id: doc.id,
+        trick: doc['trick'] ?? '',
+        ratio: doc['ratio'] ?? 0,
+      );
+    }).toList();
+  }
+
+  // get sets set results for stats TRICKLIST STATS from a week ago
+  Stream<List<AllTimeRatio>> get allTimeRatios{
+    return ratiosCollection.orderBy('ratio', descending: true).snapshots()
+      .map(_allTimeRatiosFromSnapshot);
+  }
+
+
+
+
+
+
+
 
 // GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL GENERAL
   // Deletion of all things connected with tricklist ID
@@ -592,6 +667,7 @@ class DatabaseService {
         });
       });
   }
+
   
 
 

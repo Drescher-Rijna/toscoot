@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/tricklist.dart';
+import 'package:toscoot/models/user.dart';
 import 'package:toscoot/screens/tricklists/tricklist_tile.dart';
+import 'package:toscoot/services/database.dart';
 import 'package:toscoot/shared/loading.dart';
 
 class TrickListScreen extends StatefulWidget {
@@ -16,11 +18,14 @@ class _TrickListScreenState extends State<TrickListScreen> {
 
     final tricklists = Provider.of<List<TrickList>>(context) ?? [];
 
-    return ListView.builder(
-      itemCount: tricklists.length,
-      itemBuilder: (context, index) {
-        return TrickListTile(tricklist: tricklists[index]);
-      },
+    return StreamProvider<UserData>.value(
+      value: DatabaseService().users,
+      child: ListView.builder(
+        itemCount: tricklists.length,
+        itemBuilder: (context, index) {
+          return TrickListTile(tricklist: tricklists[index]);
+        },
+      ),
     );
   }
 }

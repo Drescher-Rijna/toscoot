@@ -1,38 +1,94 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:toscoot/models/results.dart';
 
 class AllTimeRatioTile extends StatefulWidget {
 
-  final AllTimeTotals totals;
-  AllTimeRatioTile(this.totals);
+  final AllTimeRatio ratios;
+  AllTimeRatioTile(this.ratios);
 
   @override
-  _AllTimeRatioTileState createState() => _AllTimeRatioTileState(totals);
+  _AllTimeRatioTileState createState() => _AllTimeRatioTileState(ratios);
 }
 
 class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
-  final AllTimeTotals totals;
-    _AllTimeRatioTileState (this.totals);
+    final AllTimeRatio ratios;
+    _AllTimeRatioTileState (this.ratios);
 
   @override
   Widget build(BuildContext context) {
-    
-  landingRatio() {
-      var lands = totals.lands;
-      var fails = totals.fails;
-      double ratio;
 
-      if (lands == 0 && fails == 0 || lands == 0) {
-        ratio = 0;
-        return ratio.toString();
+  final List<SetResultsOld> setResultsOld = Provider.of<List<SetResultsOld>>(context) ?? [];
+
+  bool yesorno;
+
+  compareRatios() {
+      double ratio = ratios.ratio;
+      var sumLands = 0;
+      var sumFails = 0;
+      double ratioOld = 0;
+      var givenList = setResultsOld;
+      double comparedRatio = 0;
+
+      setResultsOld.map((e) => {
+        if (e.trick == ratios.trick) {
+          sumLands += e.lands,
+          sumFails += e.fails
+        }
+      }).toList();
+
+      ratioOld = sumLands/(sumFails + sumLands);
+
+      if (ratioOld.isNaN || ratioOld == 0 || ratioOld == null) {
+        comparedRatio = 0;
       } else {
-        ratio = lands/(lands+fails);
-        return ratio.toStringAsFixed(2);
+        comparedRatio = ratio-ratioOld;
       }
 
-  }
+      return comparedRatio;
+      
+    }
+
+
+    Color getColor() {
+      Color color;
+      if (compareRatios() == 0) {
+        color = Color(0xffff008b);
+      }
+
+      if (compareRatios().isNegative) {
+        color = Color(0xffe00000);
+      } 
+
+      if (compareRatios() > 0) {
+        color = Color(0xff00e000);
+      }
+
+      return color;
+    }
+
+    IconData getIcon() {
+      IconData icon;
+      if (compareRatios() == 0) {
+        icon = Icons.arrow_left_outlined;
+      }
+
+      if (compareRatios().isNegative) {
+        icon = Icons.arrow_drop_down;
+      } 
+
+      if (compareRatios() > 0) {
+        icon = Icons.arrow_drop_up;
+      }
+
+      return icon;
+    }
+
+
+
+
 
     return Padding(
       padding: EdgeInsets.fromLTRB(5, 8, 5, 0),
@@ -51,7 +107,7 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      totals.trick,
+                      ratios.trick,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 16,
@@ -62,7 +118,60 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
                     SizedBox(width: 10,),
                     IconButton(
                       onPressed: () async {
-                        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('totals').doc(totals.trick).delete();
+                          await showDialog( 
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                backgroundColor: Color(0xff121212),
+                                title: Text(
+                                  "You sure you want to delete this",
+                                  style: TextStyle(color: Colors.grey[100]),
+                                ),
+                                content: Text(
+                                  "*Be aware: Deleting this will make it lost forever",
+                                  style: TextStyle(color: Colors.grey[100]),
+                                ),
+                                actions: [
+                                    TextButton(
+                                      child: Text(
+                                        'Yes',
+                                        style: TextStyle(color: Color(0xff00e000), fontSize: 18),
+                                      ),
+                                      onPressed: () {
+                                        
+                                        Navigator.pop(context);
+                                        setState(() {
+                                          yesorno = true;                
+                                        });
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text(
+                                        'No',
+                                        style: TextStyle(color: Color(0xffe00000), fontSize: 18),
+                                        
+                                      ),
+                                      onPressed: () {
+                                        
+                                        Navigator.pop(context, 'No');
+                                        setState(() {
+                                          yesorno = false;                
+                                        });
+                                        print(yesorno);
+                                      },
+                                    ),
+                                ],
+                              );
+                          }
+                          
+                        );
+                        
+                        if (yesorno == true) {
+                          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('ratios').doc(ratios.trick).delete();
+                          await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('totals').doc(ratios.trick).delete();
+                        }
+                      
                       },
                       icon: Icon(
                         Icons.delete,
@@ -72,15 +181,32 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
                     ),
                   ],
                 ),
-                
-                Text(
-                  landingRatio(),
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xffff008b),
+                Row(
+                    children: [
+                      Text(
+                        ratios.ratio.isNaN ? '0.00' : ratios.ratio.toStringAsFixed(2),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: getColor(),
+                        ),
+                      ),
+                      Icon(
+                        getIcon(),
+                        color: getColor(),
+                      ),
+                      Text(
+                        compareRatios().toStringAsFixed(2),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: getColor(),
+                        ),
+                        
+                      ),
+                    ],
                   ),
-                ),
+                
               ],
             ),
           ),
@@ -89,3 +215,5 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
     );
   }
 }
+
+

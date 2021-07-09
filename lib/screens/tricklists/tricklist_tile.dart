@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:toscoot/models/tricklist.dart';
+import 'package:toscoot/models/user.dart';
 import 'package:toscoot/screens/tricklists/tricklist_details.dart';
 import 'package:toscoot/services/database.dart';
 import 'package:toscoot/stats/tricklist/tricklistStatsCurrent.dart';
@@ -20,8 +22,16 @@ class _TrickListTileState extends State<TrickListTile> {
   final tricklist;
   _TrickListTileState( this.tricklist );
   bool _isDisabled = false;
+
+  //dont ask again
+  bool yesorno = false;
+  bool isChecked = false;
+  
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
+
+    final UserData user = Provider.of<UserData>(context) ?? [];
 
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
@@ -46,7 +56,7 @@ class _TrickListTileState extends State<TrickListTile> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => TrickListDetails(tricklistTitle: tricklist.title, tricklistTricks: tricklist.tricks,)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => TrickListDetails(tricklistid: tricklist.id, tricklisttitle: tricklist.title,)));
                     },
                     icon: Icon(
                       Icons.read_more,
@@ -66,10 +76,93 @@ class _TrickListTileState extends State<TrickListTile> {
 
                   IconButton(
                     onPressed: () async {
-                      if (tricklist.id == ActiveID.getID()) {
-                        ActiveID.setID('noIDisChoosen');
+                      if (user.showAlerts == false) {
+                        showDialog( 
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              
+                              return AlertDialog(
+                                backgroundColor: Color(0xff121212),
+                                title: Text(
+                                  "You sure you want to delete this",
+                                  style: TextStyle(color: Colors.grey[100]),
+                                ),
+                                content: Text(
+                                  "*Be aware: Deleting this will make it lost forever",
+                                  style: TextStyle(color: Colors.grey[100]),
+                                ),
+                                actions: <Widget>[
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            TextButton(
+                                      child: const Text(
+                                        'Yes',
+                                        style: TextStyle(color: Color(0xff00e000), fontSize: 18),
+                                      ),
+                                      onPressed: () async {
+                                        if (tricklist.id == user.activeID) {
+                                          await DatabaseService().updateUserActiveID('noIDisChoosen');
+                                          DatabaseService.ActiveID = 'noIDisChoosen';
+                                        }
+                                        await DatabaseService().deleteFromTricklist(tricklist.id);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text(
+                                        'No',
+                                        style: TextStyle(color: Color(0xffe00000), fontSize: 18),
+                                        
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 20,),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Don't ask me again",
+                                              style: TextStyle(
+                                                color: Colors.grey[100],
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            Checkbox(
+                                              checkColor: Colors.white,
+                                              fillColor: MaterialStateProperty.all(Color(0xff00e000)),
+                                              value: isChecked, 
+                                              onChanged: (val) {
+                                                  setState(() {
+                                                    isChecked = val;                                                
+                                                  });
+
+                                                  DatabaseService().updateUserAlerts(isChecked);
+
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              );
+                            });
+                      } else {
+                        if (tricklist.id == user.activeID) {
+                          await DatabaseService().updateUserActiveID('noIDisChoosen');
+                          DatabaseService.ActiveID = 'noIDisChoosen';
+                        }
+
+                        await DatabaseService().deleteFromTricklist(tricklist.id);
                       }
-                      await DatabaseService().deleteFromTricklist(tricklist.id);
                     },
                     icon: Icon(
                       Icons.delete,
@@ -87,17 +180,17 @@ class _TrickListTileState extends State<TrickListTile> {
                           color: snapshot.data['isActive'] ? Color(0xff00e000) : Colors.grey[700],
                           disabledColor: Colors.grey[900],
                           onPressed: () async {
-                            if (ActiveID.getID() == 'noIDisChoosen') {
+                            if (user.activeID == 'noIDisChoosen') {
                               setState(() {
                                 _isDisabled = false;                                
                               });
                             } 
-                            if (ActiveID.getID() != 'noIDisChoosen' && ActiveID.getID() != tricklist.id) {
+                            if (user.activeID != 'noIDisChoosen' && user.activeID != tricklist.id) {
                               setState(() {
                                 _isDisabled = true;                                
                               });
                             }
-                            if (ActiveID.getID() != 'noIDisChoosen' && ActiveID.getID() == tricklist.id) {
+                            if (user.activeID != 'noIDisChoosen' && user.activeID == tricklist.id) {
                               setState(() {
                                 _isDisabled = false;                                
                               });
@@ -110,7 +203,10 @@ class _TrickListTileState extends State<TrickListTile> {
                                 'isActive': true,
                               });
 
-                              await ActiveID.setID(tricklist.id);
+                              await DatabaseService().updateUserActiveID(tricklist.id);
+
+                              DatabaseService.ActiveID = tricklist.id;
+
 
                             } else {
 
@@ -118,8 +214,9 @@ class _TrickListTileState extends State<TrickListTile> {
                                 'isActive': false,
                               });
 
-                              await ActiveID.setID('noIDisChoosen');
+                              await DatabaseService().updateUserActiveID('noIDisChoosen');
 
+                              DatabaseService.ActiveID = 'noIDisChoosen';
                             }
 
                             } else {
@@ -147,6 +244,8 @@ class _TrickListTileState extends State<TrickListTile> {
         ),
       ),
     );
+
   }
+
 }
 
