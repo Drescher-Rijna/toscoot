@@ -1,60 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:toscoot/models/tricklist.dart';
+import 'package:toscoot/screens/tricklists/tricklist_details_list.dart';
+import 'package:toscoot/services/database.dart';
 
 class TrickListDetails extends StatelessWidget {
 
-  final TrickList tricklist;
-
-  final tricklistTitle;
-  final List<dynamic> tricklistTricks;
-  TrickListDetails({this.tricklistTitle, this.tricklistTricks, this.tricklist});
-
-  Widget getTrickWidgets(List<dynamic>tricks)
-    {
-      return new Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: tricks.map((trick) => 
-          Container(
-            padding: EdgeInsets.fromLTRB(0.0, 20.0, 0, 3.0),
-            margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(width: 2.0, color: Color(0xffbd0f15)),
-              ),
-            ),
-            child: new Text(
-              trick,
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.grey[100],
-              ),
-            ),
-          )).toList()
-      );
-    }
+  String tricklistid;
+  String tricklisttitle;
+  TrickListDetails({this.tricklisttitle, this.tricklistid});
 
   @override
   Widget build(BuildContext context) {
-
-    
-    
-
-    return Scaffold(
-      backgroundColor: Color(0xff121212),
-        appBar: AppBar(
-          title: Text(tricklistTitle),
-          centerTitle: true,
-          backgroundColor: Color(0xffbd0f15),
-          elevation: 0.0,
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-                getTrickWidgets(tricklistTricks),
-              
-            ],
+    return StreamProvider<ActiveTricklist>.value(
+      value: DatabaseService(tricklistID: tricklistid).clickedTricklist,
+      child: Scaffold(
+        backgroundColor: Color(0xff121212),
+          appBar: AppBar(
+            title: Text(tricklisttitle),
+            centerTitle: true,
+            backgroundColor: Color(0xffbd0f15),
+            elevation: 0.0,
           ),
-        ),
+          body: TricklistDetailsList(),
+      ),
     );
   }
 }

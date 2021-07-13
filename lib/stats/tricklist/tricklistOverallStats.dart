@@ -99,11 +99,11 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
       }
 
       if (compareRatios().isNegative) {
-        color = Colors.redAccent[400];
+        color = Color(0xffe00000);
       } 
 
       if (compareRatios() > 0) {
-        color = Colors.greenAccent[400];
+        color = Color(0xff00e000);
       }
 
       return color;

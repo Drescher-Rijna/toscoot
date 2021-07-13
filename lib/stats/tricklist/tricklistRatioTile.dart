@@ -1,37 +1,91 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:toscoot/models/results.dart';
 
 class TricklistRatioTile extends StatefulWidget {
 
-  final totals;
-  TricklistRatioTile(this.totals);
+  final ratios;
+  TricklistRatioTile(this.ratios);
 
   @override
-  _TricklistRatioTileState createState() => _TricklistRatioTileState(totals);
+  _TricklistRatioTileState createState() => _TricklistRatioTileState(ratios);
 }
 
 class _TricklistRatioTileState extends State<TricklistRatioTile> {
 
-  final Totals totals;
-  _TricklistRatioTileState(this.totals);
-
-  landingRatio() {
-      var lands = totals.lands;
-      var fails = totals.fails;
-      double ratio;
-
-      if (lands == 0 && fails == 0 || lands == 0) {
-        ratio = 0;
-        return ratio.toString();
-      } else {
-        ratio = lands/(lands+fails);
-        return ratio.toStringAsFixed(2);
-      }
-
-  }
+  final TricklistRatio ratios;
+  _TricklistRatioTileState(this.ratios);
 
   @override
   Widget build(BuildContext context) {
+
+    final List<SetResultsOld> setResultsOld = Provider.of<List<SetResultsOld>>(context) ?? [];
+    print('set results from a week ago');
+    print(setResultsOld.length);
+
+    compareRatios() {
+        double ratio = ratios.ratio;
+        var sumLands = 0;
+        var sumFails = 0;
+        double ratioOld = 0;
+        var givenList = setResultsOld;
+        double comparedRatio = 0;
+
+        setResultsOld.map((e) => {
+          if (e.trick == ratios.trick) {
+            sumLands += e.lands,
+            sumFails += e.fails
+          }
+        }).toList();
+
+        ratioOld = sumLands/(sumFails + sumLands);
+
+        if (ratioOld.isNaN || ratioOld == 0 || ratioOld == null) {
+          comparedRatio = 0;
+        } else {
+          comparedRatio = ratio-ratioOld;
+        }
+
+        return comparedRatio;
+        
+      }
+
+
+      Color getColor() {
+        Color color;
+        if (compareRatios() == 0) {
+          color = Color(0xffff008b);
+        }
+
+        if (compareRatios().isNegative) {
+          color = Color(0xffe00000);
+        } 
+
+        if (compareRatios() > 0) {
+          color = Color(0xff00e000);
+        }
+
+        return color;
+      }
+
+      IconData getIcon() {
+        IconData icon;
+        if (compareRatios() == 0) {
+          icon = Icons.arrow_left_outlined;
+        }
+
+        if (compareRatios().isNegative) {
+          icon = Icons.arrow_drop_down;
+        } 
+
+        if (compareRatios() > 0) {
+          icon = Icons.arrow_drop_up;
+        }
+
+        return icon;
+      }
+
+
     return Padding(
       padding: EdgeInsets.fromLTRB(5, 8, 5, 0),
       child: Container(
@@ -45,23 +99,46 @@ class _TricklistRatioTileState extends State<TricklistRatioTile> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  totals.trick,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[100]
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      ratios.trick,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[100]
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  landingRatio(),
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xffff008b),
+                Row(
+                    children: [
+                      Text(
+                        ratios.ratio.isNaN ? '0.00' : ratios.ratio.toStringAsFixed(2),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: getColor(),
+                        ),
+                      ),
+                      Icon(
+                        getIcon(),
+                        color: getColor(),
+                      ),
+                      Text(
+                        compareRatios().toStringAsFixed(2),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: getColor(),
+                        ),
+                        
+                      ),
+                    ],
                   ),
-                ),
+                
               ],
             ),
           ),

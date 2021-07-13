@@ -14,25 +14,23 @@ class _AllTimeOverallStatsState extends State<AllTimeOverallStats> {
   Widget build(BuildContext context) {
 
 
-    final List<AllTimeTotals> totals = Provider.of<List<AllTimeTotals>>(context) ?? [];
+    final List<AllTimeRatio> ratios = Provider.of<List<AllTimeRatio>>(context) ?? [];
     final List<SetResults> setResults = Provider.of<List<SetResults>>(context) ?? [];
     final List<SetResultsOld> setResultsOld = Provider.of<List<SetResultsOld>>(context) ?? [];
 
 
     compareRatios() {
-      var sumLands = 0;
-      var sumFails = 0;
+      double sumLands = 0;
       var sumLandsOld = 0;
       var sumFailsOld = 0;
-      double ratio;
+      double ratioCurrent;
       double ratioOld;
       double comparing;
-      var given_list = totals;
+      var given_list = ratios;
       var given_list_old = setResultsOld;
 
       for (var i = 0; i < given_list.length; i++) {
-        sumLands += given_list[i].lands;
-        sumFails += given_list[i].fails;
+        sumLands += given_list[i].ratio;
       }
 
       for (var i = 0; i < given_list_old.length; i++) {
@@ -40,10 +38,10 @@ class _AllTimeOverallStatsState extends State<AllTimeOverallStats> {
         sumFailsOld += given_list_old[i].fails;
       }
 
-      ratio = ((sumLands/given_list.length)/((sumLands/given_list.length)+(sumFails/given_list.length)));
+      ratioCurrent = sumLands/given_list.length;
       ratioOld = ((sumLandsOld/given_list_old.length)/((sumLandsOld/given_list_old.length)+(sumFailsOld/given_list_old.length)));
       
-      comparing = ratio - ratioOld;
+      comparing = ratioCurrent - ratioOld;
 
       if (given_list.isEmpty || comparing.isNaN) {
         comparing = 0;
@@ -55,17 +53,22 @@ class _AllTimeOverallStatsState extends State<AllTimeOverallStats> {
     }
 
     landingRatio() {
-      var sumLands = 0;
-      var sumFails = 0;
+      double sumRatios = 0;
       double ratio;
-      var given_list = totals;
+      var given_list = ratios;
 
       for (var i = 0; i < given_list.length; i++) {
-        sumLands += given_list[i].lands;
-        sumFails += given_list[i].fails;
+        if(given_list[i].ratio.isNaN) {
+          given_list[i].ratio = 0;
+        }
+        sumRatios += given_list[i].ratio;
       }
 
-      ratio = ((sumLands/given_list.length)/((sumLands/given_list.length)+(sumFails/given_list.length)));
+      ratio = sumRatios/given_list.length;
+
+      if (ratio.isNaN || ratio == 0 || ratio == null) {
+        ratio = 0;
+      }
       
       return ratio;
     }

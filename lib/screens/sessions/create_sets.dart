@@ -28,7 +28,7 @@ class _Create_SetsState extends State<Create_Sets> {
     return StreamProvider<List<CurrentSets>>.value(
       value: DatabaseService().currentSets,
       child: StreamBuilder<ActiveTricklist>(
-        stream: DatabaseService(tricklistID: ActiveID.getID()).activeTricklist,
+        stream: DatabaseService().activeTricklist,
         builder: (context, snapshot) {
           if(snapshot.hasData && snapshot != null) {
             ActiveTricklist activeTricklist = snapshot.data;

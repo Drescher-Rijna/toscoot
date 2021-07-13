@@ -1,18 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:toscoot/screens/tricklists/tricklists.dart';
 import 'package:toscoot/services/database.dart';
 import 'package:toscoot/shared/loading.dart';
-
-class Create_TrickList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: TrickListForm(),
-    );
-  }
-}
-
 
 // TrickListForm
 class TrickListForm extends StatefulWidget {
@@ -24,28 +13,13 @@ class _TrickListFormState extends State<TrickListForm> {
   
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _nameController;
+  List<String> tricksList = [];
+  String _currentTrick = '';
 
-  static List<String> tricksList = [null];
 
   //field states
   String listtitle = '';
-
   bool loading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController();
-    _formKey.currentState?.reset();
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _formKey.currentState?.reset();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,164 +55,139 @@ class _TrickListFormState extends State<TrickListForm> {
           ],
         ),
       body: Container(
-        
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
+      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+        child: Column( 
+          children: [
+            Form(
+              key: _formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                
                 children: [
-                  // title textfield
-                  Padding(
-                    padding: const EdgeInsets.only(right: 32.0),
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.grey[100], fontSize: 20.0),
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        hintText: 'Title',
-                        hintStyle: TextStyle(fontSize: 20.0, color: Colors.grey[500]),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey[700], width: 2.0),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
-                        ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Title', 
+                      hintStyle: TextStyle(fontSize: 16.0),
+                      fillColor: Colors.white,
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 2.0),
                       ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
+                      ),
+                    ),
+                    style: TextStyle(fontSize: 16),
+                    validator: (val) => val.isEmpty ? 'Enter a title' : null,
                       onChanged: (val) {
-                      setState(() => listtitle = val);
+                        setState(() => listtitle = val);
                       },
-                      validator: (v){
-                        if(v.trim().isEmpty) return 'Please enter something';
-                        return null;
-                      },
-                    ),
                   ),
-                  SizedBox(height: 40,),
+                  SizedBox(height: 30,),
                   Text(
-                    'Add Tricks', 
+                    'Add new trick',
                     style: TextStyle(
-                      fontWeight: FontWeight.w700, 
-                      fontSize: 20, 
-                      color: Colors.grey[100]
+                      color: Colors.grey[200],
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold
                     ),
+                    textAlign: TextAlign.left,
                   ),
-                  ..._getTricks(),
-                ],
+                  SizedBox(height: 10,),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Trick', 
+                      hintStyle: TextStyle(fontSize: 16.0),
+                      fillColor: Colors.white,
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 2.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
+                      ),
+                    ),
+                    style: TextStyle(fontSize: 16),
+                    validator: (val) => val.isEmpty ? 'Enter a trick' : null,
+                      onChanged: (val) {
+                        setState(() => _currentTrick = val);
+                      },
+                    ),
+                  ],
+                ),
               ),
+          SizedBox(height: 20.0,),
+          TextButton.icon(
+            icon: Icon(
+              Icons.add,
+              color: Colors.grey[100],
+            ),
+            style: TextButton.styleFrom(
+              backgroundColor: Color(0xffbd0f15),
+              padding: EdgeInsets.all(12.0),
+            ),
+            onPressed: () async {
+              if(_formKey.currentState.validate()){
+                setState(() => tricksList.add(_currentTrick));
+              }
+            },
+            label: Text(
+              'Add new trick',
+              style: TextStyle(
+                color: Colors.grey[100],
+                fontSize: 16.0
+              ),
+            ),
+          ),                              
+          SizedBox(height: 30.0,),
+          Expanded(child: getTricks(tricksList)),
+        ],
+      ),
+            ),
+        );
+  }
+
+
+Widget getTricks(List tricklist) {
+  return ListView.builder(
+    itemCount: tricklist.length,
+    itemBuilder: (context, index) {
+        return Padding(
+        padding: EdgeInsets.only(top: 8.0),
+        child: Card(
+          color: Colors.grey[800],
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5)),
+          elevation: 1,
+          margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+          child: ListTile(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  tricklist[index],
+                  style: TextStyle(
+                    color: Colors.grey[100],
+                    fontSize: 16.0,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    setState(() {
+                      tricksList.remove(tricksList[index]);            
+                    });
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.grey[100],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
-        
-      ),
-    );
-  }
-
-  /// get tricks text-fields
-  List<Widget> _getTricks(){
-    List<Widget> tricksTextFields = [];
-    for(int i=0; i<tricksList.length; i++){
-      tricksTextFields.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Row(
-            children: [
-              Expanded(child: TrickTextFields(i)),
-              SizedBox(width: 16,),
-              // we need add button at last friends row
-              _addRemoveButton(i == tricksList.length-1, i),
-            ],
-          ),
-        )
       );
     }
-    return tricksTextFields;
-  }
-
-  /// add / remove button
-  Widget _addRemoveButton(bool add, int index){
-    return InkWell(
-      onTap: (){
-        if(add){
-          // add new text-fields at the top of all friends textfields
-          tricksList.insert(tricksList.length, null);
-        }
-        else tricksList.removeAt(index);
-        setState((){});
-      },
-      child: Container(
-        width: 30,
-        height: 30,
-        decoration: BoxDecoration(
-          color: (add) ? Color(0xff00e000) : Color(0xffe00000),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Icon((add) ? Icons.add : Icons.remove, color: Colors.white,),
-      ),
-    );
-  }
-
-
-}
-
-class LowerCaseTextFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    return TextEditingValue(
-      text: newValue.text?.toLowerCase(),
-      selection: newValue.selection,
-    );
-  }
+  );
 }
 
 
-// TrickTextField
-class TrickTextFields extends StatefulWidget {
-
-  final int index;
-
-  TrickTextFields(this.index);
-
-  @override
-  _TrickTextFieldsState createState() => _TrickTextFieldsState();
 }
-
-class _TrickTextFieldsState extends State<TrickTextFields> {
-
-  @override
-  Widget build(BuildContext context) {
-
-
-    return TextFormField(
-      onChanged: (val) => _TrickListFormState.tricksList[widget.index] = val,
-      style: TextStyle(color: Colors.grey[100], fontSize: 16.0),
-      inputFormatters: [
-        LowerCaseTextFormatter(),
-      ],
-      decoration: InputDecoration(
-        hintText: 'Trick name',
-        hintStyle: TextStyle( 
-          fontSize: 16, 
-          color: Colors.grey[500]
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey[700], width: 2.0),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
-        ),
-      ),
-      validator: (val){
-        if(val.trim().isEmpty) return 'Please enter something';
-        return null;
-      },
-    );
-  }
-}
-
-
-
-
-

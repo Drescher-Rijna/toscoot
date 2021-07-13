@@ -17,6 +17,7 @@ class _AllTimeStatsState extends State<AllTimeStats> {
     return MultiProvider(
       providers: [ 
         StreamProvider<List<AllTimeTotals>>.value(value: DatabaseService().allTimeTotals,),
+        StreamProvider<List<AllTimeRatio>>.value(value: DatabaseService().allTimeRatios,),
         StreamProvider<List<SetResults>>.value(value: DatabaseService().allTimeSetResults),
         StreamProvider<List<SetResultsOld>>.value(value: DatabaseService().allTimeWeekAgoSetResults,),
       ],

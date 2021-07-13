@@ -38,6 +38,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
       final _isHours = true;
 
     void showSettingsPanel() {
+      
       showModalBottomSheet(context: context, builder: (context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
