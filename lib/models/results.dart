@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toscoot/models/tricklist.dart';
 
 class Results {
 
@@ -61,6 +62,14 @@ class AllTimeRatio {
   String trick;
 
   AllTimeRatio({this.id, this.trick, this.ratio });
+}
+
+class TricklistRatio {
+  String id;
+  double ratio;
+  String trick;
+
+  TricklistRatio({this.id, this.trick, this.ratio });
 }
 
 class SessionState {

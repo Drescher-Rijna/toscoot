@@ -21,6 +21,9 @@ class _SeshStatsRatioTileState extends State<SeshStatsRatioTile> {
       double ratio;
 
       ratio = lands/(lands+fails);
+      if (ratio.isNaN) {
+        ratio = 0;
+      }
       
       return ratio.toStringAsFixed(2);
   }

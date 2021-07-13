@@ -580,7 +580,7 @@ Future<void> setRatios() async {
   
 }
 
-// old sets results from snapshot for TRICKLIST STATS
+  // ratios from snapshot for ALL TIME STATS
   List<AllTimeRatio> _allTimeRatiosFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return AllTimeRatio(
@@ -591,10 +591,47 @@ Future<void> setRatios() async {
     }).toList();
   }
 
-  // get sets set results for stats TRICKLIST STATS from a week ago
+  // get ratios for stats ALL TIME STATS
   Stream<List<AllTimeRatio>> get allTimeRatios{
     return ratiosCollection.orderBy('ratio', descending: true).snapshots()
       .map(_allTimeRatiosFromSnapshot);
+  }
+
+
+  final CollectionReference tricklistRatiosCollection = FirebaseFirestore.instance
+  .collection('users').doc(FirebaseAuth.instance.currentUser.uid)
+  .collection('tricklists');
+
+  Future<void> setTricklistRatios() async {
+      trickListCollection.doc(ActiveID).collection('totals').snapshots().map((snapshot) {
+        print(snapshot);
+        return snapshot.docs.forEach((doc) {
+          print(doc['trick']);
+          return FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).collection('tricklists').doc(ActiveID).
+          collection('ratios').doc(doc.id).set({
+            'trick': doc['trick'] ?? '',
+            'ratio': doc['lands']/(doc['lands'] + doc['fails']) ?? 0,
+          });
+        });
+      }).toList();
+    
+  }
+
+  // ratios from snapshot for ALL TIME STATS
+  List<TricklistRatio> _tricklistRatiosFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return TricklistRatio(
+        id: doc.id,
+        trick: doc['trick'] ?? '',
+        ratio: doc['ratio'] ?? 0,
+      );
+    }).toList();
+  }
+
+  // get ratios for stats ALL TIME STATS
+  Stream<List<TricklistRatio>> get tricklistRatios{
+    return tricklistRatiosCollection.doc(tricklistID).collection('ratios').orderBy('ratio', descending: true).snapshots()
+      .map(_tricklistRatiosFromSnapshot);
   }
 
 
@@ -610,6 +647,14 @@ Future<void> setRatios() async {
       trickListCollection.doc(id).delete()
       .then((doc) => {
         trickListCollection.doc(id).collection('totals').where('listID', isEqualTo: id).get()
+        .then((snapshot) {
+          for(DocumentSnapshot ds in snapshot.docs){
+              ds.reference.delete();
+          }
+        })
+      })
+      .then((doc) => {
+        trickListCollection.doc(id).collection('ratios').get()
         .then((snapshot) {
           for(DocumentSnapshot ds in snapshot.docs){
               ds.reference.delete();

@@ -149,6 +149,7 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                           await DatabaseService().updateResultsData(displayTime);
                           await DatabaseService().completeSession(true, DatabaseService.currentSeshID);
                           await DatabaseService().setRatios();
+                          await DatabaseService().setTricklistRatios();
 
                           _stopwatchTimer.onExecute.add(StopWatchExecute.reset);
 

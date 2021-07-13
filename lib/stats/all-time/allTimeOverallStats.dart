@@ -58,6 +58,9 @@ class _AllTimeOverallStatsState extends State<AllTimeOverallStats> {
       var given_list = ratios;
 
       for (var i = 0; i < given_list.length; i++) {
+        if(given_list[i].ratio.isNaN) {
+          given_list[i].ratio = 0;
+        }
         sumRatios += given_list[i].ratio;
       }
 

@@ -37,32 +37,6 @@ class _DetailsTrickTileState extends State<DetailsTrickTile> {
                   fontSize: 16.0,
                 ),
               ),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Colors.grey[100],
-                    ),
-                  ),
-
-                  IconButton(
-                    onPressed: () async {
-                      //FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid)
-                      //.collection('tricklists').doc(tricklistid).update({
-                       // 'tricks': FieldValue.arrayRemove([trick.toString()]),
-                      //});
-                    },
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.grey[100],
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),

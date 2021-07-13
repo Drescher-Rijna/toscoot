@@ -35,16 +35,10 @@ class _SessionsState extends State<Sessions> {
                 backgroundColor: Color(0xffbd0f15),
                 elevation: 0.0,
                 actions: <Widget>[
-                  TextButton.icon(
+                  IconButton(
                     icon: Icon(
-                      Icons.person,
+                      Icons.logout,
                       color: Colors.grey[100],
-                    ),
-                    label: Text(
-                      'logout',
-                      style: TextStyle(
-                        color: Colors.grey[100],
-                      ),
                     ),
                     onPressed: () async {
                       await _auth.signOut();

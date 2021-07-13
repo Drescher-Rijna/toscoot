@@ -27,8 +27,9 @@ class _TricklistStatsCurrentState extends State<TricklistStatsCurrent> {
     return MultiProvider(
       providers: [
         StreamProvider<List<Totals>>.value(value: DatabaseService(tricklistID: tricklistID).totals,),
+        StreamProvider<List<TricklistRatio>>.value(value: DatabaseService(tricklistID: tricklistID).tricklistRatios,),
         StreamProvider<List<SetResults>>.value(value: DatabaseService(tricklistID: tricklistID).tricklistSetResults),
-        StreamProvider<List<SetResultsOld>>.value(value: DatabaseService(tricklistID: tricklistID).tricklistWeekAgoSetResults)
+        StreamProvider<List<SetResultsOld>>.value(value: DatabaseService(tricklistID: tricklistID).tricklistWeekAgoSetResults),
       ],
       child: Scaffold(
         backgroundColor: Color(0xff121212),
@@ -53,7 +54,7 @@ class _TricklistStatsCurrentState extends State<TricklistStatsCurrent> {
             SizedBox(height: 20,),
             TricklistOverallStats(),
             SizedBox(height: 20,),
-            Expanded(child: TricklistRatioStatList()),
+            Expanded(child: TricklistRatioStatList(tricklistID)),
           ],
         ),
       ),
