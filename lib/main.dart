@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:toscoot/models/alertShow.dart';
 import 'package:toscoot/models/results.dart';
@@ -22,6 +23,11 @@ void main() async {
   
   await AlertShow.init();
   await SessionState.initSession();
+  
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
 
   runApp(MyApp());
 }
