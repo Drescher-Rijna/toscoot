@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toscoot/models/alertShow.dart';
 import 'package:toscoot/models/tricklist.dart';
 import 'package:toscoot/models/user.dart';
 import 'package:toscoot/screens/tricklists/tricklist_details.dart';
@@ -82,79 +83,85 @@ class _TrickListTileState extends State<TrickListTile> {
                             context: context,
                             builder: (context) {
                               
-                              return AlertDialog(
-                                backgroundColor: Color(0xff121212),
-                                title: Text(
-                                  "You sure you want to delete this",
-                                  style: TextStyle(color: Colors.grey[100]),
-                                ),
-                                content: Text(
-                                  "*Be aware: Deleting this will make it lost forever",
-                                  style: TextStyle(color: Colors.grey[100]),
-                                ),
-                                actions: <Widget>[
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: [
-                                            TextButton(
-                                      child: const Text(
-                                        'Yes',
-                                        style: TextStyle(color: Color(0xff00e000), fontSize: 18),
-                                      ),
-                                      onPressed: () async {
-                                        if (tricklist.id == user.activeID) {
-                                          await DatabaseService().updateUserActiveID('noIDisChoosen');
-                                          DatabaseService.ActiveID = 'noIDisChoosen';
-                                        }
-                                        await DatabaseService().deleteFromTricklist(tricklist.id);
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: const Text(
-                                        'No',
-                                        style: TextStyle(color: Color(0xffe00000), fontSize: 18),
-                                        
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                          ],
+                              return StatefulBuilder(
+                                builder: (context, setState) {
+                                
+                                return AlertDialog(
+                                  backgroundColor: Color(0xff121212),
+                                  title: Text(
+                                    "You sure you want to delete this",
+                                    style: TextStyle(color: Colors.grey[100]),
+                                  ),
+                                  content: Text(
+                                    "*Be aware: Deleting this will make it lost forever",
+                                    style: TextStyle(color: Colors.grey[100]),
+                                  ),
+                                  actions: <Widget>[
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              TextButton(
+                                        child: const Text(
+                                          'Yes',
+                                          style: TextStyle(color: Color(0xff00e000), fontSize: 18),
                                         ),
-                                        SizedBox(height: 20,),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Don't ask me again",
-                                              style: TextStyle(
-                                                color: Colors.grey[100],
-                                                fontSize: 18,
+                                        onPressed: () async {
+                                          if (tricklist.id == user.activeID) {
+                                            await DatabaseService().updateUserActiveID('noIDisChoosen');
+                                            DatabaseService.ActiveID = 'noIDisChoosen';
+                                          }
+                                          await DatabaseService().deleteFromTricklist(tricklist.id);
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text(
+                                          'No',
+                                          style: TextStyle(color: Color(0xffe00000), fontSize: 18),
+                                          
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 20,),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Don't ask me again",
+                                                style: TextStyle(
+                                                  color: Colors.grey[100],
+                                                  fontSize: 18,
+                                                ),
                                               ),
-                                            ),
-                                            Checkbox(
-                                              checkColor: Colors.white,
-                                              fillColor: MaterialStateProperty.all(Color(0xff00e000)),
-                                              value: isChecked, 
-                                              onChanged: (val) {
-                                                  setState(() {
-                                                    isChecked = val;                                                
-                                                  });
+                                              Checkbox(
+                                                checkColor: Colors.white,
+                                                fillColor: MaterialStateProperty.all(Color(0xff00e000)),
+                                                value: isChecked, 
+                                                onChanged: (val) {
+                                                    setState(() {
+                                                      isChecked = val;                                                
+                                                    });
 
-                                                  DatabaseService().updateUserAlerts(isChecked);
+                                                    DatabaseService().updateUserAlerts(isChecked);
 
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                ],
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                  ],
+                                );
+                                }
                               );
                             });
+                            
                       } else {
                         if (tricklist.id == user.activeID) {
                           await DatabaseService().updateUserActiveID('noIDisChoosen');
