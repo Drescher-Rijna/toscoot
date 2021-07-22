@@ -25,9 +25,9 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: Color(0xff121212),
+      backgroundColor: Color(0xfff2f2f2),
       appBar: AppBar(
-        backgroundColor: Color(0xffbd0f15),
+        backgroundColor: Color(0xffad0000),
         elevation: 0.0,
         title: Text('Sign in'),
         centerTitle: true,
@@ -66,7 +66,7 @@ class _SignInState extends State<SignIn> {
                       borderSide: BorderSide(color: Colors.white, width: 2.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
+                      borderSide: BorderSide(color: Color(0xffad0000), width: 2.0),
                     ),
                   ),
                   validator: (val) => val.isEmpty ? 'Enter an email' : null,
@@ -84,7 +84,7 @@ class _SignInState extends State<SignIn> {
                       borderSide: BorderSide(color: Colors.white, width: 2.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
+                      borderSide: BorderSide(color: Color(0xffad0000), width: 2.0),
                     ),
                   ),
                   validator: (val) => val.length < 6 ? 'Enter a password +6 characters long' : null,
@@ -103,7 +103,7 @@ class _SignInState extends State<SignIn> {
                     ),
                   ),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Color(0xffbd0f15)),
+                    backgroundColor: MaterialStateProperty.all(Color(0xffad0000)),
                     padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 12.0, horizontal: 25.0)),
                   ),
                   onPressed: () async {

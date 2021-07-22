@@ -55,15 +55,15 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
     Color getColor() {
       Color color;
       if (compareRatios() == 0) {
-        color = Color(0xffff008b);
+        color = Color(0xffd4145a);
       }
 
       if (compareRatios().isNegative) {
-        color = Color(0xffe00000);
+        color = Color(0xffad0000);
       } 
 
       if (compareRatios() > 0) {
-        color = Color(0xff00e000);
+        color = Color(0xff006837);
       }
 
       return color;
@@ -94,10 +94,10 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
       padding: EdgeInsets.fromLTRB(5, 8, 5, 0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(width: 2, color: Colors.grey[900]))
+          border: Border(bottom: BorderSide(width: 2, color: Color(0xffe6e6e6)))
         ),
         child: Card(
-          color: Color(0xff121212),
+          color: Color(0xfff2f2f2),
           margin: EdgeInsets.fromLTRB(0, 0.0, 0, 0.0),
           child: ListTile(
             title: Row(
@@ -112,11 +112,38 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[100]
+                        color: Color(0xff1a1a1a),
                       ),
                     ),
                     SizedBox(width: 10,),
-                    IconButton(
+                    
+                  ],
+                ),
+                Row(
+                    children: [
+                      
+                      Text(
+                        ratios.ratio.isNaN ? '0.00' : ratios.ratio.toStringAsFixed(2),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: getColor(),
+                        ),
+                      ),
+                      Icon(
+                        getIcon(),
+                        color: getColor(),
+                      ),
+                      Text(
+                        compareRatios().toStringAsFixed(2),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: getColor(),
+                        ),
+                        
+                      ),
+                      IconButton(
                       onPressed: () async {
                           await showDialog( 
                             barrierDismissible: false,
@@ -175,35 +202,10 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
                       },
                       icon: Icon(
                         Icons.delete,
-                        color: Colors.grey[100],
+                        color: Color(0xff1a1a1a),
                       ),
                       highlightColor: Colors.orange[900],
                     ),
-                  ],
-                ),
-                Row(
-                    children: [
-                      Text(
-                        ratios.ratio.isNaN ? '0.00' : ratios.ratio.toStringAsFixed(2),
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: getColor(),
-                        ),
-                      ),
-                      Icon(
-                        getIcon(),
-                        color: getColor(),
-                      ),
-                      Text(
-                        compareRatios().toStringAsFixed(2),
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: getColor(),
-                        ),
-                        
-                      ),
                     ],
                   ),
                 

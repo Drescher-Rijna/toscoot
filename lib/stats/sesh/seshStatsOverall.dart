@@ -49,7 +49,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
 
     }
     
-    return setResults.isEmpty || setResults == [] ? Center(child: Text('Loading...', style: TextStyle(color: Colors.grey[100], fontSize: 25),)) : Container(
+    return setResults.isEmpty || setResults == [] ? Center(child: Text('Loading...', style: TextStyle(color: Colors.grey[900], fontSize: 25),)) : Container(
       padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
       child: Column(
         children: [
@@ -60,7 +60,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
                 style: TextStyle(
                   fontSize: 34,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[100],
+                  color: Color(0xff1a1a1a),
                 ),
               ),
               SizedBox(height: 10,),
@@ -72,7 +72,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
                       height: 40,
                       child: LinearProgressIndicator(
                         value: completionRate(),
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xff00e000)),
+                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xff006837)),
                         
                       ),
                     ),
@@ -103,7 +103,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[100],
+                        color: Color(0xff1a1a1a),
                     ),
                   ),
                   SizedBox(height: 5,),
@@ -112,7 +112,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xffed2190),
+                        color: Color(0xffd4145a),
                     ),
                   ),
                 ],
@@ -124,7 +124,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[100],
+                        color: Color(0xff1a1a1a),
                     ),
                   ),
                   SizedBox(height: 5,),
@@ -133,7 +133,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blueAccent[400],
+                        color: Colors.blue[800],
                     ),
                   ),
                 ],

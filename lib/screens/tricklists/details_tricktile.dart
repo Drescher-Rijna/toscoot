@@ -21,7 +21,7 @@ class _DetailsTrickTileState extends State<DetailsTrickTile> {
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
-        color: Colors.grey[900],
+        color: Color(0xffe6e6e6),
         shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5)),
         elevation: 1,
@@ -33,7 +33,7 @@ class _DetailsTrickTileState extends State<DetailsTrickTile> {
               Text(
                 trick,
                 style: TextStyle(
-                  color: Colors.grey[100],
+                  color: Color(0xff1a1a1a),
                   fontSize: 16.0,
                 ),
               ),

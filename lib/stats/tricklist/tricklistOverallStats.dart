@@ -95,15 +95,15 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
     Color getColor() {
       Color color;
       if (compareRatios() == 0) {
-        color = Color(0xffff008b);
+        color = Color(0xffd4145a);
       }
 
       if (compareRatios().isNegative) {
-        color = Color(0xffe00000);
+        color = Color(0xffad0000);
       } 
 
       if (compareRatios() > 0) {
-        color = Color(0xff00e000);
+        color = Color(0xff006837);
       }
 
       return color;
@@ -140,7 +140,7 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[100],
+                  color: Color(0xff1a1a1a),
                 ),
               ),
               SizedBox(height: 20,),
@@ -155,7 +155,7 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
                         strokeWidth: 20.0,
                         
                         value: completionRate(),
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xff00ff0d)),
+                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xff006837)),
                         
                       ),
                     ),
@@ -166,7 +166,7 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
                       style: TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[100],
+                        color: Color(0xff1a1a1a),
                       ),
                     ), 
                     alignment: Alignment.center,
@@ -182,7 +182,7 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[100],
+                        color: Color(0xff1a1a1a),
                     ),
                   ),
                   SizedBox(height: 5,),

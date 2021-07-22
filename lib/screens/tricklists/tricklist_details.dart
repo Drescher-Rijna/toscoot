@@ -15,11 +15,11 @@ class TrickListDetails extends StatelessWidget {
     return StreamProvider<ActiveTricklist>.value(
       value: DatabaseService(tricklistID: tricklistid).clickedTricklist,
       child: Scaffold(
-        backgroundColor: Color(0xff121212),
+        backgroundColor: Color(0xfff2f2f2),
           appBar: AppBar(
             title: Text(tricklisttitle),
             centerTitle: true,
-            backgroundColor: Color(0xffbd0f15),
+            backgroundColor: Color(0xffad0000),
             elevation: 0.0,
           ),
           body: TricklistDetailsList(),

@@ -85,7 +85,7 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                 Text(
                   displayTime,
                   style: TextStyle(
-                    color: Colors.grey[100],
+                    color: Color(0xff1a1a1a),
                     fontSize: 48.0,
                   ),
                 ),
@@ -97,9 +97,9 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      color: Color(0xff00e000),
+                      color: Color(0xff006837),
                       child: IconButton(
-                        color: Colors.grey[100],
+                        color: Color(0xff1a1a1a),
                         icon: Icon(Icons.play_arrow), 
                         onPressed: () async {
                           if (isRunning == true) {
@@ -118,9 +118,9 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                     ),
                     SizedBox(width: 25,),
                     Container(
-                      color: Colors.blueAccent[700],
+                      color: Colors.blue[800],
                       child: IconButton(
-                        color: Colors.grey[100],
+                        color: Color(0xff1a1a1a),
                         icon: Icon(Icons.pause), 
                         onPressed: () {
                           if (isRunning == false) {
@@ -141,7 +141,7 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                     ),
                     SizedBox(width: 25,),
                     Container(
-                      color: Color(0xffe00000),
+                      color: Color(0xffad0000),
                       padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
                       child: TextButton(
                         
@@ -163,7 +163,7 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                         }, 
                         child: Text(
                           'End Session',
-                          style: TextStyle(color: Colors.grey[100], fontSize: 18),
+                          style: TextStyle(color: Color(0xff1a1a1a), fontSize: 18),
                         ),
                       ),
                     ),
@@ -189,18 +189,18 @@ class _TotalSessionTimerState extends State<TotalSessionTimer> {
                     }, 
                     icon: Icon(
                       Icons.play_arrow,
-                      color: Colors.grey[100],
+                      color: Color(0xff1a1a1a),
                       size: 24.0,
                     ), 
                     label: Text(
                       'Start session',
                       style: TextStyle(
-                        color: Colors.grey[100],
+                        color: Color(0xff1a1a1a),
                         fontSize: 24.0,
                       ),
                     ),
                     style: TextButton.styleFrom(
-                      backgroundColor:Color(0xffbd0f15),
+                      backgroundColor:Color(0xffad0000),
                       padding: EdgeInsets.all(13.0),
                     ),       
                   ),

@@ -35,7 +35,7 @@ class _SessionTileState extends State<SessionTile> {
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
-        color: Colors.grey[900],
+        color: Color(0xffe6e6e6),
         shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5)),
         elevation: 1,
@@ -47,7 +47,8 @@ class _SessionTileState extends State<SessionTile> {
               Text(
                 session.title,
                 style: TextStyle(
-                  color: Colors.grey[100],
+                  color: Color(0xff1a1a1a),
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               Row(
@@ -66,7 +67,7 @@ class _SessionTileState extends State<SessionTile> {
                     },
                     icon: Icon(
                       session.isComplete ? Icons.leaderboard : Icons.read_more,
-                      color: Colors.grey[100],
+                      color: Color(0xff1a1a1a),
                     ),
                     highlightColor: Colors.orange[900],
                   ),
@@ -76,7 +77,7 @@ class _SessionTileState extends State<SessionTile> {
                     },
                     icon: Icon(
                       Icons.delete,
-                      color: Colors.grey[100],
+                      color: Color(0xff1a1a1a),
                     ),
                     highlightColor: Colors.orange[900],
                   ),

@@ -22,7 +22,7 @@ class _CreatedSetTileState extends State<CreatedSetTile> {
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
-        color: Colors.grey[800],
+        color: Color(0xffe6e6e6),
         shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5)),
         elevation: 1,
@@ -34,15 +34,17 @@ class _CreatedSetTileState extends State<CreatedSetTile> {
               Text(
                 sets.trick,
                 style: TextStyle(
-                  color: Colors.grey[100],
+                  color: Color(0xff1a1a1a),
                   fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
                 sets.reps.toString(),
                 style: TextStyle(
-                  color: Colors.grey[100],
+                  color: Color(0xff1a1a1a),
                   fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               Row(
@@ -53,7 +55,7 @@ class _CreatedSetTileState extends State<CreatedSetTile> {
                     },
                     icon: Icon(
                       Icons.delete,
-                      color: Colors.grey[100],
+                      color: Color(0xff1a1a1a),
                     ),
                     highlightColor: Colors.orange[900],
                   ),

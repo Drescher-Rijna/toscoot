@@ -27,7 +27,7 @@ class _AllTimeStatsState extends State<AllTimeStats> {
           Text(
             'All-Time Stats',
             style: TextStyle(
-              color: Colors.grey[100],
+              color: Color(0xff1a1a1a),
               fontSize: 34,
               fontWeight: FontWeight.bold,
             ),

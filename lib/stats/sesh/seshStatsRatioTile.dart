@@ -34,10 +34,10 @@ class _SeshStatsRatioTileState extends State<SeshStatsRatioTile> {
       padding: EdgeInsets.fromLTRB(5, 8, 5, 0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(width: 1, color: Colors.grey[900]))
+          border: Border(bottom: BorderSide(width: 1, color: Color(0xffe6e6e6)))
         ),
         child: Card(
-          color: Color(0xff121212),
+          color: Color(0xfff2f2f2),
           margin: EdgeInsets.fromLTRB(0, 0.0, 0, 0.0),
           child: ListTile(
             title: Row(
@@ -51,7 +51,7 @@ class _SeshStatsRatioTileState extends State<SeshStatsRatioTile> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[100]
+                        color: Color(0xff1a1a1a),
                       ),
                     ),
                   ),
@@ -62,7 +62,7 @@ class _SeshStatsRatioTileState extends State<SeshStatsRatioTile> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xffed2190),
+                    color: Color(0xffd4145a),
                   ),
                 ),
               ],

@@ -37,7 +37,7 @@ class _TrickListTileState extends State<TrickListTile> {
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
-        color: Colors.grey[900],
+        color: Color(0xffe6e6e6),
         shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5)),
         elevation: 1,
@@ -49,8 +49,9 @@ class _TrickListTileState extends State<TrickListTile> {
               Text(
                 tricklist.title,
                 style: TextStyle(
-                  color: Colors.grey[100],
+                  color: Color(0xff1a1a1a),
                   fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               Row(
@@ -61,7 +62,7 @@ class _TrickListTileState extends State<TrickListTile> {
                     },
                     icon: Icon(
                       Icons.read_more,
-                      color: Colors.grey[100],
+                      color: Color(0xff1a1a1a),
                     ),
                   ),
 
@@ -71,7 +72,7 @@ class _TrickListTileState extends State<TrickListTile> {
                     },
                     icon: Icon(
                       Icons.leaderboard,
-                      color: Colors.grey[100],
+                      color: Color(0xff1a1a1a),
                     ),
                   ),
 
@@ -87,14 +88,14 @@ class _TrickListTileState extends State<TrickListTile> {
                                 builder: (context, setState) {
                                 
                                 return AlertDialog(
-                                  backgroundColor: Color(0xff121212),
+                                  backgroundColor: Color(0xfff2f2f2),
                                   title: Text(
                                     "You sure you want to delete this",
-                                    style: TextStyle(color: Colors.grey[100]),
+                                    style: TextStyle(color: Color(0xff1a1a1a)),
                                   ),
                                   content: Text(
                                     "*Be aware: Deleting this will make it lost forever",
-                                    style: TextStyle(color: Colors.grey[100]),
+                                    style: TextStyle(color: Color(0xff1a1a1a)),
                                   ),
                                   actions: <Widget>[
                                       Column(
@@ -106,7 +107,7 @@ class _TrickListTileState extends State<TrickListTile> {
                                               TextButton(
                                         child: const Text(
                                           'Yes',
-                                          style: TextStyle(color: Color(0xff00e000), fontSize: 18),
+                                          style: TextStyle(color: Color(0xff006837), fontSize: 18),
                                         ),
                                         onPressed: () async {
                                           if (tricklist.id == user.activeID) {
@@ -120,7 +121,7 @@ class _TrickListTileState extends State<TrickListTile> {
                                       TextButton(
                                         child: const Text(
                                           'No',
-                                          style: TextStyle(color: Color(0xffe00000), fontSize: 18),
+                                          style: TextStyle(color: Color(0xffad0000), fontSize: 18),
                                           
                                         ),
                                         onPressed: () {
@@ -135,13 +136,13 @@ class _TrickListTileState extends State<TrickListTile> {
                                               Text(
                                                 "Don't ask me again",
                                                 style: TextStyle(
-                                                  color: Colors.grey[100],
+                                                  color: Color(0xff1a1a1a),
                                                   fontSize: 18,
                                                 ),
                                               ),
                                               Checkbox(
                                                 checkColor: Colors.white,
-                                                fillColor: MaterialStateProperty.all(Color(0xff00e000)),
+                                                fillColor: MaterialStateProperty.all(Color(0xff006837)),
                                                 value: isChecked, 
                                                 onChanged: (val) {
                                                     setState(() {
@@ -173,7 +174,7 @@ class _TrickListTileState extends State<TrickListTile> {
                     },
                     icon: Icon(
                       Icons.delete,
-                      color: Colors.grey[100],
+                      color: Color(0xff1a1a1a),
                     ),
                     highlightColor: Colors.orange[900],
                   ),
@@ -184,8 +185,8 @@ class _TrickListTileState extends State<TrickListTile> {
                         if (snapshot.hasData) {
                           return IconButton(
                           icon: Icon(Icons.check_circle_outline_sharp),
-                          color: snapshot.data['isActive'] ? Color(0xff00e000) : Colors.grey[700],
-                          disabledColor: Colors.grey[900],
+                          color: snapshot.data['isActive'] ? Color(0xff006837) : Colors.grey[600],
+                          disabledColor: Color(0xff1a1a1a),
                           onPressed: () async {
                             if (user.activeID == 'noIDisChoosen') {
                               setState(() {

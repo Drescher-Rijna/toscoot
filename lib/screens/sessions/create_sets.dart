@@ -33,11 +33,11 @@ class _Create_SetsState extends State<Create_Sets> {
           if(snapshot.hasData && snapshot != null) {
             ActiveTricklist activeTricklist = snapshot.data;
             return Scaffold(
-              backgroundColor: Color(0xff121212),
+              backgroundColor: Color(0xfff2f2f2),
                 appBar: AppBar(
                   title: Text('Create A Session'),
                   centerTitle: true,
-                  backgroundColor: Color(0xffbd0f15),
+                  backgroundColor: Color(0xffad0000),
                   elevation: 0.0,
                   actions: <Widget>[
                     TextButton.icon(
@@ -71,7 +71,7 @@ class _Create_SetsState extends State<Create_Sets> {
                                             Text(
                                               'Add new sets',
                                               style: TextStyle(
-                                                color: Colors.grey[200],
+                                                color: Color(0xff1a1a1a),
                                                 fontSize: 24.0,
                                                 fontWeight: FontWeight.bold
                                               ),
@@ -87,11 +87,11 @@ class _Create_SetsState extends State<Create_Sets> {
                                                       Container(
                                                         height: 60,
                                                         child: DropdownButton(
-                                                          iconEnabledColor: Color(0xffbd0f15),
+                                                          iconEnabledColor: Color(0xffad0000),
                                                           iconSize: 30,
-                                                          dropdownColor: Colors.grey[900],
+                                                          dropdownColor: Color(0xfff2f2f2),
                                                           icon: Icon(Icons.arrow_drop_down),
-                                                          hint: Text('Select a trick', style: TextStyle(color: Colors.grey[100], fontSize: 16.0),),
+                                                          hint: Text('Select a trick', style: TextStyle(color: Color(0xff1a1a1a), fontSize: 16.0),),
                                                          isExpanded: true,
                                                           value: _currentTrick,
                                                           items: activeTricklist.tricks.map((trick) {
@@ -101,7 +101,7 @@ class _Create_SetsState extends State<Create_Sets> {
 
                                                               child: Text( trick, 
                                                                   style: TextStyle(
-                                                                    color: Colors.grey[100], 
+                                                                    color: Color(0xff1a1a1a), 
                                                                     fontSize: 16.0),
                                                               ),
                                                             );
@@ -150,7 +150,7 @@ class _Create_SetsState extends State<Create_Sets> {
                                 color: Colors.grey[100],
                               ),
                               style: TextButton.styleFrom(
-                                backgroundColor: Color(0xffbd0f15),
+                                backgroundColor: Color(0xffad0000),
                                 padding: EdgeInsets.all(12.0),
                               ),
                               onPressed: () async {

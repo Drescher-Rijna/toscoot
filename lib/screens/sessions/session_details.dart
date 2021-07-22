@@ -20,11 +20,11 @@ class SessionDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xff121212),
+        backgroundColor: Color(0xfff2f2f2),
         appBar: AppBar(
           title: Text(sessionTitle),
           centerTitle: true,
-          backgroundColor: Color(0xffbd0f15),
+          backgroundColor: Color(0xffad0000),
           elevation: 0.0,
           actions: <Widget>[
             TextButton.icon(
@@ -70,7 +70,7 @@ class SessionDetails extends StatelessWidget {
                     ),
                   ),
                   style: TextButton.styleFrom(
-                    backgroundColor: Color(0xffbd0f15),
+                    backgroundColor: Color(0xffad0000),
                     padding: EdgeInsets.all(13.0),
                   ),
                   

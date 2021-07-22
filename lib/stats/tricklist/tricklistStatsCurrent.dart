@@ -32,11 +32,11 @@ class _TricklistStatsCurrentState extends State<TricklistStatsCurrent> {
         StreamProvider<List<SetResultsOld>>.value(value: DatabaseService(tricklistID: tricklistID).tricklistWeekAgoSetResults),
       ],
       child: Scaffold(
-        backgroundColor: Color(0xff121212),
+        backgroundColor: Color(0xfff2f2f2),
         appBar: new AppBar(
           title: Text('ToScoot'),
           centerTitle: true,
-          backgroundColor: Color(0xffbd0f15),
+          backgroundColor: Color(0xffad0000),
           elevation: 0.0,
 
         ),
@@ -46,7 +46,7 @@ class _TricklistStatsCurrentState extends State<TricklistStatsCurrent> {
             Text(
               'Tricklist Stats',
               style: TextStyle(
-                color: Colors.grey[100],
+                color: Color(0xff1a1a1a),
                 fontSize: 34,
                 fontWeight: FontWeight.bold,
               ),
