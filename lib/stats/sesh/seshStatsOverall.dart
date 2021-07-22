@@ -71,7 +71,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
                     child: SizedBox(
                       height: 40,
                       child: LinearProgressIndicator(
-                        value: completionRate(),
+                        value: (completionRate()/100),
                         valueColor: AlwaysStoppedAnimation<Color>(Color(0xff006837)),
                         
                       ),

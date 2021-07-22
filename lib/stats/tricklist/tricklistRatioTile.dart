@@ -54,11 +54,11 @@ class _TricklistRatioTileState extends State<TricklistRatioTile> {
       Color getColor() {
         Color color;
         if (compareRatios() == 0) {
-          color = Color(0xffd4145a);
+          color = Color(0xff1a1a1a);
         }
 
         if (compareRatios().isNegative) {
-          color = Color(0xffad0000);
+          color = Color(0xffdb0707);
         } 
 
         if (compareRatios() > 0) {

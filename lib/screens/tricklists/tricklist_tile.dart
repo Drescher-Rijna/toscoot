@@ -185,7 +185,7 @@ class _TrickListTileState extends State<TrickListTile> {
                         if (snapshot.hasData) {
                           return IconButton(
                           icon: Icon(Icons.check_circle_outline_sharp),
-                          color: snapshot.data['isActive'] ? Color(0xff006837) : Colors.grey[600],
+                          color: snapshot.data['isActive'] ? Color(0xff00db49) : Colors.grey[600],
                           disabledColor: Color(0xff1a1a1a),
                           onPressed: () async {
                             if (user.activeID == 'noIDisChoosen') {

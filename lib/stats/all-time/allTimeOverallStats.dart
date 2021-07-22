@@ -98,7 +98,7 @@ class _AllTimeOverallStatsState extends State<AllTimeOverallStats> {
       }
 
       if (compareRatios().isNegative) {
-        color = Color(0xffad0000);
+        color = Color(0xffdb0707);
       } 
 
       if (compareRatios() > 0) {
@@ -154,7 +154,7 @@ class _AllTimeOverallStatsState extends State<AllTimeOverallStats> {
                       width: 135,
                       child: CircularProgressIndicator(
                         strokeWidth: 20.0,
-                        value: completionRate(),
+                        value: (completionRate()/100),
                         valueColor: AlwaysStoppedAnimation<Color>(Color(0xff006837)),
                         
                       ),

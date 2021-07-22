@@ -62,7 +62,7 @@ class _SeshStatsRatioTileState extends State<SeshStatsRatioTile> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xffd4145a),
+                    color: Colors.blue[800],
                   ),
                 ),
               ],
