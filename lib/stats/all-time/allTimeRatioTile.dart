@@ -59,7 +59,7 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
       }
 
       if (compareRatios().isNegative) {
-        color = Color(0xffdb0707);
+        color = Color(0xffad0000);
       } 
 
       if (compareRatios() > 0) {
@@ -94,7 +94,7 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
       padding: EdgeInsets.fromLTRB(5, 8, 5, 0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(width: 2, color: Color(0xffe6e6e6)))
+          border: Border(bottom: BorderSide(width: 2, color: Color(0xfff2f2f2)))
         ),
         child: Card(
           color: Color(0xfff2f2f2),
@@ -150,20 +150,20 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                backgroundColor: Color(0xff121212),
+                                backgroundColor: Colors.grey[100],
                                 title: Text(
                                   "You sure you want to delete this",
-                                  style: TextStyle(color: Colors.grey[100]),
+                                  style: TextStyle(color: Color(0xff1a1a1a)),
                                 ),
                                 content: Text(
                                   "*Be aware: Deleting this will make it lost forever",
-                                  style: TextStyle(color: Colors.grey[100]),
+                                  style: TextStyle(color: Color(0xff1a1a1a)),
                                 ),
                                 actions: [
                                     TextButton(
                                       child: Text(
                                         'Yes',
-                                        style: TextStyle(color: Color(0xff00e000), fontSize: 18),
+                                        style: TextStyle(color: Color(0xff006837), fontSize: 18),
                                       ),
                                       onPressed: () {
                                         
@@ -176,7 +176,7 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
                                     TextButton(
                                       child: const Text(
                                         'No',
-                                        style: TextStyle(color: Color(0xffe00000), fontSize: 18),
+                                        style: TextStyle(color: Color(0xffad0000), fontSize: 18),
                                         
                                       ),
                                       onPressed: () {
@@ -204,7 +204,6 @@ class _AllTimeRatioTileState extends State<AllTimeRatioTile> {
                         Icons.delete,
                         color: Color(0xff1a1a1a),
                       ),
-                      highlightColor: Colors.orange[900],
                     ),
                     ],
                   ),

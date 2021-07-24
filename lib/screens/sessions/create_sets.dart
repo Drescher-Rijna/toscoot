@@ -33,11 +33,11 @@ class _Create_SetsState extends State<Create_Sets> {
           if(snapshot.hasData && snapshot != null) {
             ActiveTricklist activeTricklist = snapshot.data;
             return Scaffold(
-              backgroundColor: Color(0xfff2f2f2),
+              backgroundColor: Colors.grey[100],
                 appBar: AppBar(
                   title: Text('Create A Session'),
                   centerTitle: true,
-                  backgroundColor: Color(0xffad0000),
+                  backgroundColor: Color(0xffa10a02),
                   elevation: 0.0,
                   actions: <Widget>[
                     TextButton.icon(
@@ -87,9 +87,9 @@ class _Create_SetsState extends State<Create_Sets> {
                                                       Container(
                                                         height: 60,
                                                         child: DropdownButton(
-                                                          iconEnabledColor: Color(0xffad0000),
+                                                          iconEnabledColor: Color(0xffa10a02),
                                                           iconSize: 30,
-                                                          dropdownColor: Color(0xfff2f2f2),
+                                                          dropdownColor: Colors.grey[100],
                                                           icon: Icon(Icons.arrow_drop_down),
                                                           hint: Text('Select a trick', style: TextStyle(color: Color(0xff1a1a1a), fontSize: 16.0),),
                                                          isExpanded: true,
@@ -128,7 +128,7 @@ class _Create_SetsState extends State<Create_Sets> {
                                                             borderSide: BorderSide(color: Colors.white, width: 2.0),
                                                           ),
                                                           focusedBorder: OutlineInputBorder(
-                                                            borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
+                                                            borderSide: BorderSide(color: Color(0xffa10a02), width: 2.0),
                                                           ),
                                                         ),
                                                         style: TextStyle(fontSize: 16),
@@ -150,7 +150,7 @@ class _Create_SetsState extends State<Create_Sets> {
                                 color: Colors.grey[100],
                               ),
                               style: TextButton.styleFrom(
-                                backgroundColor: Color(0xffad0000),
+                                backgroundColor: Color(0xffa10a02),
                                 padding: EdgeInsets.all(12.0),
                               ),
                               onPressed: () async {

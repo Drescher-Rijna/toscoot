@@ -34,7 +34,7 @@ class _SeshStatsRatioTileState extends State<SeshStatsRatioTile> {
       padding: EdgeInsets.fromLTRB(5, 8, 5, 0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(width: 1, color: Color(0xffe6e6e6)))
+          border: Border(bottom: BorderSide(width: 1, color: Color(0xfff2f2f2)))
         ),
         child: Card(
           color: Color(0xfff2f2f2),

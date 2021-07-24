@@ -15,11 +15,11 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Color(0xfff2f2f2),
+      backgroundColor: Colors.grey[100],
       appBar: new AppBar(
         title: Text('ToScoot'),
         centerTitle: true,
-        backgroundColor: Color(0xffad0000),
+        backgroundColor: Color(0xffa10a02),
         elevation: 0.0,
         actions: <Widget>[
           IconButton(

@@ -58,7 +58,7 @@ class _TricklistRatioTileState extends State<TricklistRatioTile> {
         }
 
         if (compareRatios().isNegative) {
-          color = Color(0xffdb0707);
+          color = Color(0xffad0000);
         } 
 
         if (compareRatios() > 0) {
@@ -90,7 +90,7 @@ class _TricklistRatioTileState extends State<TricklistRatioTile> {
       padding: EdgeInsets.fromLTRB(5, 8, 5, 0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(width: 2, color: Color(0xffe6e6e6)))
+          border: Border(bottom: BorderSide(width: 2, color: Color(0xfff2f2f2)))
         ),
         child: Card(
           color: Color(0xfff2f2f2),

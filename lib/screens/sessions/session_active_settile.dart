@@ -43,7 +43,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return !setResults.isDone ? Container(
-              color: Color(0xfff2f2f2),
+              color: Colors.grey[100],
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -86,7 +86,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                                   height: 45,
                                   color: Color(0xff006837),
                                   child: IconButton(
-                                    color: Color(0xff1a1a1a),
+                                    color: Colors.grey[100],
                                     icon: Icon(Icons.play_arrow), 
                                     onPressed: () {
                                       _stopwatchTimer.onExecute.add(StopWatchExecute.start);
@@ -100,7 +100,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                                   height: 45,
                                   color: Colors.blue[800],
                                   child: IconButton(
-                                    color: Color(0xff1a1a1a),
+                                    color: Colors.grey[100],
                                     icon: Icon(Icons.pause), 
                                     onPressed: () {
                                       _stopwatchTimer.onExecute.add(StopWatchExecute.stop);
@@ -111,9 +111,9 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                                 SizedBox(width: 25.0,),
                                 Container(
                                   padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
-                                  color: Color(0xffad0000),
+                                  color: Color(0xffa10a02),
                                   child: TextButton(
-                                    child: Text('End set', style: TextStyle(color: Color(0xff1a1a1a), fontSize: 16.0,),),
+                                    child: Text('End set', style: TextStyle(color: Colors.grey[100], fontSize: 16.0,),),
                                     onPressed: () async {
                                       await DatabaseService().endSet(setResults.id, _currentLand, _currentFail, displayTime, setResults.isDone);
                                       await DatabaseService().updateTotalsData(_currentLand, _currentFail, setResults.trick);
@@ -155,7 +155,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                                           'Land',
                                           style: TextStyle(
                                             fontSize: 24.0,
-                                            color: Color(0xff1a1a1a),
+                                            color: Colors.grey[100],
                                           ),
                                         ),
                                         onPressed: () async {
@@ -197,7 +197,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                                               'Fail',
                                               style: TextStyle(
                                                 fontSize: 24.0,
-                                                color: Color(0xff1a1a1a),
+                                                color: Colors.grey[100],
                                               ),
                                             ),
                                             onPressed: () {
@@ -212,7 +212,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                                             _currentFail.toString(),
                                             style: TextStyle(
                                               fontSize: 24.0,
-                                              color: Color(0xff1a1a1a),
+                                              color: Colors.grey[100],
                                             ),
                                           ),
                                         ],
@@ -296,7 +296,7 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
-        color: Colors.grey[900],
+        color: Color(0xfff2f2f2),
         shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5)),
         elevation: 1,
@@ -320,7 +320,6 @@ class _SessionActiveSetTileState extends State<SessionActiveSetTile> {
                       size: 30,
                       color: Color(0xff1a1a1a),
                     ),
-                    highlightColor: Colors.orange[900],
                   ),
                 ],
               ),

@@ -20,7 +20,7 @@ class _DetailsTileState extends State<DetailsTile> {
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
-        color: Color(0xffe6e6e6),
+        color: Color(0xfff2f2f2),
         shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5)),
         elevation: 1,

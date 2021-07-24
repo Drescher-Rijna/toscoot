@@ -14,10 +14,12 @@ import 'package:toscoot/services/database.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
-  await DatabaseService().userCollection.doc(FirebaseAuth.instance.currentUser.uid).get().then((value) {
-    DatabaseService.ActiveID = value['ActiveID'];
-  });
+   
+  if (FirebaseAuth.instance.currentUser != null) {
+    await DatabaseService().userCollection.doc(FirebaseAuth.instance.currentUser.uid).get().then((value) {
+      DatabaseService.ActiveID = value['ActiveID'];
+    });
+  }
 
   print(DatabaseService.ActiveID);
   

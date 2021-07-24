@@ -35,7 +35,7 @@ class DatabaseService {
       'username': username,
       'email': email,
       'ActiveID': 'noIDisChoosen',
-      'showAlerts': true,
+      'showAlerts': false,
     });
   }
 

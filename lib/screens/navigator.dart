@@ -35,7 +35,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         body: _children[_currentIndex],
 
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color(0xffad0000),
+          backgroundColor: Color(0xffa10a02),
           currentIndex: _currentIndex,
           onTap: (index) {
             onTapBar(index);

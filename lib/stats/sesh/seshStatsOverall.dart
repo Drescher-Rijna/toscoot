@@ -112,7 +112,7 @@ class _SeshStatsOverallState extends State<SeshStatsOverall> {
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xffd4145a),
+                        color: Colors.blue[800],
                     ),
                   ),
                 ],

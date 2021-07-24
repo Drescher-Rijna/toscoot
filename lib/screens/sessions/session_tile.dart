@@ -35,7 +35,7 @@ class _SessionTileState extends State<SessionTile> {
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
-        color: Color(0xffe6e6e6),
+        color: Color(0xfff2f2f2),
         shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5)),
         elevation: 1,
@@ -69,7 +69,6 @@ class _SessionTileState extends State<SessionTile> {
                       session.isComplete ? Icons.leaderboard : Icons.read_more,
                       color: Color(0xff1a1a1a),
                     ),
-                    highlightColor: Colors.orange[900],
                   ),
                   IconButton(
                     onPressed: () async {
@@ -79,7 +78,6 @@ class _SessionTileState extends State<SessionTile> {
                       Icons.delete,
                       color: Color(0xff1a1a1a),
                     ),
-                    highlightColor: Colors.orange[900],
                   ),
                 ],
               ),

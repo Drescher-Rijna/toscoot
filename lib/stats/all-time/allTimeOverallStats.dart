@@ -94,11 +94,11 @@ class _AllTimeOverallStatsState extends State<AllTimeOverallStats> {
     Color getColor() {
       Color color;
       if (compareRatios() == 0) {
-        color = Color(0xffd4145a);
+        color = Color(0xff1a1a1a);
       }
 
       if (compareRatios().isNegative) {
-        color = Color(0xffdb0707);
+        color = Color(0xffad0000);
       } 
 
       if (compareRatios() > 0) {
@@ -128,7 +128,7 @@ class _AllTimeOverallStatsState extends State<AllTimeOverallStats> {
 
 
 
-    return setResults.isEmpty || setResults == [] ? Center(child: Text('No activity has been detected', style: TextStyle(color: Colors.grey[100], fontSize: 25),)) : Container(
+    return setResults.isEmpty || setResults == [] ? Center(child: Text('No activity has been detected', style: TextStyle(color: Color(0xff1a1a1a), fontSize: 25),)) : Container(
       child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,

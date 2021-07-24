@@ -26,7 +26,7 @@ class _TrickListTileState extends State<TrickListTile> {
 
   //dont ask again
   bool yesorno = false;
-  bool isChecked = false;
+  bool isChecked = true;
   
 
   @override
@@ -34,10 +34,18 @@ class _TrickListTileState extends State<TrickListTile> {
 
     final UserData user = Provider.of<UserData>(context) ?? [];
 
+    @override
+    void initState() {
+      super.initState();
+      setState(() {
+        isChecked = user.showAlerts;      
+      });
+    }
+
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
-        color: Color(0xffe6e6e6),
+        color: Color(0xfff2f2f2),
         shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5)),
         elevation: 1,
@@ -78,6 +86,9 @@ class _TrickListTileState extends State<TrickListTile> {
 
                   IconButton(
                     onPressed: () async {
+                      setState(() {
+                        isChecked = user.showAlerts;                        
+                      });
                       if (user.showAlerts == false) {
                         showDialog( 
                             barrierDismissible: false,
@@ -88,7 +99,7 @@ class _TrickListTileState extends State<TrickListTile> {
                                 builder: (context, setState) {
                                 
                                 return AlertDialog(
-                                  backgroundColor: Color(0xfff2f2f2),
+                                  backgroundColor: Colors.grey[100],
                                   title: Text(
                                     "You sure you want to delete this",
                                     style: TextStyle(color: Color(0xff1a1a1a)),
@@ -176,7 +187,6 @@ class _TrickListTileState extends State<TrickListTile> {
                       Icons.delete,
                       color: Color(0xff1a1a1a),
                     ),
-                    highlightColor: Colors.orange[900],
                   ),
 
                   FutureBuilder(
