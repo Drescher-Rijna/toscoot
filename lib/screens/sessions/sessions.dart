@@ -28,11 +28,11 @@ class _SessionsState extends State<Sessions> {
           if (snapshot.hasData) {
             UserData user = snapshot.data;
             return Scaffold(
-              backgroundColor: Color(0xff121212),
+              backgroundColor: Colors.grey[100],
               appBar: AppBar(
                 title: Text('Sessions'),
                 centerTitle: true,
-                backgroundColor: Color(0xffbd0f15),
+                backgroundColor: Color(0xffa10a02),
                 elevation: 0.0,
                 actions: <Widget>[
                   IconButton(
@@ -61,7 +61,7 @@ class _SessionsState extends State<Sessions> {
                   );
                 },
                 elevation: 5,
-                backgroundColor: user.activeID == 'noIDisChoosen' ? Colors.grey[700] : Color(0xffbd0f15),
+                backgroundColor: user.activeID == 'noIDisChoosen' ? Colors.grey[700] : Color(0xffad0000),
                 child: new Icon(Icons.add),
               ),
             );

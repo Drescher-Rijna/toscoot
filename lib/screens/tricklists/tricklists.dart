@@ -23,11 +23,11 @@ class _TrickListsState extends State<TrickLists> {
     return StreamProvider<List<TrickList>>.value(
       value: DatabaseService().tricklists,
       child: Scaffold(
-        backgroundColor: Color(0xff121212),
+        backgroundColor: Colors.grey[100],
         appBar: AppBar(
           title: Text('Tricklists'),
           centerTitle: true,
-          backgroundColor: Color(0xffbd0f15),
+          backgroundColor: Color(0xffa10a02),
           elevation: 0.0,
           actions: <Widget>[
             IconButton(
@@ -56,7 +56,7 @@ class _TrickListsState extends State<TrickLists> {
             );
           },
           elevation: 5,
-          backgroundColor: Color(0xffbd0f15),
+          backgroundColor: Color(0xffa10a02),
           child: new Icon(Icons.add),
         ),
 

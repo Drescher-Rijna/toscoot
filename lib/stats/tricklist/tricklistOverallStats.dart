@@ -95,15 +95,15 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
     Color getColor() {
       Color color;
       if (compareRatios() == 0) {
-        color = Color(0xffff008b);
+        color = Color(0xff1a1a1a);
       }
 
       if (compareRatios().isNegative) {
-        color = Color(0xffe00000);
+        color = Color(0xffad0000);
       } 
 
       if (compareRatios() > 0) {
-        color = Color(0xff00e000);
+        color = Color(0xff006837);
       }
 
       return color;
@@ -127,7 +127,7 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
     }
 
    
-    return setResults.isEmpty || setResults == [] ? Center(child: Text('No activity has been detected', style: TextStyle(color: Colors.grey[100], fontSize: 25),)) : Container(
+    return setResults.isEmpty || setResults == [] ? Center(child: Text('No activity has been detected', style: TextStyle(color: Color(0xff1a1a1a), fontSize: 25),)) : Container(
       child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,7 +140,7 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[100],
+                  color: Color(0xff1a1a1a),
                 ),
               ),
               SizedBox(height: 20,),
@@ -154,8 +154,8 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
                       child: CircularProgressIndicator(
                         strokeWidth: 20.0,
                         
-                        value: completionRate(),
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xff00ff0d)),
+                        value: (completionRate()/100),
+                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xff006837)),
                         
                       ),
                     ),
@@ -166,7 +166,7 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
                       style: TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[100],
+                        color: Color(0xff1a1a1a),
                       ),
                     ), 
                     alignment: Alignment.center,
@@ -182,7 +182,7 @@ class _TricklistOverallStatsState extends State<TricklistOverallStats> {
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[100],
+                        color: Color(0xff1a1a1a),
                     ),
                   ),
                   SizedBox(height: 5,),

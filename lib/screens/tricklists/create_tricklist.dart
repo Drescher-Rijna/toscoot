@@ -24,11 +24,11 @@ class _TrickListFormState extends State<TrickListForm> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: Color(0xff121212),
+      backgroundColor: Colors.grey[100],
         appBar: AppBar(
           title: Text('Create A Tricklist'),
           centerTitle: true,
-          backgroundColor: Color(0xffbd0f15),
+          backgroundColor: Color(0xffa10a02),
           elevation: 0.0,
           actions: <Widget>[
             TextButton.icon(
@@ -72,7 +72,7 @@ class _TrickListFormState extends State<TrickListForm> {
                         borderSide: BorderSide(color: Colors.white, width: 2.0),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
+                        borderSide: BorderSide(color: Color(0xffa10a02), width: 2.0),
                       ),
                     ),
                     style: TextStyle(fontSize: 16),
@@ -85,7 +85,7 @@ class _TrickListFormState extends State<TrickListForm> {
                   Text(
                     'Add new trick',
                     style: TextStyle(
-                      color: Colors.grey[200],
+                      color: Color(0xff1a1a1a),
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold
                     ),
@@ -102,7 +102,7 @@ class _TrickListFormState extends State<TrickListForm> {
                         borderSide: BorderSide(color: Colors.white, width: 2.0),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
+                        borderSide: BorderSide(color: Color(0xffa10a02), width: 2.0),
                       ),
                     ),
                     style: TextStyle(fontSize: 16),
@@ -121,7 +121,7 @@ class _TrickListFormState extends State<TrickListForm> {
               color: Colors.grey[100],
             ),
             style: TextButton.styleFrom(
-              backgroundColor: Color(0xffbd0f15),
+              backgroundColor: Color(0xffa10a02),
               padding: EdgeInsets.all(12.0),
             ),
             onPressed: () async {
@@ -153,7 +153,7 @@ Widget getTricks(List tricklist) {
         return Padding(
         padding: EdgeInsets.only(top: 8.0),
         child: Card(
-          color: Colors.grey[800],
+          color: Color(0xfff2f2f2),
           shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5)),
           elevation: 1,
@@ -165,8 +165,9 @@ Widget getTricks(List tricklist) {
                 Text(
                   tricklist[index],
                   style: TextStyle(
-                    color: Colors.grey[100],
+                    color: Color(0xff1a1a1a),
                     fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 IconButton(
@@ -177,7 +178,7 @@ Widget getTricks(List tricklist) {
                   },
                   icon: Icon(
                     Icons.delete,
-                    color: Colors.grey[100],
+                    color: Color(0xff1a1a1a),
                   ),
                 ),
               ],

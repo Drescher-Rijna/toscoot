@@ -21,11 +21,11 @@ class _Create_SessionState extends State<Create_Session> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-        backgroundColor: Color(0xff121212),
+        backgroundColor: Colors.grey[100],
           appBar: AppBar(
             title: Text('Create A Session'),
             centerTitle: true,
-            backgroundColor: Color(0xffbd0f15),
+            backgroundColor: Color(0xffa10a02),
             elevation: 0.0,
           ),
           body: Center(
@@ -40,7 +40,7 @@ class _Create_SessionState extends State<Create_Session> {
                       'First give your session a title:',
                       style: TextStyle(
                         fontSize: 20.0,
-                        color: Colors.grey[100]
+                        color: Color(0xff1a1a1a)
                       ),
                     ),
                     SizedBox(height: 15.0,),
@@ -53,7 +53,7 @@ class _Create_SessionState extends State<Create_Session> {
                           borderSide: BorderSide(color: Colors.white, width: 2.0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffbd0f15), width: 2.0),
+                          borderSide: BorderSide(color: Color(0xffa10a02), width: 2.0),
                         ),
                       ),
                       style: TextStyle(fontSize: 16),
@@ -65,7 +65,7 @@ class _Create_SessionState extends State<Create_Session> {
                     SizedBox(height: 20.0,),
                     TextButton(
                       style: TextButton.styleFrom(
-                        backgroundColor: Color(0xffbd0f15),
+                        backgroundColor: Color(0xffa10a02),
                         padding: EdgeInsets.fromLTRB(13, 13, 13, 13)
                       ),
                       onPressed: () async {

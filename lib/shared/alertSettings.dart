@@ -15,16 +15,16 @@ void alertSettings(context) {
               return Container(
               height: 100,
               padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-              color: Color(0xff121212),
+              color: Colors.grey[100],
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   new Wrap(
                     children: <Widget>[
                       new ListTile(
-                        tileColor: Color(0xff121212),
-                          leading: !user.showAlerts ? new Icon(Icons.notifications_active, color: Colors.grey[100],) : new Icon(Icons.notifications_none, color: Colors.grey[100],),
-                          title: !user.showAlerts ? new Text('Disable alerts', style: TextStyle(color: Colors.grey[100])) : new Text('Enable alerts', style: TextStyle(color: Colors.grey[100])),
+                        tileColor: Colors.grey[100],
+                          leading: !user.showAlerts ? new Icon(Icons.notifications_active, color: Color(0xff1a1a1a),) : new Icon(Icons.notifications_none, color: Color(0xff1a1a1a),),
+                          title: !user.showAlerts ? new Text('Disable alerts', style: TextStyle(color: Color(0xff1a1a1a))) : new Text('Enable alerts', style: TextStyle(color: Color(0xff1a1a1a))),
                           onTap: () => {
                             if (!user.showAlerts) {
                               DatabaseService().updateUserAlerts(true)

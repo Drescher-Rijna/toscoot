@@ -37,11 +37,11 @@ class _SeshStatsState extends State<SeshStats> {
         StreamProvider<List<SetResults>>.value(value: DatabaseService(statsResultsID: resultsID).statsSetResults),
       ],
       child: Scaffold(
-        backgroundColor: Color(0xff121212),
+        backgroundColor: Colors.grey[100],
         appBar: AppBar(
-          title: Text('Stats'),
+          title: Text('Session stats'),
           centerTitle: true,
-          backgroundColor: Color(0xffbd0f15),
+          backgroundColor: Color(0xffa10a02),
           elevation: 0.0,
         ),
 
