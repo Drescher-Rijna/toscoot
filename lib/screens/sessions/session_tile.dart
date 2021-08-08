@@ -73,15 +73,13 @@ class _SessionTileState extends State<SessionTile> {
                   IconButton(
                     onPressed: () async {
                       await DatabaseService().getSeshID(session.id);
-                      if (session.isComplete) {
-                        print('session is complete');
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SeshStats(session.resultsID)));
-                      } else {
-                        
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(sessionTitle: session.title, session: session,)));
-                      }await DatabaseService().deleteFromSession(session.id);
-                      
-                    },
+                        if (session.isComplete) {
+                          print('session is complete');
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SeshStats(session.resultsID)));
+                        } else {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(session: session, sessionTitle: session.title,)));
+                        }
+                      },
                     icon: Icon(
                       session.isComplete ? Icons.leaderboard : Icons.read_more,
                       color: Color(0xff1a1a1a),

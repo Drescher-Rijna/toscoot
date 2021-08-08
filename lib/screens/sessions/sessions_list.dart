@@ -20,11 +20,14 @@ class _SessionListState extends State<SessionList> {
 
     return StreamProvider<UserData>.value(
       value: DatabaseService().users,
-      child: ListView.builder(
-        itemCount: sessions.length,
-        itemBuilder: (context, index) {
-          return SessionTile(session: sessions[index]);
-        },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: ListView.builder(
+          itemCount: sessions.length,
+          itemBuilder: (context, index) {
+            return SessionTile(session: sessions[index]);
+          },
+        ),
       ),
     );
   }

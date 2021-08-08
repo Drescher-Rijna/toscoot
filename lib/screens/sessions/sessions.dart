@@ -52,7 +52,10 @@ class _SessionsState extends State<Sessions> {
                 ),
                 ],
               ),
-              body: SessionList(),
+              body: Padding(
+                padding: const EdgeInsets.only(bottom: 80.0),
+                child: SessionList(),
+              ),
               floatingActionButton: new FloatingActionButton(
                 onPressed: user.activeID == 'noIDisChoosen' ? null : () {
                   Navigator.push(
